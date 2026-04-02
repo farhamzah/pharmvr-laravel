@@ -137,7 +137,7 @@ class HomeController extends Controller
         $activeProgress = UserTrainingProgress::where('user_id', $user->id)
             ->whereIn('status', ['in_progress', 'available'])
             ->with('trainingModule')
-            ->orderByRaw("FIELD(status, 'in_progress', 'available')")
+            ->orderByRaw("CASE WHEN status = 'in_progress' THEN 1 WHEN status = 'available' THEN 2 ELSE 3 END")
             ->latest('last_accessed_at')
             ->first();
 
