@@ -1,0 +1,176 @@
+
+   INFO  Seeding database.  
+
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: pharmvr, SQL: select * from `users` where (`email` = test@pharmvr.com) limit 1)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:838
+    834▕             $exceptionType = $this->isUniqueConstraintError($e)
+    835▕                 ? UniqueConstraintViolationException::class
+    836▕                 : QueryException::class;
+    837▕ 
+  ➜ 838▕             throw new $exceptionType(
+    839▕                 $this->getNameWithReadWriteType(),
+    840▕                 $query,
+    841▕                 $this->prepareBindings($bindings),
+    842▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connectors\Connector.php:66
+      PDOException::("SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it")
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connectors\Connector.php:66
+      PDO::__construct("mysql:host=127.0.0.1;port=3306;dbname=pharmvr", "root", Object(SensitiveParameterValue), [])
+
+  3   vendor\laravel\framework\src\Illuminate\Database\Connectors\Connector.php:85
+      Illuminate\Database\Connectors\Connector::createPdoConnection("mysql:host=127.0.0.1;port=3306;dbname=pharmvr", "root", Object(SensitiveParameterValue), [])
+
+  4   vendor\laravel\framework\src\Illuminate\Database\Connectors\Connector.php:48
+      Illuminate\Database\Connectors\Connector::tryAgainIfCausedByLostConnection(Object(PDOException), "mysql:host=127.0.0.1;port=3306;dbname=pharmvr", "root", Object(SensitiveParameterValue), [])
+
+  5   vendor\laravel\framework\src\Illuminate\Database\Connectors\MySqlConnector.php:24
+      Illuminate\Database\Connectors\Connector::createConnection("mysql:host=127.0.0.1;port=3306;dbname=pharmvr", [])
+
+  6   vendor\laravel\framework\src\Illuminate\Database\Connectors\ConnectionFactory.php:186
+      Illuminate\Database\Connectors\MySqlConnector::connect()
+
+  7   vendor\laravel\framework\src\Illuminate\Database\Connection.php:1257
+      Illuminate\Database\Connectors\ConnectionFactory::Illuminate\Database\Connectors\{closure}()
+  8   vendor\laravel\framework\src\Illuminate\Database\Connection.php:1257
+
+  9   vendor\laravel\framework\src\Illuminate\Database\Connection.php:1295
+      Illuminate\Database\Connection::getPdo()
+
+  10  vendor\laravel\framework\src\Illuminate\Database\Connection.php:525
+      Illuminate\Database\Connection::getReadPdo()
+
+  11  vendor\laravel\framework\src\Illuminate\Database\Connection.php:420
+      Illuminate\Database\Connection::getPdoForSelect()
+
+  12  vendor\laravel\framework\src\Illuminate\Database\Connection.php:827
+      Illuminate\Database\Connection::Illuminate\Database\{closure}("select * from `users` where (`email` = ?) limit 1")
+
+  13  vendor\laravel\framework\src\Illuminate\Database\Connection.php:999
+      Illuminate\Database\Connection::runQueryCallback("select * from `users` where (`email` = ?) limit 1", Object(Closure))
+
+  14  vendor\laravel\framework\src\Illuminate\Database\Connection.php:978
+      Illuminate\Database\Connection::tryAgainIfCausedByLostConnection(Object(Illuminate\Database\QueryException), "select * from `users` where (`email` = ?) limit 1", Object(Closure))
+
+  15  vendor\laravel\framework\src\Illuminate\Database\Connection.php:796
+      Illuminate\Database\Connection::handleQueryException(Object(Illuminate\Database\QueryException), "select * from `users` where (`email` = ?) limit 1", Object(Closure))
+
+  16  vendor\laravel\framework\src\Illuminate\Database\Connection.php:411
+      Illuminate\Database\Connection::run("select * from `users` where (`email` = ?) limit 1", Object(Closure))
+
+  17  vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3475
+      Illuminate\Database\Connection::select("select * from `users` where (`email` = ?) limit 1")
+
+  18  vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3460
+      Illuminate\Database\Query\Builder::runSelect()
+
+  19  vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:4050
+      Illuminate\Database\Query\Builder::Illuminate\Database\Query\{closure}()
+
+  20  vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:3459
+      Illuminate\Database\Query\Builder::onceWithColumns(Object(Closure))
+
+  21  vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:902
+      Illuminate\Database\Query\Builder::get()
+
+  22  vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:884
+      Illuminate\Database\Eloquent\Builder::getModels()
+
+  23  vendor\laravel\framework\src\Illuminate\Database\Concerns\BuildsQueries.php:366
+      Illuminate\Database\Eloquent\Builder::get()
+
+  24  vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:708
+      Illuminate\Database\Eloquent\Builder::first()
+
+  25  vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:740
+      Illuminate\Database\Eloquent\Builder::firstOrCreate(["test@pharmvr.com"], ["Test Student", "$2y$12$f9JZR6jWl3U9qBEklI9zPuM8ChskkiAGbEAzJ6jScflqvnH2rIOJy"])
+
+  26  vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:23
+      Illuminate\Database\Eloquent\Builder::updateOrCreate(["test@pharmvr.com"], ["Test Student", "$2y$12$f9JZR6jWl3U9qBEklI9zPuM8ChskkiAGbEAzJ6jScflqvnH2rIOJy"])
+
+  27  vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:2540
+      Illuminate\Database\Eloquent\Model::forwardCallTo(Object(Illuminate\Database\Eloquent\Builder), "updateOrCreate")
+
+  28  vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:2556
+      Illuminate\Database\Eloquent\Model::__call("updateOrCreate")
+
+  29  database\seeders\UserSeeder.php:17
+      Illuminate\Database\Eloquent\Model::__callStatic("updateOrCreate")
+
+  30  vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php:36
+      Database\Seeders\UserSeeder::run()
+
+  31  vendor\laravel\framework\src\Illuminate\Container\Util.php:43
+      Illuminate\Container\BoundMethod::Illuminate\Container\{closure}()
+
+  32  vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php:96
+      Illuminate\Container\Util::unwrapIfClosure(Object(Closure))
+
+  33  vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php:35
+      Illuminate\Container\BoundMethod::callBoundMethod(Object(Illuminate\Foundation\Application), Object(Closure))
+
+  34  vendor\laravel\framework\src\Illuminate\Container\Container.php:799
+      Illuminate\Container\BoundMethod::call(Object(Illuminate\Foundation\Application), [])
+
+  35  vendor\laravel\framework\src\Illuminate\Database\Seeder.php:184
+      Illuminate\Container\Container::call([])
+
+  36  vendor\laravel\framework\src\Illuminate\Database\Seeder.php:193
+      Illuminate\Database\Seeder::Illuminate\Database\{closure}()
+
+  37  vendor\laravel\framework\src\Illuminate\Database\Console\Seeds\SeedCommand.php:71
+      Illuminate\Database\Seeder::__invoke()
+
+  38  vendor\laravel\framework\src\Illuminate\Database\Eloquent\Concerns\GuardsAttributes.php:157
+      Illuminate\Database\Console\Seeds\SeedCommand::Illuminate\Database\Console\Seeds\{closure}()
+
+  39  vendor\laravel\framework\src\Illuminate\Database\Console\Seeds\SeedCommand.php:70
+      Illuminate\Database\Eloquent\Model::unguarded(Object(Closure))
+
+  40  vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php:36
+      Illuminate\Database\Console\Seeds\SeedCommand::handle()
+
+  41  vendor\laravel\framework\src\Illuminate\Container\Util.php:43
+      Illuminate\Container\BoundMethod::Illuminate\Container\{closure}()
+
+  42  vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php:96
+      Illuminate\Container\Util::unwrapIfClosure(Object(Closure))
+
+  43  vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php:35
+      Illuminate\Container\BoundMethod::callBoundMethod(Object(Illuminate\Foundation\Application), Object(Closure))
+
+  44  vendor\laravel\framework\src\Illuminate\Container\Container.php:799
+      Illuminate\Container\BoundMethod::call(Object(Illuminate\Foundation\Application), [])
+
+  45  vendor\laravel\framework\src\Illuminate\Console\Command.php:211
+      Illuminate\Container\Container::call()
+
+  46  vendor\symfony\console\Command\Command.php:341
+      Illuminate\Console\Command::execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Illuminate\Console\OutputStyle))
+
+  47  vendor\laravel\framework\src\Illuminate\Console\Command.php:180
+      Symfony\Component\Console\Command\Command::run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Illuminate\Console\OutputStyle))
+
+  48  vendor\symfony\console\Application.php:1117
+      Illuminate\Console\Command::run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+
+  49  vendor\symfony\console\Application.php:356
+      Symfony\Component\Console\Application::doRunCommand(Object(Illuminate\Database\Console\Seeds\SeedCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+
+  50  vendor\symfony\console\Application.php:195
+      Symfony\Component\Console\Application::doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+
+  51  vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php:198
+      Symfony\Component\Console\Application::run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+
+  52  vendor\laravel\framework\src\Illuminate\Foundation\Application.php:1235
+      Illuminate\Foundation\Console\Kernel::handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+
+  53  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+

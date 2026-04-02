@@ -1,0 +1,6 @@
+﻿
+  GET|HEAD  storage/{path} storage.local
+  PUT       storage/{path} storage.local.upload
+
+        Showing [2] routes
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Tests\Feature\Api\V1\Vr\VrPhase4Test" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" tests="1" assertions="0" errors="1" failures="0" skipped="0" time="0.392569">
+    <testcase name="a_headset_can_pair_with_specific_response_structure" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" line="94" class="Tests\Feature\Api\V1\Vr\VrPhase4Test" classname="Tests.Feature.Api.V1.Vr.VrPhase4Test" assertions="0" time="0.392569">
+      <error type="Illuminate\Auth\AuthenticationException">Tests\Feature\Api\V1\Vr\VrPhase4Test::a_headset_can_pair_with_specific_response_structure&#13;
+Illuminate\Auth\AuthenticationException: Unauthenticated.
+&#13;
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Auth\Middleware\Authenticate.php:101
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Auth\Middleware\Authenticate.php:87
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Auth\Middleware\Authenticate.php:61
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:137
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php:821
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php:800
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php:764
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php:753
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php:200
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:180
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php:21
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull.php:31
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php:21
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TrimStrings.php:51
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePostSize.php:27
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance.php:109
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Http\Middleware\HandleCors.php:74
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Http\Middleware\TrustProxies.php:58
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks.php:22
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePathEncoding.php:26
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:219
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php:137
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php:175
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php:144
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php:607
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php:573
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php:411
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:106</error>
+    </testcase>
+  </testsuite>
+</testsuites>
