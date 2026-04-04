@@ -22,7 +22,7 @@ class NewsController extends Controller
         $topic = $request->query('topic');
         $source = $request->query('source');
 
-        $query = News::visible()->latest('published_at');
+        $query = News::visible();
 
         if ($type) {
             $query->where('content_type', $type);
@@ -64,8 +64,8 @@ class NewsController extends Controller
             $query->where('is_featured', $featured);
         }
 
-        // Pinned articles always appear first
-        $query->orderBy('is_pinned', 'desc');
+        // Pinned articles always appear first, then sorted by published date
+        $query->orderBy('is_pinned', 'desc')->latest('published_at');
 
         $news = $query->paginate($perPage);
 

@@ -21,7 +21,7 @@ class NewsResource extends JsonResource
             'slug' => $this->slug,
             'summary' => $this->summary,
             'content' => $this->isExternal() ? null : $this->content,
-            'image_url' => $this->image_url ? url($this->image_url) : null,
+            'image_url' => $this->image_url ? (str_starts_with($this->image_url, 'http') ? $this->image_url : url($this->image_url)) : null,
             'category' => $this->category,
             'is_featured' => $this->is_featured,
             'is_pinned' => $this->is_pinned ?? false,
