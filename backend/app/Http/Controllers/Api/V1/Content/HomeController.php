@@ -9,6 +9,7 @@ use App\Models\EducationContent;
 use App\Http\Resources\Api\V1\Content\TrainingModuleResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\AssetUrlService;
 
 class HomeController extends Controller
 {
@@ -39,7 +40,7 @@ class HomeController extends Controller
                             'title'        => $news->title,
                             'slug'         => $news->slug,
                             'summary'      => $news->summary,
-                            'image_url'    => $news->image_url,
+                            'image_url'    => AssetUrlService::resolve($news->image_url),
                             'category'     => $news->category,
                             'published_at' => $news->published_at?->toIso8601String(),
                         ];
@@ -60,7 +61,7 @@ class HomeController extends Controller
     {
         return [
             'full_name'        => $user->name,
-            'avatar_url'       => $user->profile?->avatar_url ? \Illuminate\Support\Facades\Storage::url($user->profile->avatar_url) : null,
+            'avatar_url'       => AssetUrlService::resolve($user->profile?->avatar_url),
             'academic_summary' => $user->profile?->university ?? 'Lengkapi profil akademik Anda',
         ];
     }
@@ -240,17 +241,7 @@ class HomeController extends Controller
     {
         $setting = \App\Models\Setting::where('key', 'home_banner')->first();
         $path = $setting ? $setting->value : 'assets/images/hero_banner.jpg';
-
-        if (str_starts_with($path, 'http')) {
-            return $path;
-        }
-
-        // Handle relative paths from storage
-        if (!str_starts_with($path, 'storage/') && !str_starts_with($path, 'assets/')) {
-            $path = 'storage/' . $path;
-        }
-
-        return url($path);
+        return AssetUrlService::resolve($path);
     }
 
     /**

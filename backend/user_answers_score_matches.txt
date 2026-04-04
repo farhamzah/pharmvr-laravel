@@ -1,1 +1,0 @@
-﻿E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_043003_create_assessment_recovery_tables.php:20:                // score column intentionally omitted to test for duplication sources

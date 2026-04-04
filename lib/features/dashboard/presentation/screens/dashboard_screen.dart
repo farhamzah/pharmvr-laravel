@@ -147,10 +147,10 @@ class _HeroSection extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(colors: [
-                    PharmColors.primary.withOpacity(0.25),
-                    PharmColors.primaryDark.withOpacity(0.10),
+                    Theme.of(context).primaryColor.withOpacity(0.25),
+                    Theme.of(context).primaryColor.withOpacity(0.10),
                   ]),
-                  border: Border.all(color: PharmColors.primary.withOpacity(0.35), width: 1.5),
+                  border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.35), width: 1.5),
                 ),
                 child: CircleAvatar(
                   backgroundColor: Colors.transparent,
@@ -158,7 +158,7 @@ class _HeroSection extends StatelessWidget {
                   child: avatarUrl == null
                       ? Text(
                           fullName.isNotEmpty ? fullName[0].toUpperCase() : 'U',
-                          style: PharmTextStyles.h3.copyWith(color: PharmColors.primary),
+                          style: PharmTextStyles.h3.copyWith(color: Theme.of(context).primaryColor),
                         )
                       : null,
                 ),
@@ -171,7 +171,7 @@ class _HeroSection extends StatelessWidget {
                     Text(AppLocalizations.of(context)!.welcomeBack, style: PharmTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.labelSmall?.color)),
                     Text(fullName, style: PharmTextStyles.h3.copyWith(color: Theme.of(context).textTheme.displaySmall?.color, fontSize: 18)),
                     if (academicSummary.isNotEmpty)
-                      Text(academicSummary, style: PharmTextStyles.caption.copyWith(color: PharmColors.primary, fontWeight: FontWeight.w500)),
+                      Text(academicSummary, style: PharmTextStyles.caption.copyWith(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
@@ -255,8 +255,8 @@ class _VrPill extends StatelessWidget {
       VrConnectionStatus.ready    => (PharmColors.success, Icons.headset, l10n.vrReady),
       VrConnectionStatus.inProgress => (PharmColors.info, Icons.play_circle_fill, l10n.vrActive),
       VrConnectionStatus.pairing  => (PharmColors.warning, Icons.sync, l10n.vrSyncing),
-      VrConnectionStatus.offline  => (PharmColors.textTertiary, Icons.headset_off, l10n.vrDisconnected),
-      VrConnectionStatus.idle     => (PharmColors.textTertiary, Icons.headset_off, l10n.vrIdle),
+      VrConnectionStatus.offline  => (Theme.of(context).textTheme.bodySmall?.color ?? PharmColors.textTertiary, Icons.headset_off, l10n.vrDisconnected),
+      VrConnectionStatus.idle     => (Theme.of(context).textTheme.bodySmall?.color ?? PharmColors.textTertiary, Icons.headset_off, l10n.vrIdle),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -302,11 +302,11 @@ class _CurrentModuleCard extends StatelessWidget {
               Row(children: [
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(color: PharmColors.primary.withOpacity(0.12), borderRadius: BorderRadius.circular(20)),
+                  decoration: BoxDecoration(color: Theme.of(context).primaryColor.withOpacity(0.12), borderRadius: BorderRadius.circular(20)),
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    const Icon(Icons.vrpano, color: PharmColors.primary, size: 13),
+                    Icon(Icons.vrpano, color: Theme.of(context).primaryColor, size: 13),
                     const SizedBox(width: 5),
-                    Text(AppLocalizations.of(context)!.currentModule, style: PharmTextStyles.overline.copyWith(color: PharmColors.primary, fontWeight: FontWeight.w700)),
+                    Text(AppLocalizations.of(context)!.currentModule, style: PharmTextStyles.overline.copyWith(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w800)),
                   ]),
                 ),
                 const Spacer(),
@@ -379,13 +379,20 @@ class _StatCard extends StatelessWidget {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
-        decoration: BoxDecoration(
+          decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.12)),
+          border: Border.all(
+            color: Theme.of(context).brightness == Brightness.dark 
+                ? color.withOpacity(0.15) 
+                : color.withOpacity(0.3),
+            width: Theme.of(context).brightness == Brightness.dark ? 1.0 : 0.5,
+          ),
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(0.06),
+              color: Theme.of(context).brightness == Brightness.dark 
+                  ? color.withOpacity(0.06) 
+                  : Colors.black.withOpacity(0.04),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -460,7 +467,7 @@ class _QuickActions extends ConsumerWidget {
       _ActionTile(
         icon: Icons.auto_awesome,
         label: l10n.askAi,
-        color: PharmColors.info,
+        color: Theme.of(context).primaryColor,
         onTap: () => context.go('/ai-assistant'),
       ),
     ]);
@@ -535,12 +542,19 @@ class _ActionTileState extends State<_ActionTile> with SingleTickerProviderState
                   boxShadow: widget.isHero
                       ? [
                           BoxShadow(
-                            color: PharmColors.primary.withOpacity(0.15 * _pulseController.value),
+                            color: Theme.of(context).primaryColor.withOpacity(0.2 * _pulseController.value),
                             blurRadius: 16 + (8 * _pulseController.value),
                             spreadRadius: 1 + (2 * _pulseController.value),
                           )
                         ]
-                      : [],
+                      : [
+                          if (Theme.of(context).brightness == Brightness.light)
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.04),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            )
+                        ],
                 ),
                 child: Column(children: [
                   Container(
@@ -603,7 +617,7 @@ class _AiCard extends StatelessWidget {
     
     return _InfoRow(
       onTap: () => context.go('/ai-assistant'),
-      icon: Icons.auto_awesome, iconColor: PharmColors.primary,
+      icon: Icons.auto_awesome, iconColor: Theme.of(context).primaryColor,
       overline: AppLocalizations.of(context)!.pharmAiSuggests,
       text: firstAction != null 
           ? firstAction['label'] ?? 'Ask AI about CPOB/GMP best practices'

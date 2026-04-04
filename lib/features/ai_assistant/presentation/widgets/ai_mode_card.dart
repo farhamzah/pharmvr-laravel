@@ -31,12 +31,12 @@ class AiModeCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected 
               ? PharmColors.primary.withValues(alpha: 0.1) 
-              : PharmColors.surface,
+              : Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isSelected 
                 ? PharmColors.primary 
-                : PharmColors.cardBorder.withValues(alpha: 0.5),
+                : Theme.of(context).dividerColor.withOpacity(0.5),
               width: isSelected ? 2 : 1,
             ),
             boxShadow: [
@@ -56,7 +56,7 @@ class AiModeCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected 
                     ? PharmColors.primary 
-                    : PharmColors.background,
+                    : Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(
@@ -73,7 +73,7 @@ class AiModeCard extends StatelessWidget {
                     Text(
                       title.toUpperCase(),
                       style: PharmTextStyles.label.copyWith(
-                        color: isSelected ? PharmColors.primary : Colors.white,
+                        color: isSelected ? PharmColors.primary : Theme.of(context).textTheme.bodyLarge?.color,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.0,
                       ),
@@ -82,7 +82,7 @@ class AiModeCard extends StatelessWidget {
                     Text(
                       subtitle,
                       style: PharmTextStyles.caption.copyWith(
-                        color: Colors.white.withValues(alpha: 0.5),
+                        color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
                         fontSize: 11,
                       ),
                     ),

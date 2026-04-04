@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 class NetworkConstants {
   // Base URLs for different environments
   static const String emulatorBaseUrl = 'http://10.0.2.2:8000/api/v1';
-  static const String localWifiBaseUrl = 'http://localhost:8000/api/v1'; 
+  static const String localWifiBaseUrl = 'http://192.168.1.3:8000/api/v1'; 
   static const String productionBaseUrl = 'http://admin.pharmvr.cloud/api/v1';
 
   static String get baseUrl {

@@ -9,7 +9,9 @@ use App\Models\Assessment;
 use App\Models\QuestionBankItem;
 use App\Models\QuestionBankOption;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class ContentSeeder extends Seeder
 {
@@ -19,14 +21,14 @@ class ContentSeeder extends Seeder
     public function run(): void
     {
         // Truncate tables to avoid duplicate entry errors
-        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
-        \App\Models\News::truncate();
-        \App\Models\EducationContent::truncate();
-        \App\Models\TrainingModule::truncate();
-        \App\Models\Assessment::truncate();
-        \App\Models\QuestionBankItem::truncate();
-        \App\Models\QuestionBankOption::truncate();
-        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+        Schema::disableForeignKeyConstraints();
+        News::truncate();
+        EducationContent::truncate();
+        TrainingModule::truncate();
+        Assessment::truncate();
+        QuestionBankItem::truncate();
+        QuestionBankOption::truncate();
+        Schema::enableForeignKeyConstraints();
 
         // 1. Seed News
         News::create([
@@ -34,10 +36,10 @@ class ContentSeeder extends Seeder
             'slug'         => Str::slug('Implementasi Quality by Design QbD Dasar Efisiensi Produksi'),
             'summary'      => 'Bagaimana pendekatan QbD membantu industri farmasi mengurangi variasi batch dan pemborosan material.',
             'content'      => 'Quality by Design (QbD) merupakan kerangka kerja sistematis yang menekankan pemahaman produk dan proses sejak awal...',
-            'image_url'    => url('assets/images/news/compliance.jpg'),
+            'image_url'    => 'assets/images/news/compliance.jpg',
             'category'     => 'Industry',
             'is_featured'  => true,
-            'published_at' => now(),
+            'published_at' => Carbon::now(),
         ]);
 
         News::create([
@@ -45,10 +47,10 @@ class ContentSeeder extends Seeder
             'slug'         => Str::slug('Persiapan Inspeksi BPOM Fokus pada Integritas Data Digital'),
             'summary'      => 'Memastikan rekaman batch elektronik memenuhi standar ALCOA+ dalam ekosistem CPOB 4.0.',
             'content'      => 'Integritas data kini menjadi fokus utama inspeksi BPOM di Indonesia seiring digitalisasi pabrik farmasi...',
-            'image_url'    => url('assets/images/news/lab.jpg'),
+            'image_url'    => 'assets/images/news/lab.jpg',
             'category'     => 'Regulation',
             'is_featured'  => true,
-            'published_at' => now()->subDays(1),
+            'published_at' => Carbon::now()->subDays(1),
         ]);
 
         News::create([
@@ -56,10 +58,10 @@ class ContentSeeder extends Seeder
             'slug'         => Str::slug('Optimasi Laju Alir Serbuk pada Mesin Kompresi Tablet Kecepatan Tinggi'),
             'summary'      => 'Studi kasus penggunaan eksipien inovatif untuk mencegah capping dan laminating pada tablet.',
             'content'      => 'Proses kompresi tablet sering menghadapi masalah teknis seperti capping jika sifat alir serbuk tidak optimal...',
-            'image_url'    => url('assets/images/news/logistics.jpg'),
+            'image_url'    => 'assets/images/news/logistics.jpg',
             'category'     => 'Research',
             'is_featured'  => false,
-            'published_at' => now()->subDays(3),
+            'published_at' => Carbon::now()->subDays(3),
         ]);
 
         News::create([
@@ -67,9 +69,10 @@ class ContentSeeder extends Seeder
             'slug'         => Str::slug('Validasi Metode Pembersihan Deteksi Residu Aktif Menggunakan HPLC'),
             'summary'      => 'Teknik swab dan rinse sampling terbaru untuk memastikan eliminasi kontaminasi silang di fasilitas multi-produk.',
             'content'      => 'Pembersihan peralatan produksi antar produk yang berbeda adalah langkah krusial dalam GMP...',
+            'image_url'    => 'assets/images/news/compliance.jpg',
             'category'     => 'Quality Control',
             'is_featured'  => false,
-            'published_at' => now()->subDays(5),
+            'published_at' => Carbon::now()->subDays(5),
         ]);
 
         // 3. Seed Training Modules (VR)
@@ -79,7 +82,7 @@ class ContentSeeder extends Seeder
             'description'        => 'Tur virtual ke dalam fasilitas produksi steril CPOB.',
             'difficulty'         => 'Beginner',
             'estimated_duration' => 15,
-            'cover_image_path'   => url('assets/images/news/compliance.jpg'),
+            'cover_image_path'   => 'assets/images/news/compliance.jpg',
         ]);
 
         $vrGowning = TrainingModule::create([
@@ -88,7 +91,7 @@ class ContentSeeder extends Seeder
             'description'        => 'Simulasi mengenakan pakaian steril lengkap untuk kelas A.',
             'difficulty'         => 'Intermediate',
             'estimated_duration' => 10,
-            'cover_image_path'   => url('assets/images/news/lab.jpg'),
+            'cover_image_path'   => 'assets/images/news/lab.jpg',
         ]);
 
         $vrGmp = TrainingModule::create([
@@ -97,7 +100,7 @@ class ContentSeeder extends Seeder
             'description'        => 'Basics of sterile production and cleanroom protocols.',
             'difficulty'         => 'Beginner',
             'estimated_duration' => 20,
-            'cover_image_path'   => url('assets/images/news/logistics.jpg'),
+            'cover_image_path'   => 'assets/images/news/logistics.jpg',
         ]);
 
         // 2. Seed Education Contents
@@ -119,7 +122,7 @@ class ContentSeeder extends Seeder
             'next_step_label'  => 'Mulai Pre-Test Validasi',
             'next_step_action' => 'open_assessment',
             'description'      => 'Modul mendalam mengenai klasifikasi ruang bersih Kelas A hingga D sesuai aneks 1 CPOB terbaru.',
-            'thumbnail_url'    => url('assets/images/news/compliance.jpg'),
+            'thumbnail_url'    => 'assets/images/news/compliance.jpg',
             'duration_minutes' => 60,
             'pages_count'      => 20,
         ]);
@@ -142,7 +145,7 @@ class ContentSeeder extends Seeder
             'next_step_label'  => 'Mulai Pre-Test Gowning',
             'next_step_action' => 'open_assessment',
             'description'      => 'Pelajari prosedur gowning lengkap untuk memasuki area produksi kelas A.',
-            'thumbnail_url'    => url('assets/images/news/lab.jpg'),
+            'thumbnail_url'    => 'assets/images/news/lab.jpg',
             'duration_minutes' => 30,
             'pages_count'      => 15,
         ]);
@@ -165,7 +168,7 @@ class ContentSeeder extends Seeder
             'next_step_label'  => 'Mulai Belajar GMP',
             'next_step_action' => 'open_assessment',
             'description'      => 'Pelajari dasar-dasar produksi steril sesuai standar GMP internasional.',
-            'thumbnail_url'    => url('assets/images/news/logistics.jpg'),
+            'thumbnail_url'    => 'assets/images/news/logistics.jpg',
             'duration_minutes' => 45,
             'pages_count'      => 12,
         ]);
@@ -228,7 +231,7 @@ class ContentSeeder extends Seeder
             'tags'        => ['CDOB', 'Logistics', 'Quality'],
             'description' => 'Dokumen standar operasional prosedur untuk penerimaan, karantina, dan pemusnahan produk kembalian.',
             'file_url'    => 'https://example.com/sop_return.pdf',
-            'thumbnail_url' => url('assets/images/news/compliance.jpg'),
+            'thumbnail_url' => 'assets/images/news/compliance.jpg',
             'file_type'   => 'PDF',
             'pages_count' => 8,
         ]);
@@ -243,7 +246,7 @@ class ContentSeeder extends Seeder
             'tags'        => ['Sitostatika', 'Production', 'Safety'],
             'description' => 'Materi edukasi mengenai Pencampuran Sediaan Sitostatika [PH-4407] (Document) untuk tenaga profesional farmasi.',
             'file_url'    => 'https://drive.google.com/file/d/1lAlY2fOvrgjrUgl6W3a9SwpvR2Jk-Du6/view?usp=drive_link',
-            'thumbnail_url' => url('assets/images/news/compliance.jpg'), // Same as document #1
+            'thumbnail_url' => 'assets/images/news/compliance.jpg', // Same as document #1
             'file_type'   => 'PDF',
             'pages_count' => 29,
         ]);
@@ -258,14 +261,14 @@ class ContentSeeder extends Seeder
             'tags'        => ['CPOB 2024', 'QA', 'Regulatory'],
             'description' => 'Materi edukasi mengenai Prinsip CPOB 2024 [PH-4336] (Document) sesuai standar industri terbaru.',
             'file_url'    => 'https://drive.google.com/file/d/1lAlY2fOvrgjrUgl6W3a9SwpvR2Jk-Du6/view?usp=drive_link',
-            'thumbnail_url' => url('assets/images/news/lab.jpg'),
+            'thumbnail_url' => 'assets/images/news/lab.jpg',
             'file_type'   => 'PDF',
             'pages_count' => 15,
         ]);
 
         $module = TrainingModule::where('slug', 'pengenalan-lab-steril')->first();
         if ($module) {
-            $preTest = Assessment::create([
+            Assessment::create([
                 'module_id'          => $module->id,
                 'type'               => 'pretest',
                 'title'              => 'Pre-Test: Dasar Ruang Steril',

@@ -21,12 +21,12 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: PharmColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           'AI ASSISTANT',
           style: PharmTextStyles.h4.copyWith(
-            color: Colors.white,
+            color: Theme.of(context).textTheme.displayLarge?.color,
             letterSpacing: 2.0,
             fontStyle: FontStyle.italic,
             fontWeight: FontWeight.w900,
@@ -66,7 +66,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
               Text(
                 'PHARMVR AI ASSISTANT',
                 style: PharmTextStyles.h2.copyWith(
-                  color: Colors.white,
+                  color: Theme.of(context).textTheme.displayLarge?.color,
                   letterSpacing: 1.5,
                   fontWeight: FontWeight.w900,
                   fontStyle: FontStyle.italic,
@@ -78,7 +78,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
               Text(
                 'Proprietary pharmaceutical intelligence for GMP standards, CPOB protocols, and manufacturing excellence.',
                 style: PharmTextStyles.bodyMedium.copyWith(
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6),
                   height: 1.6,
                 ),
                 textAlign: TextAlign.center,
@@ -90,7 +90,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
               const SizedBox(height: 4),
               Text(
                 'Choose a specialized AI mode to focus the retrieval logic.',
-                style: PharmTextStyles.caption.copyWith(color: Colors.white24),
+                style: PharmTextStyles.caption.copyWith(color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.4)),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
@@ -273,7 +273,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
           height: 80,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: PharmColors.surface,
+            color: Theme.of(context).colorScheme.surface,
             border: Border.all(
               color: PharmColors.primary.withValues(alpha: 0.4),
               width: 2,

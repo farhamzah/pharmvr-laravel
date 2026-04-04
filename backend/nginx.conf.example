@@ -1,0 +1,55 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name admin.pharmvr.cloud;
+    
+    # Redirect HTTP to HTTPS (Uncomment when SSL is installed)
+    # return 301 https://$server_name$request_uri;
+
+    root /var/www/pharmvr-laravel/public;
+    index index.php index.html index.htm;
+
+    charset utf-8;
+
+    # Handle Frontend Router & Laravel
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # API Endpoint Proxy Config (Prevent CORS issues)
+    location /api/ {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # Storage Link (Public Assets)
+    location /storage/ {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # Hide sensitive files
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+    location ~ \.env { deny all; }
+    location ~ /\.git { deny all; }
+
+    # Handle PHP FPM
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        
+        # Adjust fastcgi_pass to match your PHP version (e.g. php8.2-fpm.sock)
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+        
+        # Performance Tweaks
+        fastcgi_buffer_size 128k;
+        fastcgi_buffers 4 256k;
+        fastcgi_busy_buffers_size 256k;
+    }
+
+    # Deny access to hidden files
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}

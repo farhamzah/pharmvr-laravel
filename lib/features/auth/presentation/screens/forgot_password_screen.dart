@@ -194,7 +194,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen>
                 PharmTextField(
                   controller: _emailController,
                   labelText: 'EMAIL',
-                  hintText: 'name@university.ac.id',
+                  hintText: 'name@unpad.ac.id',
                   prefixIcon: const Icon(Icons.email_outlined),
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.done,

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\OptimizesImages;
+use App\Services\AssetUrlService;
 
 class NewsController extends Controller
 {
@@ -99,7 +100,7 @@ class NewsController extends Controller
             $imageUrl = null;
             if ($request->hasFile('image')) {
                 $path = $this->storeOptimized($request->file('image'), 'news', 1200);
-                $imageUrl = 'storage/' . $path;
+                $imageUrl = $path;
             }
 
             // Generate a unique slug
@@ -163,12 +164,12 @@ class NewsController extends Controller
             if ($request->hasFile('image')) {
                 // Delete old image if exists
                 if ($news->image_url) {
-                    $oldPath = str_replace('storage/', 'public/', $news->image_url);
-                    \Illuminate\Support\Facades\Storage::delete($oldPath);
+                    $oldPath = AssetUrlService::normalize($news->image_url, 'dynamic');
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
                 }
 
                 $path = $this->storeOptimized($request->file('image'), 'news', 1200);
-                $imageUrl = 'storage/' . $path;
+                $imageUrl = $path;
             }
 
             // Handle title change and potential slug conflict
@@ -222,8 +223,8 @@ class NewsController extends Controller
     public function destroy(News $news)
     {
         if ($news->image_url) {
-            $oldPath = str_replace('storage/', 'public/', $news->image_url);
-            \Illuminate\Support\Facades\Storage::delete($oldPath);
+            $oldPath = AssetUrlService::normalize($news->image_url, 'dynamic');
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
         }
         
         $news->delete();

@@ -39,11 +39,11 @@ class MainShellScreen extends StatelessWidget {
                 child: FloatingActionButton.small(
                   heroTag: 'ai_fab',
                   onPressed: () => AiQuickChatModal.show(context),
-                  backgroundColor: PharmColors.primary.withOpacity(0.85),
+                  backgroundColor: Theme.of(context).primaryColor.withOpacity(0.85),
                   elevation: 2, // Reduced from 4
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
-                    side: BorderSide(color: PharmColors.primary.withOpacity(0.2), width: 1),
+                    side: BorderSide(color: Theme.of(context).primaryColor.withOpacity(0.2), width: 1),
                   ),
                   child: Icon(Icons.auto_awesome, color: Theme.of(context).scaffoldBackgroundColor, size: 20),
                 ),
@@ -69,7 +69,7 @@ class MainShellScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.85),
             border: Border(
-              top: BorderSide(color: PharmColors.primary.withValues(alpha: 0.25), width: 0.5), // Sharper top edge
+              top: BorderSide(color: Theme.of(context).primaryColor.withValues(alpha: 0.15), width: 0.5), // Sharper top edge
             ),
           ),
           child: Row(
@@ -98,10 +98,10 @@ class MainShellScreen extends StatelessWidget {
         curve: Curves.easeOutQuint,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? PharmColors.primary.withOpacity(0.15) : Colors.transparent,
+          color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.12) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? PharmColors.primary.withOpacity(0.3) : Colors.transparent,
+            color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.25) : Colors.transparent,
             width: 1,
           ),
         ),
@@ -110,15 +110,15 @@ class MainShellScreen extends StatelessWidget {
           children: [
             Icon(
               isSelected ? selectedIcon : unselectedIcon,
-              color: isSelected ? PharmColors.primary : Theme.of(context).textTheme.bodySmall?.color,
+              color: isSelected ? Theme.of(context).primaryColor : Theme.of(context).textTheme.bodySmall?.color,
               size: isSelected ? 26 : 24,
             ),
             const SizedBox(height: 4),
             Text(
               label,
               style: PharmTextStyles.label.copyWith(
-                color: isSelected ? PharmColors.primary : Theme.of(context).textTheme.labelSmall?.color,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                color: isSelected ? Theme.of(context).primaryColor : Theme.of(context).textTheme.labelSmall?.color,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 fontSize: 10,
               ),
             ),
@@ -129,11 +129,11 @@ class MainShellScreen extends StatelessWidget {
                 width: 4,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: PharmColors.primary,
+                  color: Theme.of(context).primaryColor,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: PharmColors.primary.withOpacity(0.6),
+                      color: Theme.of(context).primaryColor.withOpacity(0.4),
                       blurRadius: 4,
                       spreadRadius: 1,
                     )

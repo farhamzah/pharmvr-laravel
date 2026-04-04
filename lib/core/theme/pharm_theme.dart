@@ -90,12 +90,12 @@ class PharmTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       brightness: Brightness.light,
-      scaffoldBackgroundColor: PharmColors.backgroundLight,
-      primaryColor: PharmColors.primary,
+      scaffoldBackgroundColor: const Color(0xFFF8FAFC), // Softer white/slate background
+      primaryColor: const Color(0xFF0097A7), // Cyan 700 - better contrast on light mode
       dividerColor: PharmColors.dividerLight,
       colorScheme: const ColorScheme.light(
-        primary: PharmColors.primary,
-        secondary: PharmColors.primaryDark,
+        primary: Color(0xFF0097A7),
+        secondary: Color(0xFF006064),
         surface: PharmColors.surfaceWhite,
         error: PharmColors.error,
       ),
@@ -118,7 +118,7 @@ class PharmTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: PharmColors.primary,
+          backgroundColor: const Color(0xFF0097A7),
           foregroundColor: Colors.white,
           textStyle: PharmTextStyles.button,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -154,7 +154,7 @@ class PharmTheme {
         ),
       ),
       scrollbarTheme: ScrollbarThemeData(
-        thumbColor: WidgetStateProperty.all(PharmColors.primary.withOpacity(0.2)),
+        thumbColor: WidgetStateProperty.all(const Color(0xFF0097A7).withOpacity(0.2)),
         trackColor: WidgetStateProperty.all(PharmColors.dividerLight.withOpacity(0.1)),
         thickness: WidgetStateProperty.all(6),
         radius: const Radius.circular(10),

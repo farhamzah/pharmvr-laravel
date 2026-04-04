@@ -22,7 +22,7 @@ class AiSuggestionChip extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
-            color: PharmColors.surfaceLight,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: PharmColors.primary.withValues(alpha: 0.2),

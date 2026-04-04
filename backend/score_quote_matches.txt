@@ -1,2 +1,0 @@
-﻿E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_043003_create_assessment_recovery_tables.php:30:            if (!Schema::hasColumn('assessment_attempts', 'score')) {
-E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_043003_create_assessment_recovery_tables.php:31:                $table->integer('score')->nullable();

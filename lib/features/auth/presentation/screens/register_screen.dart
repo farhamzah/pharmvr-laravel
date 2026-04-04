@@ -265,7 +265,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
             PharmTextField(
               controller: _emailController,
               labelText: 'EMAIL',
-              hintText: 'name@university.ac.id',
+              hintText: 'name@unpad.ac.id',
               prefixIcon: const Icon(Icons.email_outlined),
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
@@ -294,13 +294,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
 
             PharmTextField(
               controller: _confirmController,
+              focusNode: _confirmFocus,
               labelText: 'CONFIRM PASSWORD',
               hintText: 'Re-enter password',
               prefixIcon: const Icon(Icons.lock_outline),
               isPasswordField: true,
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) => _handleRegister(),
-              validator: ValidatorBuilder.validateConfirmPassword(_passwordController.text),
+              validator: (value) => ValidatorBuilder.validateConfirmPassword(_passwordController.text)(value),
             ),
             const SizedBox(height: 28),
 

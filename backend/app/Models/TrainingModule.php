@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\UserTrainingProgress;
 
 use App\Traits\Auditable;
+use App\Services\AssetUrlService;
 
 /**
  * @property int $id
@@ -62,13 +63,7 @@ class TrainingModule extends Model
 
     public function getCoverImageUrlAttribute()
     {
-        $path = $this->cover_image_path;
-        if (!$path) return null;
-        if (filter_var($path, FILTER_VALIDATE_URL)) return $path;
-        
-        // Remove 'storage/' prefix if we stored it that way
-        $cleanPath = str_replace('storage/', '', $path);
-        return \Illuminate\Support\Facades\Storage::disk('public')->url($cleanPath);
+        return AssetUrlService::resolve($this->cover_image_path);
     }
 
     /**

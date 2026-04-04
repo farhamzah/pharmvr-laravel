@@ -49,3 +49,10 @@ android/app/build/
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
+
+# Custom Debug Files
+out.txt
+session_restore_trace.txt
+verification_output.txt
+*.log
+*.txt

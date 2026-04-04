@@ -206,7 +206,7 @@ class _ProfileHeader extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            PharmColors.primary.withValues(alpha: 0.12),
+            Theme.of(context).primaryColor.withValues(alpha: 0.12),
             Theme.of(context).scaffoldBackgroundColor,
           ],
         ),
@@ -220,15 +220,15 @@ class _ProfileHeader extends StatelessWidget {
               width: 88, height: 88,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: PharmColors.primary.withValues(alpha: 0.4), width: 2.5),
-                boxShadow: [BoxShadow(color: PharmColors.primary.withValues(alpha: 0.15), blurRadius: 24, spreadRadius: 4)],
+                border: Border.all(color: Theme.of(context).primaryColor.withValues(alpha: 0.4), width: 2.5),
+                boxShadow: [BoxShadow(color: Theme.of(context).primaryColor.withValues(alpha: 0.15), blurRadius: 24, spreadRadius: 4)],
               ),
               child: CircleAvatar(
                 backgroundColor: Theme.of(context).colorScheme.surface,
                 backgroundImage: avatarUrl != null ? CachedNetworkImageProvider(NetworkConstants.sanitizeUrl(avatarUrl!)) : null,
                 child: avatarUrl == null
                     ? Text(name.isNotEmpty ? name[0].toUpperCase() : 'U',
-                        style: PharmTextStyles.h1.copyWith(color: PharmColors.primary, fontSize: 34))
+                        style: PharmTextStyles.h1.copyWith(color: Theme.of(context).primaryColor, fontSize: 34))
                     : null,
               ),
             ),
@@ -241,21 +241,21 @@ class _ProfileHeader extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               '${university ?? ""}${university != null && nim != null ? " • " : ""}${nim ?? ""}',
-              style: PharmTextStyles.caption.copyWith(color: PharmColors.primary.withValues(alpha: 0.8), fontWeight: FontWeight.w500),
+              style: PharmTextStyles.caption.copyWith(color: Theme.of(context).primaryColor.withValues(alpha: 0.8), fontWeight: FontWeight.w500),
             ),
           ],
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: PharmColors.primary.withValues(alpha: 0.1),
+              color: Theme.of(context).primaryColor.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
               role.toUpperCase(),
               style: PharmTextStyles.caption.copyWith(
-                color: PharmColors.primary,
-                fontWeight: FontWeight.w700,
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.w800,
                 letterSpacing: 1.2,
               ),
             ),
@@ -352,7 +352,7 @@ class _MenuRow extends StatelessWidget {
                 Text(trailing!, style: PharmTextStyles.caption.copyWith(color: Theme.of(context).textTheme.labelSmall?.color)),
                 const SizedBox(width: 8),
               ],
-              const Icon(Icons.arrow_forward_ios, size: 12, color: PharmColors.primary),
+              Icon(Icons.arrow_forward_ios, size: 12, color: Theme.of(context).primaryColor.withOpacity(0.5)),
             ],
           ),
         ),

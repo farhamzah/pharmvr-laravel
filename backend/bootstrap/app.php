@@ -3,6 +3,14 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Middleware\PermissionMiddleware;
+use Illuminate\Http\Request;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,27 +21,27 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'admin' => \App\Http\Middleware\AdminMiddleware::class,
-            'permission' => \App\Http\Middleware\PermissionMiddleware::class,
+            'admin' => EnsureUserIsAdmin::class,
+            'permission' => PermissionMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (\Throwable $e, \Illuminate\Http\Request $request) {
+        $exceptions->render(function (Throwable $e, Request $request) {
             if ($request->is('admin/*') && !config('app.debug')) {
                 return response()->view('errors.500', [], 500);
             }
             
             if ($request->is('api/*') || $request->wantsJson()) {
-                if ($e instanceof \Illuminate\Auth\AuthenticationException) {
+                if ($e instanceof AuthenticationException) {
                     return response()->json(['success' => false, 'message' => 'Unauthenticated.'], 401);
                 }
-                if ($e instanceof \Illuminate\Validation\ValidationException) {
+                if ($e instanceof ValidationException) {
                     return response()->json(['success' => false, 'message' => $e->getMessage(), 'errors' => $e->errors()], 422);
                 }
-                if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException || $e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+                if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {
                     return response()->json(['success' => false, 'message' => 'Resource not found.'], 404);
                 }
-                if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
+                if ($e instanceof HttpException) {
                     return response()->json(['success' => false, 'message' => $e->getMessage()], $e->getStatusCode());
                 }
 

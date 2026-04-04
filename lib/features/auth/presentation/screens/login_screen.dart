@@ -373,7 +373,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       controller: _emailController,
       focusNode: _emailFocus,
       labelText: 'EMAIL',
-      hintText: 'name@university.ac.id',
+      hintText: 'name@unpad.ac.id',
       prefixIcon: const Icon(Icons.email_outlined),
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,

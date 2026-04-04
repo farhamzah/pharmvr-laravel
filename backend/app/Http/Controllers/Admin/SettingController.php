@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Traits\OptimizesImages;
+use App\Services\AssetUrlService;
 
 class SettingController extends Controller
 {
@@ -32,11 +33,12 @@ class SettingController extends Controller
                 if ($request->hasFile($setting->key)) {
                     // Delete old image if exists and it's not a default asset
                     if ($setting->value && !str_contains($setting->value, 'assets/')) {
-                        \Illuminate\Support\Facades\Storage::disk('public')->delete(str_replace('storage/', '', $setting->value));
+                        $cleanValue = AssetUrlService::normalize($setting->value, 'dynamic');
+                        \Illuminate\Support\Facades\Storage::disk('public')->delete($cleanValue);
                     }
 
                     $path = $this->storeOptimized($request->file($setting->key), 'settings', 1200);
-                    $setting->update(['value' => 'storage/' . $path]);
+                    $setting->update(['value' => $path]);
                 }
             } else {
                 if ($request->has($setting->key)) {

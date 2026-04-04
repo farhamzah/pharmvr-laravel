@@ -25,12 +25,16 @@ class AiAssistantApiService {
   }
 
   Future<AiSession> startSession({String? title, String? moduleId, String? assistantMode}) async {
-    final response = await _dio.post('/ai-assistant/chat/start', data: {
-      'session_title': title, // Match backend key
-      'module_id': moduleId,
-      'assistant_mode': assistantMode,
-      'platform': 'mobile',
-    });
+    final response = await _dio.post(
+      '/ai-assistant/chat/start', 
+      data: {
+        'session_title': title, // Match backend key
+        'module_id': moduleId,
+        'assistant_mode': assistantMode,
+        'platform': 'mobile',
+      },
+      options: Options(receiveTimeout: const Duration(minutes: 2)),
+    );
     return AiSession.fromJson(response.data['data']);
   }
 
@@ -55,7 +59,11 @@ class AiAssistantApiService {
     // Debug logging for development
     print('AI_REQUEST_PAYLOAD: $payload');
 
-    final response = await _dio.post('/ai-assistant/chat/ask', data: payload);
+    final response = await _dio.post(
+      '/ai-assistant/chat/ask', 
+      data: payload,
+      options: Options(receiveTimeout: const Duration(minutes: 2)),
+    );
     
     print('AI_RESPONSE_STATUS: ${response.statusCode}');
     print('AI_RESPONSE_BODY: ${response.data}');
