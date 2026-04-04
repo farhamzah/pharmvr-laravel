@@ -1,0 +1,17 @@
+﻿--- NEWS ---
+Title: Implementasi Quality by Design (QbD) Dasar Efisiensi Produksi | Image: http://localhost:8000/assets/images/news/compliance.jpg
+Title: Persiapan Inspeksi BPOM: Fokus pada Integritas Data Digital | Image: http://localhost:8000/assets/images/news/lab.jpg
+Title: Optimasi Laju Alir Serbuk pada Mesin Kompresi Tablet Kecepatan Tinggi | Image: http://localhost:8000/assets/images/news/logistics.jpg
+
+--- EDUCATION ---
+Title: Pengenalan Lab Steril (VR) | Type: module | Thumbnail: http://localhost:8000/assets/images/news/compliance.jpg
+Title: Prosedur Gowning Level 3 | Type: module | Thumbnail: http://localhost:8000/assets/images/news/lab.jpg
+Title: CPOB Part 1: Dasar-Dasar CPOB | Type: video | Thumbnail: NULL
+Title: CPOB Part 2: Personalia & Bangunan | Type: video | Thumbnail: NULL
+Title: CPOB 2018: Proses Produksi | Type: video | Thumbnail: NULL
+Title: SOP Penanganan Produk Kembalian (Product Return) | Type: document | Thumbnail: http://localhost:8000/assets/images/news/compliance.jpg
+Title: Pencampuran Sediaan Sitostatika [PH-4407] (Document) | Type: document | Thumbnail: http://localhost:8000/assets/images/news/compliance.jpg
+Title: Prinsip CPOB 2024 [PH-4336] (Document) | Type: document | Thumbnail: http://localhost:8000/assets/images/news/lab.jpg
+
+--- USERS ---
+User: Nana | Avatar: NULL

@@ -1,0 +1,26 @@
+﻿E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_043003_create_assessment_recovery_tables.php:4:use Illuminate\Database\Schema\Blueprint;
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_043003_create_assessment_recovery_tables.php:16:            Schema::create('assessment_attempts', function (Blueprint $table) {
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_043003_create_assessment_recovery_tables.php:23:        Schema::table('assessment_attempts', function (Blueprint $table) {
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_043003_create_assessment_recovery_tables.php:46:            Schema::create('user_answers', function (Blueprint $table) {
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_043003_create_assessment_recovery_tables.php:53:        Schema::table('user_answers', function (Blueprint $table) {
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:4:use Illuminate\Database\Schema\Blueprint;
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:14:        Schema::create('vr_session_stage_results', function (Blueprint $blueprint) {
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:15:            $blueprint->id();
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:16:            $blueprint->foreignId('vr_session_id')->constrained()->onDelete('cascade');
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:17:            $blueprint->foreignId('user_id')->constrained()->onDelete('cascade');
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:18:            $blueprint->foreignId('training_module_id')->constrained()->onDelete('cascade');
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:20:            $blueprint->string('stage_name')->index();
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:21:            $blueprint->decimal('stage_score', 8, 2)->nullable();
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:22:            $blueprint->boolean('passed')->default(false);
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:23:            $blueprint->timestamp('submitted_at')->useCurrent();
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:24:            $blueprint->json('metadata')->nullable();
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:26:            $blueprint->timestamps();
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:28:            $blueprint->index(['vr_session_id', 'stage_name']);
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_140712_create_session_analytics_table.php:4:use Illuminate\Database\Schema\Blueprint;
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_140712_create_session_analytics_table.php:14:        Schema::create('session_analytics', function (Blueprint $table) {
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_18_222659_rebuild_question_bank_schema_to_spec.php:4:use Illuminate\Database\Schema\Blueprint;
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_18_222659_rebuild_question_bank_schema_to_spec.php:20:        Schema::create('assessments', function (Blueprint $table) {
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_18_222659_rebuild_question_bank_schema_to_spec.php:38:        Schema::create('question_bank_items', function (Blueprint $table) {
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_18_222659_rebuild_question_bank_schema_to_spec.php:50:        Schema::create('question_bank_options', function (Blueprint $table) {
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_18_235340_create_ai_chat_messages_table.php:4:use Illuminate\Database\Schema\Blueprint;
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_18_235340_create_ai_chat_messages_table.php:14:        Schema::create('ai_chat_messages', function (Blueprint $table) {

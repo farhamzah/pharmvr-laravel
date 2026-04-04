@@ -1,0 +1,76 @@
+﻿
+  Dropping all tables  193.69ms DONE
+
+   INFO  Preparing database.  
+
+  Creating migration table  14.12ms DONE
+
+   INFO  Running migrations.  
+
+  0001_01_01_000000_create_users_table  93.03ms DONE
+  0001_01_01_000001_create_cache_table  57.06ms DONE
+  0001_01_01_000002_create_jobs_table  91.73ms DONE
+  2026_03_10_073956_create_personal_access_tokens_table  55.51ms DONE
+  2026_03_11_031522_create_user_profiles_table  68.51ms DONE
+  2026_03_11_031523_create_user_preferences_table  72.26ms DONE
+  2026_03_11_043000_create_news_table  54.74ms DONE
+  2026_03_11_043001_create_education_contents_table  66.50ms DONE
+  2026_03_11_043002_create_training_tables  180.61ms DONE
+  2026_03_11_043003_create_assessment_recovery_tables  267.13ms DONE
+  2026_03_11_043500_update_education_contents_table  31.52ms DONE
+  2026_03_11_043600_add_module_meta_to_education_contents  12.70ms DONE
+  2026_03_11_043601_link_education_to_training_modules  69.01ms DONE
+  2026_03_11_044000_add_platform_to_education_contents  11.00ms DONE
+  2026_03_11_044500_add_file_type_to_education_contents  9.10ms DONE
+  2026_03_11_044800_add_detail_meta_to_education_contents  18.46ms DONE
+  2026_03_11_045000_update_news_table  23.18ms DONE
+  2026_03_11_061143_create_vr_tables  696.20ms DONE
+  2026_03_11_070000_create_vr_session_events_table  291.87ms DONE
+  2026_03_11_080000_create_vr_session_stage_results_table  197.46ms DONE
+  2026_03_11_090000_create_vr_session_hints_table  209.66ms DONE
+  2026_03_11_134258_create_pharmai_tables  197.30ms DONE
+  2026_03_11_134318_create_vr_ai_interactions_table  229.28ms DONE
+  2026_03_11_140712_create_session_analytics_table  67.94ms DONE
+  2026_03_11_140712_create_user_achievements_table  97.29ms DONE
+  2026_03_11_161137_add_fields_to_vr_ai_interactions_table  25.23ms DONE
+  2026_03_11_161825_change_hint_type_to_string_in_vr_ai_interactions_table  48.26ms DONE
+  2026_03_12_045000_create_ai_usage_logs_table  217.41ms DONE
+  2026_03_13_065406_add_ban_fields_to_users_table  16.10ms DONE
+  2026_03_13_065409_create_audit_logs_table  62.14ms DONE
+  2026_03_13_071347_create_settings_table  35.79ms DONE
+  2026_03_13_074058_add_vr_bypass_flag_to_users_table  8.37ms DONE
+  2026_03_13_075751_create_rbac_tables  346.03ms DONE
+  2026_03_13_085523_add_passed_to_assessment_attempts_table  7.25ms DONE
+  2026_03_14_232904_refine_user_roles_and_status  23.57ms DONE
+  2026_03_15_024541_add_learning_meta_to_education_contents  37.16ms DONE
+  2026_03_15_030710_add_detailed_document_meta_to_education_contents  16.10ms DONE
+  2026_03_18_031617_add_journey_status_to_user_training_progress  28.66ms DONE
+  2026_03_18_034353_rename_cover_image_url_to_path_in_training_modules_table  37.14ms DONE
+  2026_03_18_055705_seed_app_settings  33.37ms DONE
+  2026_03_18_222659_rebuild_question_bank_schema_to_spec  248.57ms DONE
+  2026_03_18_235338_create_ai_knowledge_sources_table  148.09ms DONE
+  2026_03_18_235339_create_ai_knowledge_chunks_table  85.00ms DONE
+  2026_03_18_235340_create_ai_avatar_profiles_table  152.42ms DONE
+  2026_03_18_235340_create_ai_chat_messages_table  49.49ms FAIL
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[HY000]: General error: 1005 Can't create table `pharmvr`.`ai_chat_messages` (errno: 150 "Foreign key constraint is incorrectly formed") (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: pharmvr, SQL: alter table `ai_chat_messages` add constraint `ai_chat_messages_session_id_foreign` foreign key (`session_id`) references `ai_chat_sessions` (`id`) on delete cascade)
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:838
+    834Γûò             $exceptionType = $this->isUniqueConstraintError($e)
+    835Γûò                 ? UniqueConstraintViolationException::class
+    836Γûò                 : QueryException::class;
+    837Γûò 
+  Γ₧£ 838Γûò             throw new $exceptionType(
+    839Γûò                 $this->getNameWithReadWriteType(),
+    840Γûò                 $query,
+    841Γûò                 $this->prepareBindings($bindings),
+    842Γûò                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:584
+      PDOException::("SQLSTATE[HY000]: General error: 1005 Can't create table `pharmvr`.`ai_chat_messages` (errno: 150 "Foreign key constraint is incorrectly formed")")
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:584
+      PDOStatement::execute()
+

@@ -1,0 +1,115 @@
+﻿
+   WARN  Metadata found in doc-comment for method Tests\Unit\VrRuleSanityTest::it_evaluates_sterile_breach_correctly(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\AiAvatarVrIntegrationTest::it_returns_greeting_guidance_correctly(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\AiAvatarVrIntegrationTest::it_returns_explain_guidance_with_scene_prompt(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\AiAvatarVrIntegrationTest::it_returns_hint_guidance_for_specific_object(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\AiAvatarVrIntegrationTest::it_returns_concise_response_to_question_in_vr(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\AiUsageTrackingTest::it_logs_usage_when_sending_app_chat_message(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\AiUsageTrackingTest::it_logs_usage_when_generating_vr_feedback(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\HybridEvaluationTest::system_uses_hybrid_evaluation_for_sterile_breach(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\PharmAiTest::a_user_can_create_and_list_conversations(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\PharmAiTest::a_user_can_send_a_message_and_get_mock_ai_response(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\PharmAiTest::ai_enforces_domain_restriction_mock(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\PharmAiTest::headset_can_trigger_ai_hint_generation(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\PharmAiTest::headset_can_trigger_ai_reminder_generation(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\PharmAiTest::headset_can_trigger_ai_feedback_generation(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\PharmAiTest::a_user_can_use_stateless_chat(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\PharmaiApiContractTest::it_matches_the_list_conversations_contract(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\PharmaiApiContractTest::it_matches_the_create_conversation_contract(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\PharmaiApiContractTest::it_matches_the_conversation_detail_contract(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\PharmaiApiContractTest::it_matches_the_send_message_contract(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Ai\PharmaiApiContractTest::it_matches_the_stateless_chat_contract(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Analytics\AnalyticsTest::completing_a_session_triggers_analytics_and_achievements(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Analytics\AnalyticsTest::a_user_can_view_analytics_overview(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Analytics\AnalyticsTest::a_user_can_view_achievements(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Analytics\LeaderboardTest::users_can_view_global_leaderboard(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Analytics\LeaderboardTest::users_can_view_module_specific_leaderboard(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Analytics\LeaderboardTest::users_can_view_their_unified_progress(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_user_can_start_a_pairing_session(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_user_can_check_current_pairing_status(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_user_can_cancel_a_pending_pairing(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_headset_can_pair_with_specific_response_structure(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_headset_can_send_heartbeat_with_issued_token(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_headset_can_start_update_and_complete_a_vr_session(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_headset_can_interrupt_a_vr_session(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_headset_can_record_session_events(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_headset_can_record_in_vr_quiz_events(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_headset_can_record_staged_post_test_results(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_headset_can_record_ai_hint_logs(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_headset_can_send_unified_learning_events(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::v1_vr_status_returns_refined_response_structure(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::v1_vr_launch_readiness_checks_all_requirements(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_mobile_user_can_start_a_vr_session(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::home_api_returns_correct_vr_status(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_mobile_user_can_fetch_current_session_status(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\Api\V1\Vr\VrPhase4Test::a_mobile_user_can_show_specific_session_details(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   FAIL  Tests\Feature\Api\V1\Ai\AiAvatarVrIntegrationTest
+  Γ¿» it returns concΓÇª 0.42s  
+  ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  
+   FAILED  Tests\FeatureΓÇª   
+  Failed asserting that two strings are identical.
+--- Expected
++++ Actual
+@@ @@
+-'vr_concise'
++'neutral'
+
+  at tests\Feature\Api\V1\Ai\AiAvatarVrIntegrationTest.php:114
+    110Γûò         ]);
+    111Γûò 
+    112Γûò         $response->assertStatus(200)
+    113Γûò             ->assertJsonPath('interaction_mode', 'ask')
+  Γ₧£ 114Γûò             ->assertJsonPath('response_mode', 'vr_concise')
+    115Γûò             ->assertSee('Sebagai Senior GMP Auditor:');
+    116Γûò             
+    117Γûò         if (strlen($response->json('answer')) > 250) {
+    118Γûò             fwrite(STDERR, "\nFAILED LENGTH: " . strlen($response->json('answer')) . "\n");
+
+
+  Tests:    1 failed (3 assertions)
+  Duration: 0.57s
+

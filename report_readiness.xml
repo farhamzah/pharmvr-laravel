@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Tests\Feature\Api\V1\Vr\VrPhase4Test" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" tests="1" assertions="6" errors="1" failures="0" skipped="0" time="0.309119">
+    <testcase name="v1_vr_launch_readiness_checks_all_requirements" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" line="247" class="Tests\Feature\Api\V1\Vr\VrPhase4Test" classname="Tests.Feature.Api.V1.Vr.VrPhase4Test" assertions="6" time="0.309119">
+      <error type="Illuminate\Database\QueryException">Tests\Feature\Api\V1\Vr\VrPhase4Test::v1_vr_launch_readiness_checks_all_requirements&#13;
+Illuminate\Database\QueryException: SQLSTATE[23000]: Integrity constraint violation: 19 CHECK constraint failed: status (Connection: sqlite, Database: :memory:, SQL: insert into "assessment_attempts" ("user_id", "assessment_id", "score", "status", "completed_at", "updated_at", "created_at") values (1, 1, 85, completed, 2026-03-11 07:53:36, 2026-03-11 07:53:36, 2026-03-11 07:53:36))
+&#13;
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Connection.php:838
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Connection.php:794
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Connection.php:573
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Connection.php:537
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Query\Processors\Processor.php:32
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php:4140
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:2235
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:1436
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:1401
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:1240
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:1219
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Support\helpers.php:388
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php:1218
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Support\Traits\ForwardsCalls.php:23
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:2540
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php:2556
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:271</error>
+    </testcase>
+  </testsuite>
+</testsuites>

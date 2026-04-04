@@ -1,0 +1,5 @@
+--- Testing /api/v1/assessments/pengenalan-lab-steril/pre_test ---
+Status: 200
+Content:
+{"data":{"id":1,"type":"pretest","title":"Pre-Test: Pengenalan Lab Steril (VR)","description":"Initial neural evaluation for Pengenalan Lab Steril (VR)","total_questions":3,"estimated_duration":" menit","passing_score":null,"module_summary":{"slug":"pengenalan-lab-steril","title":"Pengenalan Lab Steril (VR)"},"attempt_info":{"has_previous_attempt":true,"latest_score":null,"highest_score":0,"status":"in_progress","has_passed":false,"vr_completed":false},"is_eligible":true,"eligibility_message":null,"can_start":true,"recommended_action":"Ulangi Assessment"}}
+

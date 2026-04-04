@@ -1,0 +1,24 @@
+﻿URI: storage/{path}
+Methods: GET,HEAD
+Action: {"uses":{},"as":"storage.local"}
+
+All storage routes:
+
+   BadMethodCallException 
+
+  Method Illuminate\Routing\Route::method does not exist.
+
+  at vendor\laravel\framework\src\Illuminate\Macroable\Traits\Macroable.php:115
+    111Γûò      */
+    112Γûò     public function __call($method, $parameters)
+    113Γûò     {
+    114Γûò         if (! static::hasMacro($method)) {
+  Γ₧£ 115Γûò             throw new BadMethodCallException(sprintf(
+    116Γûò                 'Method %s::%s does not exist.', static::class, $method
+    117Γûò             ));
+    118Γûò         }
+    119Γûò
+
+  1   tmp\check_route.php:22
+      Illuminate\Routing\Route::__call("method", [])
+
