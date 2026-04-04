@@ -15,7 +15,7 @@ echo "🚀 Starting PharmVR Pro Backend Deployment..."
 # 2. Pull Latest Code
 echo "📥 Pulling latest code from Git..."
 git gc --auto
-git pull origin main
+git pull origin master
 
 # 3. Install/Update Composer Dependencies
 echo "📦 Installing composer dependencies..."
