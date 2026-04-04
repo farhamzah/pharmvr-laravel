@@ -8,6 +8,7 @@ use App\Models\EducationContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Traits\OptimizesImages;
+use App\Services\AssetUrlService;
 
 class EducationController extends Controller
 {
@@ -35,14 +36,6 @@ class EducationController extends Controller
      */
     public function store(Request $request)
     {
-        \Log::info('Module Store Request:', $request->all());
-        if ($request->hasFile('cover_image')) {
-            \Log::info('File Details:', [
-                'name' => $request->file('cover_image')->getClientOriginalName(),
-                'size' => $request->file('cover_image')->getSize(),
-                'mime' => $request->file('cover_image')->getMimeType(),
-            ]);
-        }
         $request->validate([
             'title' => 'required|string|max:255|unique:training_modules,title',
             'description' => 'required|string',
@@ -57,7 +50,7 @@ class EducationController extends Controller
 
         if ($request->hasFile('cover_image')) {
             $path = $this->storeOptimized($request->file('cover_image'), 'modules/thumbnails', 1080);
-            $data['cover_image_path'] = 'storage/' . $path;
+            $data['cover_image_path'] = $path;
         }
 
         TrainingModule::create($data);
@@ -90,14 +83,6 @@ class EducationController extends Controller
      */
     public function update(Request $request, TrainingModule $education)
     {
-        \Log::info('Module Update Request ID: ' . $education->id, $request->all());
-        if ($request->hasFile('cover_image')) {
-            \Log::info('File Details:', [
-                'name' => $request->file('cover_image')->getClientOriginalName(),
-                'size' => $request->file('cover_image')->getSize(),
-                'mime' => $request->file('cover_image')->getMimeType(),
-            ]);
-        }
         $request->validate([
             'title' => 'required|string|max:255|unique:training_modules,title,' . $education->id,
             'description' => 'required|string',
@@ -113,11 +98,12 @@ class EducationController extends Controller
         if ($request->hasFile('cover_image')) {
             // Delete old image if exists
             if ($education->cover_image_path) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete(str_replace('storage/', '', $education->cover_image_path));
+                $cleanPath = AssetUrlService::normalize($education->cover_image_path, 'dynamic');
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($cleanPath);
             }
             
             $path = $this->storeOptimized($request->file('cover_image'), 'modules/thumbnails', 1080);
-            $data['cover_image_path'] = 'storage/' . $path;
+            $data['cover_image_path'] = $path;
         }
 
         $education->update($data);

@@ -4,6 +4,7 @@ namespace App\Http\Resources\Api\V1;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Services\AssetUrlService;
 
 class UserResource extends JsonResource
 {
@@ -21,7 +22,7 @@ class UserResource extends JsonResource
             'role'  => $this->role,
             'profile' => [
                 'phone'      => $this->profile?->phone,
-                'avatar_url' => $this->profile?->avatar_url ? \Illuminate\Support\Facades\Storage::url($this->profile->avatar_url) : null,
+                'avatar_url' => AssetUrlService::resolve($this->profile?->avatar_url),
                 'bio'        => $this->profile?->bio,
                 'university' => $this->profile?->university,
                 'semester'   => (int) $this->profile?->semester,

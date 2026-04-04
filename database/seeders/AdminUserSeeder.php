@@ -14,8 +14,9 @@ class AdminUserSeeder extends Seeder
             ['email' => 'admin@pharmvr.com'],
             [
                 'name' => 'Super Admin',
-                'password' => Hash::make('Password123!'),
+                'password' => Hash::make('PharmVR@dmin2026!'),
                 'role' => 'admin',
+                'status' => 'active',
             ]
         );
         $admin->assignRole('super-admin');
@@ -24,8 +25,9 @@ class AdminUserSeeder extends Seeder
             ['email' => 'moderator@pharmvr.com'],
             [
                 'name' => 'Content Moderator',
-                'password' => Hash::make('Password123!'),
+                'password' => Hash::make('PharmVR@Mod2026!'),
                 'role' => 'admin',
+                'status' => 'active',
             ]
         );
         $moderator->assignRole('moderator');
@@ -34,8 +36,9 @@ class AdminUserSeeder extends Seeder
             ['email' => 'viewer@pharmvr.com'],
             [
                 'name' => 'System Auditor',
-                'password' => Hash::make('Password123!'),
+                'password' => Hash::make('PharmVR@View2026!'),
                 'role' => 'admin',
+                'status' => 'active',
             ]
         );
         $viewer->assignRole('viewer');

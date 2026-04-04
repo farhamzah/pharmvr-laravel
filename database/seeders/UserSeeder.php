@@ -13,21 +13,21 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Default Test User for Frontend
+        // Default Test User for Frontend (dev/testing only)
         User::updateOrCreate(
             ['email' => 'test@pharmvr.com'],
             [
                 'name' => 'Test Student',
-                'password' => Hash::make('Password123!'),
+                'password' => Hash::make('DevTest@2026!'),
                 'role' => 'user',
             ]
         );
 
         User::updateOrCreate(
-            ['email' => 'nana@ui.com'],
+            ['email' => 'student@pharmvr.com'],
             [
-                'name' => 'Nana',
-                'password' => Hash::make('Farhamzah34#'),
+                'name' => 'Demo Student',
+                'password' => Hash::make('DevTest@2026!'),
                 'role' => 'user',
             ]
         );

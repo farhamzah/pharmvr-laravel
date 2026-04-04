@@ -5,9 +5,6 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Http\Request;
 use App\Models\Permission;
 
 class AppServiceProvider extends ServiceProvider
@@ -44,15 +41,6 @@ class AppServiceProvider extends ServiceProvider
         // Backward compatibility for existing hardcoded roles
         Gate::define('access-admin', function ($user) {
             return in_array($user->role, ['admin', 'super_admin']) || $user->roles->count() > 0;
-        });
-
-        // Hardened Rate Limiters
-        RateLimiter::for('admin', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-        });
-
-        RateLimiter::for('admin-sensitive', function (Request $request) {
-            return Limit::perMinute(10)->by($request->user()?->id ?: $request->ip());
         });
     }
 }

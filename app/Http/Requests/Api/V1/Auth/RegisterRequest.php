@@ -28,7 +28,6 @@ class RegisterRequest extends FormRequest
                 'required',
                 'string',
                 'min:8',
-                'confirmed',
                 \Illuminate\Validation\Rules\Password::min(8)
                     ->letters()
                     ->mixedCase()

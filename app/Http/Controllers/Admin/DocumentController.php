@@ -8,6 +8,7 @@ use App\Models\EducationContent;
 use App\Models\TrainingModule;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use App\Services\AssetUrlService;
 
 class DocumentController extends Controller
 {
@@ -69,8 +70,8 @@ class DocumentController extends Controller
         } elseif ($request->hasFile('document_file')) {
             $file = $request->file('document_file');
             $fileName = time() . '_' . Str::slug($request->title) . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('public/documents', $fileName);
-            $data['file_url'] = Storage::url($path);
+            $path = $file->storeAs('documents', $fileName, 'public');
+            $data['file_url'] = $path;
             $data['file_type'] = $file->getClientOriginalExtension();
         }
 
@@ -78,8 +79,8 @@ class DocumentController extends Controller
         if ($request->hasFile('thumbnail')) {
             $thumb = $request->file('thumbnail');
             $thumbName = time() . '_thumb_' . Str::slug($request->title) . '.' . $thumb->getClientOriginalExtension();
-            $thumbPath = $thumb->storeAs('public/thumbnails/documents', $thumbName);
-            $data['thumbnail_url'] = Storage::url($thumbPath);
+            $thumbPath = $thumb->storeAs('thumbnails/documents', $thumbName, 'public');
+            $data['thumbnail_url'] = $thumbPath;
         }
 
         EducationContent::create($data);
@@ -126,22 +127,22 @@ class DocumentController extends Controller
         if ($request->source_type === 'external') {
             // If switching from upload to external, we might want to delete the old file
             if ($document->source_type === 'upload' && $document->file_url) {
-                $oldPath = str_replace('/storage/', 'public/', $document->file_url);
-                Storage::delete($oldPath);
+                $oldPath = AssetUrlService::normalize($document->file_url, 'dynamic');
+                Storage::disk('public')->delete($oldPath);
             }
             $data['file_url'] = $request->external_url;
             $data['file_type'] = pathinfo($request->external_url, PATHINFO_EXTENSION) ?: 'URL';
         } elseif ($request->hasFile('document_file')) {
             // Delete old file if exists (whether it was an upload or an external link record)
             if ($document->source_type === 'upload' && $document->file_url) {
-                $oldPath = str_replace('/storage/', 'public/', $document->file_url);
-                Storage::delete($oldPath);
+                $oldPath = AssetUrlService::normalize($document->file_url, 'dynamic');
+                Storage::disk('public')->delete($oldPath);
             }
 
             $file = $request->file('document_file');
             $fileName = time() . '_' . Str::slug($request->title) . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('public/documents', $fileName);
-            $data['file_url'] = Storage::url($path);
+            $path = $file->storeAs('documents', $fileName, 'public');
+            $data['file_url'] = $path;
             $data['file_type'] = $file->getClientOriginalExtension();
         }
 
@@ -149,14 +150,14 @@ class DocumentController extends Controller
         if ($request->hasFile('thumbnail')) {
             // Delete old thumbnail if exists
             if ($document->thumbnail_url) {
-                $oldThumbPath = str_replace('/storage/', 'public/', $document->thumbnail_url);
-                Storage::delete($oldThumbPath);
+                $oldThumbPath = AssetUrlService::normalize($document->thumbnail_url, 'dynamic');
+                Storage::disk('public')->delete($oldThumbPath);
             }
 
             $thumb = $request->file('thumbnail');
             $thumbName = time() . '_thumb_' . Str::slug($request->title) . '.' . $thumb->getClientOriginalExtension();
-            $thumbPath = $thumb->storeAs('public/thumbnails/documents', $thumbName);
-            $data['thumbnail_url'] = Storage::url($thumbPath);
+            $thumbPath = $thumb->storeAs('thumbnails/documents', $thumbName, 'public');
+            $data['thumbnail_url'] = $thumbPath;
         }
 
         $document->update($data);
@@ -171,12 +172,12 @@ class DocumentController extends Controller
     {
         // Delete files
         if ($document->file_url) {
-            $filePath = str_replace('/storage/', 'public/', $document->file_url);
-            Storage::delete($filePath);
+            $filePath = AssetUrlService::normalize($document->file_url, 'dynamic');
+            Storage::disk('public')->delete($filePath);
         }
         if ($document->thumbnail_url) {
-            $thumbPath = str_replace('/storage/', 'public/', $document->thumbnail_url);
-            Storage::delete($thumbPath);
+            $thumbPath = AssetUrlService::normalize($document->thumbnail_url, 'dynamic');
+            Storage::disk('public')->delete($thumbPath);
         }
 
         $document->delete();

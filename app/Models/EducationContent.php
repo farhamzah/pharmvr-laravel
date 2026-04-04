@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasAssetUrls;
+use App\Services\AssetUrlService;
 
 /**
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -74,7 +76,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class EducationContent extends Model
 {
-    use HasFactory;
+    use HasFactory, HasAssetUrls;
 
     protected $fillable = [
         'code',
@@ -117,5 +119,17 @@ class EducationContent extends Model
     public function trainingModule()
     {
         return $this->belongsTo(TrainingModule::class);
+    }
+
+    public function getThumbnailFullUrlAttribute(): ?string
+    {
+        return AssetUrlService::resolve($this->thumbnail_url);
+    }
+
+    public function getFileFullUrlAttribute(): ?string
+    {
+        // For external source_type, file_url might be a raw external URL
+        // AssetUrlService natively handles external URLs too.
+        return AssetUrlService::resolve($this->file_url);
     }
 }

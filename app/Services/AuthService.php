@@ -47,12 +47,6 @@ class AuthService
      */
     public function login(array $credentials): array
     {
-        \Illuminate\Support\Facades\Log::debug('Login attempt:', [
-            'email' => '[' . $credentials['email'] . ']',
-            'password_length' => strlen($credentials['password']),
-            'password_first' => '[' . substr($credentials['password'], 0, 1) . ']',
-            'password_last' => '[' . substr($credentials['password'], -1) . ']',
-        ]);
         $user = User::where('email', $credentials['email'])->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {

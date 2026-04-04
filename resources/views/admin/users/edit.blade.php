@@ -119,7 +119,7 @@
                             <label for="university" class="text-[10px] font-black text-text-tertiary uppercase tracking-widest">Academic Institution</label>
                             <input type="text" id="university" name="university" value="{{ old('university', $user->profile?->university) }}" 
                                 class="w-full px-5 py-3.5 bg-surface-light border border-divider rounded-xl text-white font-bold focus:border-primary outline-none transition-all"
-                                placeholder="e.g. UNIVERSITY OF INDONESIA">
+                                placeholder="e.g. UNIVERSITY OF PADJADJARAN">
                         </div>
 
                         <div class="space-y-2">

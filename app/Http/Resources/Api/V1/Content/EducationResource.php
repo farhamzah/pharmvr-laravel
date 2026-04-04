@@ -5,6 +5,7 @@ namespace App\Http\Resources\Api\V1\Content;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
+use App\Services\AssetUrlService;
 
 class EducationResource extends JsonResource
 {
@@ -20,15 +21,11 @@ class EducationResource extends JsonResource
         
         // If it's a module type, prefer the parent TrainingModule's cover image
         if ($typeNormalized === 'module' && $this->trainingModule) {
-            $thumbnailUrl = $this->trainingModule->cover_image_url ?? $thumbnailUrl;
+            $thumbnailUrl = $this->trainingModule->cover_image_path ?? $thumbnailUrl;
         }
 
-        // Handle path prepending for relative paths
-        if ($thumbnailUrl && !filter_var($thumbnailUrl, FILTER_VALIDATE_URL)) {
-            // Remove storage/ if already present to avoid double prefix
-            $cleanPath = str_replace('storage/', '', $thumbnailUrl);
-            $thumbnailUrl = Storage::disk('public')->url($cleanPath);
-        }
+        // Resolve through AssetUrlService (handles all formats)
+        $thumbnailUrl = AssetUrlService::resolve($thumbnailUrl);
 
         // Auto-generate YouTube thumbnail if missing
         if ($typeNormalized === 'video' && !$thumbnailUrl && $this->video_id && strtolower($this->platform ?? '') === 'youtube') {

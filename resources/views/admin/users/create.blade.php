@@ -56,7 +56,7 @@
                             <label for="email" class="text-[10px] font-black text-text-tertiary uppercase tracking-widest">Email Address</label>
                             <input type="email" id="email" name="email" value="{{ old('email') }}" required 
                                 class="w-full px-5 py-3.5 bg-surface-light border border-divider rounded-xl text-white font-bold focus:border-primary outline-none transition-all @error('email') border-red-500 @enderror"
-                                placeholder="user@pharmvr.com">
+                                placeholder="user@unpad.ac.id">
                             @error('email') <p class="text-[9px] font-bold text-red-500 mt-1 uppercase italic tracking-widest">{{ $message }}</p> @enderror
                         </div>
 
@@ -102,7 +102,7 @@
                             <label for="university" class="text-[10px] font-black text-text-tertiary uppercase tracking-widest">University</label>
                             <input type="text" id="university" name="university" value="{{ old('university') }}" 
                                 class="w-full px-5 py-3.5 bg-surface-light border border-divider rounded-xl text-white font-bold focus:border-primary outline-none transition-all"
-                                placeholder="e.g. University of Indonesia">
+                                placeholder="e.g. University of Padjadjaran">
                         </div>
 
                         <div class="space-y-2">
