@@ -1,0 +1,106 @@
+﻿E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Admin\AssessmentController.php:100:                        'passing_score' => 70,
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Admin\DashboardController.php:28:        $avgScore = DB::table('assessment_attempts')->avg('score') ?? 0;
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Admin\DashboardController.php:61:            'avgScore',
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Api\V1\Ai\AiChatController.php:67:            'confidence_score' => $answerData['confidence_score'] ?? null,
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Api\V1\Analytics\AnalyticsController.php:30:        $averageScore = floor(SessionAnalytics::whereHas('vrSession', function ($q) use ($user) {
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Api\V1\Analytics\AnalyticsController.php:32:        })->avg('total_score') ?? 0);
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Api\V1\Analytics\AnalyticsController.php:46:                'average_score' => $averageScore,
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Api\V1\Vr\VrSessionController.php:241:            if (!$preTestAttempt || $preTestAttempt->score < ($preTest->min_score ?? 80)) {
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Api\V1\Vr\VrSessionController.php:345:                'total_score' => $analytics->total_score,
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Api\V1\Vr\VrSessionController.php:346:                'accuracy_score' => $analytics->accuracy_score,
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Api\V1\Vr\VrSessionController.php:482:            'stage_score' => 'nullable|numeric|min:0|max:100',
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Api\V1\Vr\VrSessionController.php:504:            'stage_score' => $request->stage_score,
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Api\V1\Vr\VrSessionController.php:591:            'stage_score' => $payload['stage_score'] ?? null,
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Api\V1\Vr\VrStatusController.php:98:                ->orderBy('score', 'desc')
+E:\Flutter\pharmvrpro\backend\app\Http\Controllers\Api\V1\Vr\VrStatusController.php:103:        $preTestPassed = $preTestAttempt && $preTestAttempt->score >= ($preTest->min_score ?? 0);
+E:\Flutter\pharmvrpro\backend\app\Http\Requests\Admin\StoreAssessmentRequest.php:30:            'passing_score' => 'required|integer|min:0|max:100',
+E:\Flutter\pharmvrpro\backend\app\Http\Requests\Admin\UpdateAssessmentRequest.php:28:            'passing_score' => 'sometimes|required|integer|min:0|max:100',
+E:\Flutter\pharmvrpro\backend\app\Models\AiChatMessage.php:20:        'confidence_score',
+E:\Flutter\pharmvrpro\backend\app\Models\AiChatMessage.php:30:        'confidence_score' => 'decimal:2',
+E:\Flutter\pharmvrpro\backend\app\Models\Assessment.php:16: * @property int $min_score
+E:\Flutter\pharmvrpro\backend\app\Models\Assessment.php:36: * @method static \Illuminate\Database\Eloquent\Builder<static>|Assessment wherePassingScore($value)
+E:\Flutter\pharmvrpro\backend\app\Models\Assessment.php:59:        'passing_score',
+E:\Flutter\pharmvrpro\backend\app\Models\Assessment.php:74:        'passing_score' => 'integer',
+E:\Flutter\pharmvrpro\backend\app\Models\AssessmentAttempt.php:12: * @property int|null $score
+E:\Flutter\pharmvrpro\backend\app\Models\AssessmentAttempt.php:31: * @method static \Illuminate\Database\Eloquent\Builder<static>|AssessmentAttempt whereScore($value)
+E:\Flutter\pharmvrpro\backend\app\Models\AssessmentAttempt.php:45:        'score',
+E:\Flutter\pharmvrpro\backend\app\Models\SessionAnalytics.php:11: * @property int $total_score
+E:\Flutter\pharmvrpro\backend\app\Models\SessionAnalytics.php:12: * @property int $accuracy_score
+E:\Flutter\pharmvrpro\backend\app\Models\SessionAnalytics.php:13: * @property int $speed_score
+E:\Flutter\pharmvrpro\backend\app\Models\SessionAnalytics.php:25: * @method static \Illuminate\Database\Eloquent\Builder<static>|SessionAnalytics whereAccuracyScore($value)
+E:\Flutter\pharmvrpro\backend\app\Models\SessionAnalytics.php:32: * @method static \Illuminate\Database\Eloquent\Builder<static>|SessionAnalytics whereSpeedScore($value)
+E:\Flutter\pharmvrpro\backend\app\Models\SessionAnalytics.php:33: * @method static \Illuminate\Database\Eloquent\Builder<static>|SessionAnalytics whereTotalScore($value)
+E:\Flutter\pharmvrpro\backend\app\Models\SessionAnalytics.php:47:        'total_score',
+E:\Flutter\pharmvrpro\backend\app\Models\SessionAnalytics.php:48:        'accuracy_score',
+E:\Flutter\pharmvrpro\backend\app\Models\SessionAnalytics.php:49:        'speed_score',
+E:\Flutter\pharmvrpro\backend\app\Models\VrSessionStageResult.php:14: * @property numeric|null $stage_score
+E:\Flutter\pharmvrpro\backend\app\Models\VrSessionStageResult.php:31: * @method static \Illuminate\Database\Eloquent\Builder<static>|VrSessionStageResult whereStageScore($value)
+E:\Flutter\pharmvrpro\backend\app\Models\VrSessionStageResult.php:48:        'stage_score',
+E:\Flutter\pharmvrpro\backend\app\Models\VrSessionStageResult.php:58:        'stage_score' => 'decimal:2',
+E:\Flutter\pharmvrpro\backend\app\Services\Ai\AiAnswerService.php:68:            'confidence_score' => 0.92, 
+E:\Flutter\pharmvrpro\backend\app\Services\Ai\AiChatService.php:108:            - Accuracy: {$analytics->accuracy_score}/100
+E:\Flutter\pharmvrpro\backend\app\Services\Ai\AiChatService.php:109:            - Speed score: {$analytics->speed_score}/100
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\AchievementService.php:35:        // 4. Perfect Score (100)
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\AchievementService.php:36:        if ($analytics->total_score === 100) {
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\AchievementService.php:37:            $awarded[] = $this->award($user, 'perfect-score', ['session_id' => $session->id]);
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\LeaderboardService.php:13:     * Get global leaderboard (highest total scores).
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\LeaderboardService.php:23:                DB::raw('MAX(session_analytics.total_score) as top_score'),
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\LeaderboardService.php:24:                DB::raw('SUM(session_analytics.total_score) as cumulative_score')
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\LeaderboardService.php:27:            ->orderBy('top_score', 'desc')
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\LeaderboardService.php:44:                DB::raw('MAX(session_analytics.total_score) as top_score'),
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\LeaderboardService.php:48:            ->orderBy('top_score', 'desc')
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\ProgressService.php:33:        })->avg('accuracy_score') ?? 0;
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\SessionSummaryService.php:29:        // 3. Calculate Scores (Simplified logic)
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\SessionSummaryService.php:31:        $accuracyScore = max(0, 100 - ($breachCount * 10));
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\SessionSummaryService.php:34:        $speedScore = max(0, 100 - floor(max(0, $durationSeconds - 300) / 30));
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\SessionSummaryService.php:36:        // Total Score: Average (weighted)
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\SessionSummaryService.php:37:        $totalScore = floor(($accuracyScore * 0.7) + ($speedScore * 0.3));
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\SessionSummaryService.php:43:                'total_score' => $totalScore,
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\SessionSummaryService.php:44:                'accuracy_score' => $accuracyScore,
+E:\Flutter\pharmvrpro\backend\app\Services\Analytics\SessionSummaryService.php:45:                'speed_score' => $speedScore,
+E:\Flutter\pharmvrpro\backend\app\Services\AssessmentService.php:84:            'passing_score' => $assessment->passing_score,
+E:\Flutter\pharmvrpro\backend\app\Services\AssessmentService.php:104:     * Submit an assessment attempt and calculate score.
+E:\Flutter\pharmvrpro\backend\app\Services\AssessmentService.php:125:        $score = ($totalQuestions > 0) ? (int) round(($correctCount / $totalQuestions) * 100) : 0;
+E:\Flutter\pharmvrpro\backend\app\Services\AssessmentService.php:126:        $passed = $score >= $assessment->passing_score;
+E:\Flutter\pharmvrpro\backend\app\Services\AssessmentService.php:129:            'score' => $score,
+E:\Flutter\pharmvrpro\backend\database\factories\AssessmentFactory.php:24:            'min_score'          => 80,
+E:\Flutter\pharmvrpro\backend\database\factories\VrSessionFactory.php:46:                'final_score' => $this->faker->numberBetween(70, 100),
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_043003_create_assessment_recovery_tables.php:30:            if (!Schema::hasColumn('assessment_attempts', 'score')) {
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_043003_create_assessment_recovery_tables.php:31:                $table->integer('score')->nullable();
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_080000_create_vr_session_stage_results_table.php:21:            $blueprint->decimal('stage_score', 8, 2)->nullable();
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_140712_create_session_analytics_table.php:17:            $table->integer('total_score')->default(0);
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_140712_create_session_analytics_table.php:18:            $table->integer('accuracy_score')->default(0);
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_11_140712_create_session_analytics_table.php:19:            $table->integer('speed_score')->default(0);
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_18_222659_rebuild_question_bank_schema_to_spec.php:30:            $table->integer('passing_score')->unsigned()->default(70);
+E:\Flutter\pharmvrpro\backend\database\migrations\2026_03_18_235340_create_ai_chat_messages_table.php:23:            $table->decimal('confidence_score', 5, 2)->nullable();
+E:\Flutter\pharmvrpro\backend\database\seeders\AssessmentSeeder.php:30:                'passing_score' => 70,
+E:\Flutter\pharmvrpro\backend\database\seeders\AssessmentSeeder.php:42:                'passing_score' => 85,
+E:\Flutter\pharmvrpro\backend\database\seeders\ContentSeeder.php:219:                'min_score'          => 80,
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Analytics\AnalyticsTest.php:101:            'total_score' => 85,
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Analytics\AnalyticsTest.php:102:            'accuracy_score' => 90,
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Analytics\AnalyticsTest.php:103:            'speed_score' => 80,
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Analytics\AnalyticsTest.php:114:            ->assertJsonPath('data.summary.average_score', 85);
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Analytics\LeaderboardTest.php:52:            'total_score' => 95,
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Analytics\LeaderboardTest.php:65:            'total_score' => 85,
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Analytics\LeaderboardTest.php:78:            ->assertJsonPath('data.0.top_score', 95)
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:303:                'score_value' => 10
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:341:            'stage_score' => 85.50,
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:358:            'stage_score' => 85.50,
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:445:                'stage_score' => 99.0,
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:453:            'stage_score' => 99.0
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:530:            'min_score' => 80,
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:538:            'score' => 85,
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:570:            'min_score' => 80,
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:577:            'score' => 90,
+E:\Flutter\pharmvrpro\backend\_ide_helper_models.php:72: * @property int $min_score
+E:\Flutter\pharmvrpro\backend\_ide_helper_models.php:91: * @method static \Illuminate\Database\Eloquent\Builder<static>|Assessment whereMinScore($value)
+E:\Flutter\pharmvrpro\backend\_ide_helper_models.php:106: * @property int|null $score
+E:\Flutter\pharmvrpro\backend\_ide_helper_models.php:125: * @method static \Illuminate\Database\Eloquent\Builder<static>|AssessmentAttempt whereScore($value)
+E:\Flutter\pharmvrpro\backend\_ide_helper_models.php:433: * @property int $total_score
+E:\Flutter\pharmvrpro\backend\_ide_helper_models.php:434: * @property int $accuracy_score
+E:\Flutter\pharmvrpro\backend\_ide_helper_models.php:435: * @property int $speed_score
+E:\Flutter\pharmvrpro\backend\_ide_helper_models.php:447: * @method static \Illuminate\Database\Eloquent\Builder<static>|SessionAnalytics whereAccuracyScore($value)
+E:\Flutter\pharmvrpro\backend\_ide_helper_models.php:454: * @method static \Illuminate\Database\Eloquent\Builder<static>|SessionAnalytics whereSpeedScore($value)
+E:\Flutter\pharmvrpro\backend\_ide_helper_models.php:455: * @method static \Illuminate\Database\Eloquent\Builder<static>|SessionAnalytics whereTotalScore($value)
+E:\Flutter\pharmvrpro\backend\_ide_helper_models.php:982: * @property numeric|null $stage_score
+E:\Flutter\pharmvrpro\backend\_ide_helper_models.php:999: * @method static \Illuminate\Database\Eloquent\Builder<static>|VrSessionStageResult whereStageScore($value)

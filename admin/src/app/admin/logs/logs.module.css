@@ -1,0 +1,144 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.downloadBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  padding: 0 var(--space-4);
+  height: 40px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: var(--transition-fast);
+}
+
+.downloadBtn:hover {
+  background: var(--surface-light);
+}
+
+.logList {
+  padding: 0;
+  overflow: hidden;
+}
+
+.listHeader {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1.5fr 1fr;
+  padding: var(--space-4) var(--space-8);
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.column {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  letter-spacing: 0.5px;
+}
+
+.logItem {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1.5fr 1fr;
+  padding: var(--space-5) var(--space-8);
+  border-bottom: 1px solid var(--border-subtle);
+  align-items: center;
+  transition: var(--transition-fast);
+}
+
+.logItem:last-child {
+  border-bottom: none;
+}
+
+.logItem:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mainInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.iconBox {
+  width: 32px;
+  height: 32px;
+  background: var(--surface-light);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.eventName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.eventType {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.actor, .target {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.statusTag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.success {
+  background: rgba(0, 230, 118, 0.1);
+  color: var(--success);
+}
+
+.warning {
+  background: rgba(255, 183, 77, 0.1);
+  color: var(--warning);
+}
+
+.info {
+  background: rgba(100, 181, 246, 0.1);
+  color: var(--primary);
+}

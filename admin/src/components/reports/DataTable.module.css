@@ -1,0 +1,66 @@
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-tertiary);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: var(--transition-fast);
+}
+
+.table th:hover {
+  color: var(--primary);
+}
+
+.sortIcon {
+  margin-left: 4px;
+  opacity: 0.5;
+  font-size: 10px;
+}
+
+.table td {
+  font-size: 13px;
+  color: var(--text-primary);
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(42, 53, 69, 0.4);
+  white-space: nowrap;
+}
+
+.table tr:hover td {
+  background: rgba(0, 229, 255, 0.03);
+}
+
+.emptyRow td {
+  text-align: center;
+  color: var(--text-tertiary);
+  padding: 32px;
+  font-style: italic;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badgeGreen  { background: rgba(0,230,118,0.15); color: var(--success); }
+.badgeYellow { background: rgba(255,183,77,0.15); color: var(--warning); }
+.badgeRed    { background: rgba(207,102,121,0.15); color: var(--error); }
+.badgeCyan   { background: rgba(0,229,255,0.12); color: var(--primary); }
+
+.scrollWrap {
+  overflow-x: auto;
+}

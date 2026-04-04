@@ -1,0 +1,104 @@
+﻿
+  Dropping all tables  264.34ms DONE
+
+   INFO  Preparing database.  
+
+  Creating migration table  16.74ms DONE
+
+   INFO  Running migrations.  
+
+  0001_01_01_000000_create_users_table  49.84ms DONE
+  0001_01_01_000001_create_cache_table  37.24ms DONE
+  0001_01_01_000002_create_jobs_table  63.56ms DONE
+  2026_03_10_073956_create_personal_access_tokens_table  36.19ms DONE
+  2026_03_11_031522_create_user_profiles_table  60.08ms DONE
+  2026_03_11_031523_create_user_preferences_table  79.66ms DONE
+  2026_03_11_043000_create_news_table  42.14ms DONE
+  2026_03_11_043001_create_education_contents_table  27.28ms DONE
+  2026_03_11_043002_create_training_tables  127.53ms DONE
+  2026_03_11_043003_create_assessment_recovery_tables  276.49ms DONE
+  2026_03_11_043500_update_education_contents_table  40.09ms DONE
+  2026_03_11_043600_add_module_meta_to_education_contents  15.82ms DONE
+  2026_03_11_043601_link_education_to_training_modules  58.05ms DONE
+  2026_03_11_044000_add_platform_to_education_contents  8.14ms DONE
+  2026_03_11_044500_add_file_type_to_education_contents  6.62ms DONE
+  2026_03_11_044800_add_detail_meta_to_education_contents  16.85ms DONE
+  2026_03_11_045000_update_news_table  19.43ms DONE
+  2026_03_11_061143_create_vr_tables  599.90ms DONE
+  2026_03_11_070000_create_vr_session_events_table  233.80ms DONE
+  2026_03_11_080000_create_vr_session_stage_results_table  211.09ms DONE
+  2026_03_11_090000_create_vr_session_hints_table  191.40ms DONE
+  2026_03_11_134258_create_pharmai_tables  122.31ms DONE
+  2026_03_11_134318_create_vr_ai_interactions_table  193.67ms DONE
+  2026_03_11_140712_create_session_analytics_table  54.12ms DONE
+  2026_03_11_140712_create_user_achievements_table  69.93ms DONE
+  2026_03_11_161137_add_fields_to_vr_ai_interactions_table  41.28ms DONE
+  2026_03_11_161825_change_hint_type_to_string_in_vr_ai_interactions_table  47.98ms DONE
+  2026_03_12_045000_create_ai_usage_logs_table  185.49ms DONE
+  2026_03_13_065406_add_ban_fields_to_users_table  14.12ms DONE
+  2026_03_13_065409_create_audit_logs_table  45.33ms DONE
+  2026_03_13_071347_create_settings_table  30.56ms DONE
+  2026_03_13_074058_add_vr_bypass_flag_to_users_table  4.48ms DONE
+  2026_03_13_075751_create_rbac_tables  214.43ms DONE
+  2026_03_13_085523_add_passed_to_assessment_attempts_table  9.76ms DONE
+  2026_03_14_232904_refine_user_roles_and_status  17.26ms DONE
+  2026_03_15_024541_add_learning_meta_to_education_contents  17.06ms DONE
+  2026_03_15_030710_add_detailed_document_meta_to_education_contents  10.55ms DONE
+  2026_03_18_031617_add_journey_status_to_user_training_progress  42.33ms DONE
+  2026_03_18_034353_rename_cover_image_url_to_path_in_training_modules_table  44.97ms DONE
+  2026_03_18_055705_seed_app_settings  37.63ms DONE
+  2026_03_18_222659_rebuild_question_bank_schema_to_spec  150.00ms DONE
+  2026_03_18_235337_create_ai_knowledge_sources_table  102.96ms DONE
+  2026_03_18_235338_create_ai_knowledge_chunks_table  54.91ms DONE
+  2026_03_18_235339_create_ai_chat_sessions_table  137.50ms DONE
+  2026_03_18_235340_create_ai_avatar_profiles_table  57.83ms DONE
+  2026_03_18_235340_create_ai_chat_messages_table  50.24ms DONE
+  2026_03_18_235341_create_ai_avatar_scene_prompts_table  53.71ms DONE
+  2026_03_19_005233_add_assistant_mode_to_ai_chat_sessions_table  8.15ms DONE
+  2026_03_19_014331_add_content_and_url_to_ai_knowledge_sources_table  11.92ms DONE
+  2026_03_19_080500_add_response_mode_to_ai_chat_messages_table  13.94ms DONE
+
+
+   INFO  Seeding database.  
+
+  Database\Seeders\RbacSeeder  RUNNING  
+  Database\Seeders\RbacSeeder  75 ms DONE  
+
+  Database\Seeders\AdminUserSeeder  RUNNING  
+  Database\Seeders\AdminUserSeeder  289 ms DONE  
+
+  Database\Seeders\UserSeeder  RUNNING  
+  Database\Seeders\UserSeeder  832 ms DONE  
+
+  Database\Seeders\ContentSeeder  RUNNING  
+  Database\Seeders\ContentSeeder  218 ms DONE  
+
+  Database\Seeders\AssessmentSeeder  RUNNING  
+  Database\Seeders\AssessmentSeeder  65 ms DONE  
+
+  Database\Seeders\VrSeeder  RUNNING  
+  Database\Seeders\VrSeeder  2,542 ms DONE  
+
+  Database\Seeders\AiSeeder  RUNNING  
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[42S22]: Column not found: 1054 Unknown column 'context_data' in 'field list' (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: pharmvr, SQL: insert into `vr_ai_interactions` (`vr_session_id`, `hint_type`, `trigger_event_type`, `context_data`, `output_text`, `display_text`, `speech_text`, `severity`, `recommended_next_action`, `metadata`, `updated_at`, `created_at`) values (10, reminder, autem, ?, Pastikan masker menutup hidung dengan sempurna., Cek posisi masker., Ingat untuk selalu memeriksa posisi masker Anda. Masker harus menutup hidung dan mulut sepenuhnya., info, Lanjutkan ke langkah berikutnya sesuai panduan., {"tokens":37,"latency_ms":371}, 2026-03-19 10:21:08, 2026-03-19 10:21:08))
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:838
+    834Γûò             $exceptionType = $this->isUniqueConstraintError($e)
+    835Γûò                 ? UniqueConstraintViolationException::class
+    836Γûò                 : QueryException::class;
+    837Γûò 
+  Γ₧£ 838Γûò             throw new $exceptionType(
+    839Γûò                 $this->getNameWithReadWriteType(),
+    840Γûò                 $query,
+    841Γûò                 $this->prepareBindings($bindings),
+    842Γûò                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php:47
+      PDOException::("SQLSTATE[42S22]: Column not found: 1054 Unknown column 'context_data' in 'field list'")
+
+  2   vendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php:47
+      PDO::prepare("insert into `vr_ai_interactions` (`vr_session_id`, `hint_type`, `trigger_event_type`, `context_data`, `output_text`, `display_text`, `speech_text`, `severity`, `recommended_next_action`, `metadata`, `updated_at`, `created_at`) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+

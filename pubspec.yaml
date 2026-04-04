@@ -1,0 +1,66 @@
+name: pharmvrpro
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^3.3.1
+  riverpod_annotation: ^4.0.2
+  go_router: ^17.0.0
+  dio: ^5.9.2
+  google_fonts: ^6.3.2
+  flutter_svg: ^2.2.3
+  qr_flutter: ^4.1.0
+  shared_preferences: ^2.5.2
+  flutter_secure_storage: ^9.2.2
+  url_launcher: ^6.3.1
+  flutter_markdown: ^0.7.5
+  cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
+  image_picker: ^1.1.2
+  youtube_player_iframe: ^5.2.1
+  webview_flutter: ^4.10.0
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  web:
+    generate: true
+    image_path: "assets/images/logo.png"
+    background_color: "#0A0F14"
+    theme_color: "#00E5FF"
+  image_path: "assets/images/logo.png"
+  adaptive_icon_background: "#0A0F14"
+  adaptive_icon_foreground: "assets/images/logo.png"
+
+flutter_native_splash:
+  color: "#0A0F14"
+  image: "assets/images/logo.png"
+  android_12:
+    image: "assets/images/logo.png"
+    color: "#0A0F14"
+  web: false
+
+flutter:
+  generate: true
+  uses-material-design: true
+  assets:
+    - assets/images/

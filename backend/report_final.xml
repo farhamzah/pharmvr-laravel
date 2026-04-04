@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Tests\Feature\Api\V1\Vr\VrPhase4Test" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" tests="10" assertions="60" errors="0" failures="2" skipped="0" time="0.427016">
+    <testcase name="a_user_can_start_a_pairing_session" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" line="34" class="Tests\Feature\Api\V1\Vr\VrPhase4Test" classname="Tests.Feature.Api.V1.Vr.VrPhase4Test" assertions="11" time="0.259344"/>
+    <testcase name="a_user_can_check_current_pairing_status" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" line="59" class="Tests\Feature\Api\V1\Vr\VrPhase4Test" classname="Tests.Feature.Api.V1.Vr.VrPhase4Test" assertions="3" time="0.012504"/>
+    <testcase name="a_user_can_cancel_a_pending_pairing" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" line="77" class="Tests\Feature\Api\V1\Vr\VrPhase4Test" classname="Tests.Feature.Api.V1.Vr.VrPhase4Test" assertions="2" time="0.013405"/>
+    <testcase name="a_headset_can_pair_with_specific_response_structure" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" line="94" class="Tests\Feature\Api\V1\Vr\VrPhase4Test" classname="Tests.Feature.Api.V1.Vr.VrPhase4Test" assertions="1" time="0.029892">
+      <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Feature\Api\V1\Vr\VrPhase4Test::a_headset_can_pair_with_specific_response_structure&#13;
+Expected response status code [200] but received 500.
+Failed asserting that 500 is identical to 200.&#13;
+&#13;
+The following exception occurred during the last request:
+
+Error: Call to undefined method App\Http\Controllers\Api\V1\Vr\VrPairingController::headsetConfirm() in E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php:46
+Stack trace:
+#0 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Route.php(265): Illuminate\Routing\ControllerDispatcher-&gt;dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\Api\V1\Vr\VrPairingController), 'headsetConfirm')
+#1 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Route.php(211): Illuminate\Routing\Route-&gt;runController()
+#2 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php(822): Illuminate\Routing\Route-&gt;run()
+#3 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(180): Illuminate\Routing\Router-&gt;Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#4 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Middleware\SubstituteBindings.php(50): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#5 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#6 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Middleware\ThrottleRequests.php(166): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#7 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Middleware\ThrottleRequests.php(93): Illuminate\Routing\Middleware\ThrottleRequests-&gt;handleRequest(Object(Illuminate\Http\Request), Object(Closure), Array)
+#8 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Routing\Middleware\ThrottleRequests-&gt;handle(Object(Illuminate\Http\Request), Object(Closure), '5', '1')
+#9 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(137): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#10 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php(821): Illuminate\Pipeline\Pipeline-&gt;then(Object(Closure))
+#11 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php(800): Illuminate\Routing\Router-&gt;runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#12 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php(764): Illuminate\Routing\Router-&gt;runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+#13 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php(753): Illuminate\Routing\Router-&gt;dispatchToRoute(Object(Illuminate\Http\Request))
+#14 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(200): Illuminate\Routing\Router-&gt;dispatch(Object(Illuminate\Http\Request))
+#15 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(180): Illuminate\Foundation\Http\Kernel-&gt;Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#16 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#17 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#18 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#19 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#20 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#21 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#22 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#23 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#24 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#25 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#26 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Http\Middleware\HandleCors.php(74): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#27 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\HandleCors-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#28 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Http\Middleware\TrustProxies.php(58): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#29 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#30 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#31 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#32 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePathEncoding.php(26): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#33 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#34 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(137): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#35 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(175): Illuminate\Pipeline\Pipeline-&gt;then(Object(Closure))
+#36 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(144): Illuminate\Foundation\Http\Kernel-&gt;sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#37 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(607): Illuminate\Foundation\Http\Kernel-&gt;handle(Object(Illuminate\Http\Request))
+#38 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(573): Illuminate\Foundation\Testing\TestCase-&gt;call('POST', '/api/v1/vr/head...', Array, Array, Array, Array, '{"pairing_code"...')
+#39 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(411): Illuminate\Foundation\Testing\TestCase-&gt;json('POST', '/api/v1/vr/head...', Array, Array, 0)
+#40 E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php(104): Illuminate\Foundation\Testing\TestCase-&gt;postJson('/api/v1/vr/head...', Array)
+#41 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\Framework\TestCase.php(1667): Tests\Feature\Api\V1\Vr\VrPhase4Test-&gt;a_headset_can_pair_with_specific_response_structure()
+#42 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\Framework\TestCase.php(519): PHPUnit\Framework\TestCase-&gt;runTest()
+#43 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\Framework\TestRunner\TestRunner.php(87): PHPUnit\Framework\TestCase-&gt;runBare()
+#44 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\Framework\TestCase.php(365): PHPUnit\Framework\TestRunner-&gt;run(Object(Tests\Feature\Api\V1\Vr\VrPhase4Test))
+#45 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\Framework\TestSuite.php(369): PHPUnit\Framework\TestCase-&gt;run()
+#46 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\TextUI\TestRunner.php(64): PHPUnit\Framework\TestSuite-&gt;run()
+#47 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\TextUI\Application.php(211): PHPUnit\TextUI\TestRunner-&gt;run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+#48 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\phpunit(104): PHPUnit\TextUI\Application-&gt;run(Array)
+#49 E:\Flutter\pharmvrpro\backend\vendor\bin\phpunit(122): include('E:\\Flutter\\phar...')
+#50 {main}
+
+----------------------------------------------------------------------------------
+
+Call to undefined method App\Http\Controllers\Api\V1\Vr\VrPairingController::headsetConfirm()
+&#13;
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:174
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:112</failure>
+    </testcase>
+    <testcase name="a_headset_can_send_heartbeat_with_issued_token" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" line="129" class="Tests\Feature\Api\V1\Vr\VrPhase4Test" classname="Tests.Feature.Api.V1.Vr.VrPhase4Test" assertions="1" time="0.013706">
+      <failure type="PHPUnit\Framework\ExpectationFailedException">Tests\Feature\Api\V1\Vr\VrPhase4Test::a_headset_can_send_heartbeat_with_issued_token&#13;
+Expected response status code [200] but received 500.
+Failed asserting that 500 is identical to 200.&#13;
+&#13;
+The following exception occurred during the last request:
+
+Error: Call to undefined method App\Http\Controllers\Api\V1\Vr\VrPairingController::heartbeat() in E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php:46
+Stack trace:
+#0 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Route.php(265): Illuminate\Routing\ControllerDispatcher-&gt;dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\Api\V1\Vr\VrPairingController), 'heartbeat')
+#1 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Route.php(211): Illuminate\Routing\Route-&gt;runController()
+#2 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php(822): Illuminate\Routing\Route-&gt;run()
+#3 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(180): Illuminate\Routing\Router-&gt;Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#4 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Middleware\SubstituteBindings.php(50): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#5 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#6 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(137): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#7 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php(821): Illuminate\Pipeline\Pipeline-&gt;then(Object(Closure))
+#8 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php(800): Illuminate\Routing\Router-&gt;runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#9 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php(764): Illuminate\Routing\Router-&gt;runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+#10 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Routing\Router.php(753): Illuminate\Routing\Router-&gt;dispatchToRoute(Object(Illuminate\Http\Request))
+#11 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(200): Illuminate\Routing\Router-&gt;dispatch(Object(Illuminate\Http\Request))
+#12 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(180): Illuminate\Foundation\Http\Kernel-&gt;Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#13 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#14 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#15 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#16 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TransformsRequest.php(21): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#17 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#18 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#19 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#20 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#21 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#22 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#23 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Http\Middleware\HandleCors.php(74): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#24 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\HandleCors-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#25 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Http\Middleware\TrustProxies.php(58): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#26 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#27 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#28 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#29 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Http\Middleware\ValidatePathEncoding.php(26): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#30 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding-&gt;handle(Object(Illuminate\Http\Request), Object(Closure))
+#31 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(137): Illuminate\Pipeline\Pipeline-&gt;Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#32 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(175): Illuminate\Pipeline\Pipeline-&gt;then(Object(Closure))
+#33 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(144): Illuminate\Foundation\Http\Kernel-&gt;sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#34 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(607): Illuminate\Foundation\Http\Kernel-&gt;handle(Object(Illuminate\Http\Request))
+#35 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(573): Illuminate\Foundation\Testing\TestCase-&gt;call('POST', '/api/v1/vr/head...', Array, Array, Array, Array, '{"device_access...')
+#36 E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\MakesHttpRequests.php(411): Illuminate\Foundation\Testing\TestCase-&gt;json('POST', '/api/v1/vr/head...', Array, Array, 0)
+#37 E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php(140): Illuminate\Foundation\Testing\TestCase-&gt;postJson('/api/v1/vr/head...', Array)
+#38 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\Framework\TestCase.php(1667): Tests\Feature\Api\V1\Vr\VrPhase4Test-&gt;a_headset_can_send_heartbeat_with_issued_token()
+#39 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\Framework\TestCase.php(519): PHPUnit\Framework\TestCase-&gt;runTest()
+#40 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\Framework\TestRunner\TestRunner.php(87): PHPUnit\Framework\TestCase-&gt;runBare()
+#41 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\Framework\TestCase.php(365): PHPUnit\Framework\TestRunner-&gt;run(Object(Tests\Feature\Api\V1\Vr\VrPhase4Test))
+#42 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\Framework\TestSuite.php(369): PHPUnit\Framework\TestCase-&gt;run()
+#43 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\TextUI\TestRunner.php(64): PHPUnit\Framework\TestSuite-&gt;run()
+#44 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\src\TextUI\Application.php(211): PHPUnit\TextUI\TestRunner-&gt;run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+#45 E:\Flutter\pharmvrpro\backend\vendor\phpunit\phpunit\phpunit(104): PHPUnit\TextUI\Application-&gt;run(Array)
+#46 E:\Flutter\pharmvrpro\backend\vendor\bin\phpunit(122): include('E:\\Flutter\\phar...')
+#47 {main}
+
+----------------------------------------------------------------------------------
+
+Call to undefined method App\Http\Controllers\Api\V1\Vr\VrPairingController::heartbeat()
+&#13;
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponseAssert.php:45
+E:\Flutter\pharmvrpro\backend\vendor\laravel\framework\src\Illuminate\Testing\TestResponse.php:174
+E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php:144</failure>
+    </testcase>
+    <testcase name="a_headset_can_start_and_update_a_vr_session" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" line="151" class="Tests\Feature\Api\V1\Vr\VrPhase4Test" classname="Tests.Feature.Api.V1.Vr.VrPhase4Test" assertions="6" time="0.022162"/>
+    <testcase name="v1_vr_status_returns_refined_response_structure" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" line="192" class="Tests\Feature\Api\V1\Vr\VrPhase4Test" classname="Tests.Feature.Api.V1.Vr.VrPhase4Test" assertions="15" time="0.023184"/>
+    <testcase name="v1_vr_launch_readiness_checks_all_requirements" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" line="247" class="Tests\Feature\Api\V1\Vr\VrPhase4Test" classname="Tests.Feature.Api.V1.Vr.VrPhase4Test" assertions="11" time="0.016668"/>
+    <testcase name="a_mobile_user_can_start_a_vr_session" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" line="297" class="Tests\Feature\Api\V1\Vr\VrPhase4Test" classname="Tests.Feature.Api.V1.Vr.VrPhase4Test" assertions="5" time="0.013771"/>
+    <testcase name="home_api_returns_correct_vr_status" file="E:\Flutter\pharmvrpro\backend\tests\Feature\Api\V1\Vr\VrPhase4Test.php" line="344" class="Tests\Feature\Api\V1\Vr\VrPhase4Test" classname="Tests.Feature.Api.V1.Vr.VrPhase4Test" assertions="5" time="0.022379"/>
+  </testsuite>
+</testsuites>

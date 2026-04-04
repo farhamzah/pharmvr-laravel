@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.mainWrapper {
+  flex: 1;
+  margin-left: 260px; /* Width of the sidebar */
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  padding: var(--space-8);
+  flex: 1;
+}

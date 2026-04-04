@@ -1,0 +1,63 @@
+{
+    "java.configuration.updateBuildConfiguration": "disabled",
+    "java.import.gradle.enabled": false,
+    "java.import.exclusions": [
+        "**/node_modules/**",
+        "**/.metadata/**",
+        "**/archetype-resources/**",
+        "**/META-INF/maven/**",
+        "**/android/**"
+    ],
+    "java.jdt.ls.java.home": "C:\\Program Files\\Android\\Android Studio\\jbr",
+    "intelephense.environment.phpVersion": "8.2.12",
+    "php.validate.executablePath": "C:\\xampp\\php\\php.exe",
+    "php.validate.enable": false,
+    "php.suggest.basic": false,
+    "intelephense.diagnostics.exclude": [
+        "**/vendor/**",
+        "**/storage/**",
+        "**/bootstrap/cache/**",
+        "**/.git/**",
+        "backend/_ide_helper.php",
+        "backend/_ide_helper_models.php",
+        "backend/.phpstorm.meta.php",
+        "backend/*.php"
+    ],
+    "intelephense.files.exclude": [
+        "**/.git/**",
+        "**/node_modules/**",
+        "**/storage/framework/views/**",
+        "**/storage/logs/**",
+        "**/bootstrap/cache/**",
+        "**/build/**",
+        "**/.dart_tool/**",
+        "**/*.txt",
+        "**/*.log"
+    ],
+    "intelephense.memory": 4096,
+    "intelephense.files.maxSize": 10000000,
+    "files.associations": {
+        "*.blade.php": "blade"
+    },
+    "emmet.includeLanguages": {
+        "blade": "html"
+    },
+    "files.exclude": {
+        "**/ios": true,
+        "**/build": true,
+        "**/.dart_tool": true
+    },
+    "search.exclude": {
+        "**/ios": true,
+        "**/build": true,
+        "**/.dart_tool": true
+    },
+    "files.watcherExclude": {
+        "**/ios/**": true,
+        "**/build/**": true,
+        "**/.dart_tool/**": true
+    },
+    "php.suggest.basic": false,
+    "php.validate.enable": false,
+    "php.validate.run": "onSave"
+}
