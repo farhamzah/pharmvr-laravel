@@ -22,3 +22,38 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Uploaded dynamic assets (per-environment)
+/storage/app/public/avatars/*
+/storage/app/public/education/*
+/storage/app/public/documents/*
+/storage/app/public/thumbnails/*
+/storage/app/public/knowledge_sources/*
+/storage/app/public/modules/*
+/storage/app/public/news/*
+/storage/app/public/settings/*
+!storage/app/public/.gitignore
+
+# Debug/temp files
+*.txt
+*.xml
+*.sql
+*.php.bak
+/tmp/
+_ide_helper*.php
+.phpstorm.meta.php
+
+# Custom Debug Scripts
+check_*.php
+test_*.php
+debug_*.php
+deep_*.php
+final_*.php
+get_*.php
+output_*.txt
+score_*.txt
+*.sql
+
+# SQLite DB (if used locally)
+pharmvr
+*.sqlite

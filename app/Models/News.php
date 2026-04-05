@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Traits\Auditable;
+use App\Traits\HasAssetUrls;
+use App\Services\AssetUrlService;
 
 /**
  * @mixin \Illuminate\Database\Eloquent\Builder
@@ -41,7 +43,7 @@ use App\Traits\Auditable;
  */
 class News extends Model
 {
-    use HasFactory, Auditable;
+    use HasFactory, Auditable, HasAssetUrls;
 
     protected $fillable = [
         'title',
@@ -109,5 +111,13 @@ class News extends Model
     public function isExternal(): bool
     {
         return $this->content_type === 'external';
+    }
+
+    /**
+     * Get the resolved image URL.
+     */
+    public function getImageFullUrlAttribute(): ?string
+    {
+        return AssetUrlService::resolve($this->image_url);
     }
 }
