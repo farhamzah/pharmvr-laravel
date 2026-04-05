@@ -1,0 +1,37 @@
+﻿[
+    {
+        "id": 1,
+        "email": "admin@pharmvr.com",
+        "name": "Super Admin",
+        "role": "admin",
+        "university": "University of Padjadjaran"
+    },
+    {
+        "id": 42,
+        "email": "sriwidodo@unpad.ac.id",
+        "name": "sriwidodo",
+        "role": "student",
+        "university": "University of Padjadjaran"
+    },
+    {
+        "id": 46,
+        "email": "moderator@pharmvr.com",
+        "name": "Content Moderator",
+        "role": "admin",
+        "university": "University of Padjadjaran"
+    },
+    {
+        "id": 47,
+        "email": "viewer@pharmvr.com",
+        "name": "System Auditor",
+        "role": "admin",
+        "university": "University of Padjadjaran"
+    },
+    {
+        "id": 48,
+        "email": "instructor@pharmvr.com",
+        "name": "Lead Instructor",
+        "role": "instructor",
+        "university": "University of Padjadjaran"
+    }
+]

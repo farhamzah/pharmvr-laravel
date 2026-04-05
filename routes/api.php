@@ -15,10 +15,14 @@ use App\Http\Controllers\Admin\Ai\AiKnowledgeSourceController;
 use App\Http\Controllers\Admin\Ai\AiAvatarProfileController;
 use App\Http\Controllers\Admin\Ai\AiAvatarScenePromptController;
 use App\Http\Controllers\Api\V1\Vr\VrAiController;
+use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\Analytics\AnalyticsController;
 use App\Http\Controllers\Api\V1\App\AppSettingController;
 
 Route::prefix('v1')->group(function () {
+    // Media Proxy (Public)
+    Route::get('/media/{path}', [MediaController::class, 'serve'])->where('path', '.*');
+
     // Public Auth Routes
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::post('/auth/login', [AuthController::class, 'login']);
