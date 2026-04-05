@@ -168,7 +168,7 @@ class _AiChatSessionScreenState extends ConsumerState<AiChatSessionScreen> {
                 Text(
                   'ACTIVE_SESSION: ${(_currentSessionId!.length > 8 ? _currentSessionId!.substring(0, 8) : _currentSessionId!).toUpperCase()}',
                   style: PharmTextStyles.caption.copyWith(
-                    color: Colors.white.withValues(alpha: 0.5),
+                    color: Colors.white.withOpacity(0.5),
                     fontSize: 10,
                     letterSpacing: 0.5,
                   ),
@@ -178,9 +178,9 @@ class _AiChatSessionScreenState extends ConsumerState<AiChatSessionScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: PharmColors.primary.withValues(alpha: 0.15),
+                      color: PharmColors.primary.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: PharmColors.primary.withValues(alpha: 0.3)),
+                      border: Border.all(color: PharmColors.primary.withOpacity(0.3)),
                     ),
                     child: Text(
                       widget.assistantMode!.toUpperCase().replaceAll('_', ' '),
@@ -192,7 +192,7 @@ class _AiChatSessionScreenState extends ConsumerState<AiChatSessionScreen> {
             ),
           ],
         ),
-        backgroundColor: PharmColors.surface.withValues(alpha: 0.8),
+        backgroundColor: PharmColors.surface.withOpacity(0.8),
         elevation: 0,
         actions: [
           IconButton(
@@ -274,12 +274,12 @@ class _AiChatSessionScreenState extends ConsumerState<AiChatSessionScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.auto_awesome, color: PharmColors.primary.withValues(alpha: 0.2), size: 64),
+          Icon(Icons.auto_awesome, color: PharmColors.primary.withOpacity(0.2), size: 64),
           const SizedBox(height: 16),
           Text(
             'AWAITING INPUT...',
             style: PharmTextStyles.overline.copyWith(
-              color: PharmColors.primary.withValues(alpha: 0.4),
+              color: PharmColors.primary.withOpacity(0.4),
               letterSpacing: 4.0,
             ),
           ),
@@ -317,14 +317,14 @@ class _AiChatSessionScreenState extends ConsumerState<AiChatSessionScreen> {
         bottom: bottomPadding,
       ),
       decoration: BoxDecoration(
-        color: PharmColors.surface.withValues(alpha: 0.95),
+        color: PharmColors.surface.withOpacity(0.95),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         border: Border(
-          top: BorderSide(color: PharmColors.primary.withValues(alpha: 0.2), width: 1.5),
+          top: BorderSide(color: PharmColors.primary.withOpacity(0.2), width: 1.5),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.4),
+            color: Colors.black.withOpacity(0.4),
             blurRadius: 20,
             offset: const Offset(0, -5),
           ),
@@ -364,7 +364,7 @@ class _AiChatSessionScreenState extends ConsumerState<AiChatSessionScreen> {
                     color: PharmColors.background,
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                      color: _isSending ? Colors.white12 : PharmColors.primary.withValues(alpha: 0.3),
+                      color: _isSending ? Colors.white12 : PharmColors.primary.withOpacity(0.3),
                       width: 1.5,
                     ),
                   ),
@@ -384,7 +384,7 @@ class _AiChatSessionScreenState extends ConsumerState<AiChatSessionScreen> {
                           : widget.assistantMode == 'lab_procedures'
                             ? 'Ask for procedural steps...'
                             : 'Transmit inquiry...',
-                      hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.2), fontSize: 14),
+                      hintStyle: TextStyle(color: Colors.white.withOpacity(0.2), fontSize: 14),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(vertical: 14),
                     ),
@@ -466,7 +466,7 @@ class _SourceDetailSheet extends StatelessWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.1),
+                color: Colors.white.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -495,14 +495,14 @@ class _SourceDetailSheet extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: PharmColors.background.withValues(alpha: 0.5),
+              color: PharmColors.background.withOpacity(0.5),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: PharmColors.cardBorder),
             ),
             child: Text(
               'Supporting excerpt from the knowledge base would appear here, providing context and verification for the neural response delivered by PharmVR AI.',
               style: PharmTextStyles.bodyMedium.copyWith(
-                color: Colors.white.withValues(alpha: 0.7),
+                color: Colors.white.withOpacity(0.7),
                 height: 1.6,
               ),
             ),

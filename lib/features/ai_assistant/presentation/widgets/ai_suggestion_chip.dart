@@ -25,12 +25,12 @@ class AiSuggestionChip extends StatelessWidget {
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: PharmColors.primary.withValues(alpha: 0.2),
+              color: PharmColors.primary.withOpacity(0.2),
               width: 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: PharmColors.primary.withValues(alpha: 0.05),
+                color: PharmColors.primary.withOpacity(0.05),
                 blurRadius: 4,
                 spreadRadius: 0,
               ),

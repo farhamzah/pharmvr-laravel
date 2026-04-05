@@ -128,7 +128,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with TickerProvider
                       ),
                       child: Center(
                         child: Image.asset(
-                          'assets/images/logo.png',
+                          'assets/images/Pharmvrlogo.png',
                           width: 60,
                           height: 60,
                           fit: BoxFit.contain,

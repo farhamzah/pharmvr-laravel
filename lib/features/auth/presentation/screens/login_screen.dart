@@ -8,6 +8,7 @@ import '../../../../core/utils/error_handler.dart';
 import '../../../../core/widgets/pharm_responsive_wrapper.dart';
 import '../providers/auth_provider.dart';
 import '../../../../core/widgets/pharm_text_field.dart';
+import '../../../../core/services/local_storage_service.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -27,29 +28,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   bool _rememberMe = true;
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
-  late AnimationController _fadeController;
-  late Animation<double> _fadeAnim;
-  late Animation<Offset> _slideAnim;
-
   @override
   void initState() {
     super.initState();
-    _fadeController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    );
-    _fadeAnim = CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
-    _slideAnim = Tween<Offset>(
-      begin: const Offset(0, 0.08),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeOutCubic));
-    _fadeController.forward();
+    _loadSavedEmail();
+  }
+
+  Future<void> _loadSavedEmail() async {
+    final localStorage = ref.read(localStorageProvider);
+    final savedEmail = await localStorage.getRememberMeEmail();
     
-    // Clear any previous state on entry with a slight delay
-    // to override any OS-level Autofill values
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (mounted) _resetForm();
-    });
+    if (savedEmail != null && mounted) {
+      _emailController.text = savedEmail;
+      setState(() => _rememberMe = true);
+    } else {
+      // Clear any previous state on entry with a slight delay
+      // to override any OS-level Autofill values
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) _resetForm();
+      });
+    }
   }
 
   void _resetForm() {
@@ -71,7 +69,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     _passwordController.dispose();
     _emailFocus.dispose();
     _passwordFocus.dispose();
-    _fadeController.dispose();
     super.dispose();
   }
 
@@ -110,77 +107,30 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       showSidePanelDecoration: true,
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: Stack(
-        children: [
-          // ── Background glow orbs ──
-          Positioned(
-            top: -80,
-            right: -60,
-            child: Container(
-              width: 240,
-              height: 240,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    PharmColors.primary.withOpacity(0.08),
-                    Colors.transparent,
-                  ],
-                ),
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: screenHeight * 0.02),
+
+                  // ── BRANDING ──
+                  _buildBranding(),
+                  const SizedBox(height: 40),
+
+                  // ── LOGIN CARD ──
+                  _buildLoginCard(authState),
+                  const SizedBox(height: 28),
+
+                  // ── BOTTOM HELPER ──
+                  _buildBottomHelper(),
+                  const SizedBox(height: 16),
+                ],
               ),
             ),
           ),
-          Positioned(
-            bottom: -100,
-            left: -80,
-            child: Container(
-              width: 280,
-              height: 280,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    PharmColors.primaryDark.withOpacity(0.06),
-                    Colors.transparent,
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          // ── Main content ──
-          SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
-                child: FadeTransition(
-                  opacity: _fadeAnim,
-                  child: SlideTransition(
-                    position: _slideAnim,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(height: screenHeight * 0.02),
-
-                        // ── BRANDING ──
-                        _buildBranding(),
-                        const SizedBox(height: 40),
-
-                        // ── LOGIN CARD ──
-                        _buildLoginCard(authState),
-                        const SizedBox(height: 28),
-
-                        // ── BOTTOM HELPER ──
-                        _buildBottomHelper(),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
         ),
       ),
     );
@@ -210,7 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             ),
             child: ClipOval(
               child: Image.asset(
-                'assets/images/logo.png',
+                'assets/images/Pharmvrlogo.png',
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) => Container(
                   decoration: BoxDecoration(
@@ -227,7 +177,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           ),
         ),
         const SizedBox(height: 12),
-
         // App name
         Text(
           'PharmVR',
@@ -241,7 +190,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         Text(
           'Access your immersive CPOB learning modules',
           style: PharmTextStyles.bodyMedium.copyWith(
-            color: Theme.of(context).textTheme.labelSmall?.color?.withOpacity(0.6),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Theme.of(context).textTheme.labelSmall?.color?.withOpacity(0.6)
+                : Theme.of(context).textTheme.labelSmall?.color?.withOpacity(0.85),
             letterSpacing: 0.2,
             fontWeight: FontWeight.w500,
           ),
@@ -288,7 +239,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             Text(
               'Login to continue your VR pharmaceutical training.',
               style: PharmTextStyles.bodyMedium.copyWith(
-                color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6)
+                    : Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.85),
               ),
             ),
             const SizedBox(height: 32),
@@ -346,10 +299,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
             // ── Primary CTA ──
             _buildLoginButton(authState),
-            const SizedBox(height: 24),
-
-            // ── Secondary / Dev CTA ──
-            _buildQuickLoginButton(authState),
+            const SizedBox(height: 12),
           ],
         ),
       ),
@@ -454,34 +404,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     );
   }
 
-  // ── Quick Login (Testing) ──
-  Widget _buildQuickLoginButton(AuthState authState) {
-    return Center(
-      child: TextButton(
-        onPressed: authState.isLoading
-            ? null
-            : () {
-                _emailController.text = 'test@pharmvr.com';
-                _passwordController.text = 'Password123!';
-                _handleLogin();
-              },
-        style: TextButton.styleFrom(
-          foregroundColor: PharmColors.primary.withOpacity(0.5),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        ),
-        child: Text(
-          'Quick Login (Dev Protocol)',
-          style: PharmTextStyles.overline.copyWith(
-            color: authState.isLoading 
-                ? Theme.of(context).textTheme.labelSmall?.color 
-                : PharmColors.primary.withOpacity(0.5),
-            fontSize: 10,
-            letterSpacing: 1.2,
-          ),
-        ),
-      ),
-    );
-  }
+
 
   // ═══════════════════════════════════════════════════════
   // BOTTOM HELPER

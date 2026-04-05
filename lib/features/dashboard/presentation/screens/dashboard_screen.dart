@@ -14,6 +14,7 @@ import '../../../vr_experience/presentation/providers/vr_connection_provider.dar
 import '../../../vr_experience/presentation/providers/vr_readiness_provider.dart';
 import '../../../../core/config/network_constants.dart';
 import '../../../../core/widgets/pharm_network_image.dart';
+import '../../../../core/widgets/pharm_network_avatar.dart';
 import 'package:pharmvrpro/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -141,27 +142,10 @@ class _HeroSection extends StatelessWidget {
           child: Row(
             children: [
               // Avatar
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(colors: [
-                    Theme.of(context).primaryColor.withOpacity(0.25),
-                    Theme.of(context).primaryColor.withOpacity(0.10),
-                  ]),
-                  border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.35), width: 1.5),
-                ),
-                child: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: avatarUrl != null ? CachedNetworkImageProvider(NetworkConstants.sanitizeUrl(avatarUrl)) : null,
-                  child: avatarUrl == null
-                      ? Text(
-                          fullName.isNotEmpty ? fullName[0].toUpperCase() : 'U',
-                          style: PharmTextStyles.h3.copyWith(color: Theme.of(context).primaryColor),
-                        )
-                      : null,
-                ),
+              PharmNetworkAvatar(
+                url: avatarUrl,
+                displayName: fullName,
+                size: 48,
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -235,7 +219,14 @@ class _BannerImage extends StatelessWidget {
 
   Widget _fallback(BuildContext context, {bool loading = false}) {
     return Container(
-      color: Theme.of(context).colorScheme.surface,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        image: const DecorationImage(
+          image: AssetImage('assets/images/web_landing_hero.png'),
+          fit: BoxFit.cover,
+          opacity: 0.3, // Subtle opacity so it doesn't distract from text
+        ),
+      ),
       child: loading
           ? const Center(child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: PharmColors.primary, strokeWidth: 2)))
           : Center(child: Icon(Icons.biotech, size: 40, color: PharmColors.primary.withOpacity(0.15))),
@@ -349,6 +340,20 @@ class _ProgressGrid extends StatelessWidget {
     final summary = data.progressSummary;
     final progress = (summary['progress_percentage'] as num?)?.toDouble() ?? 0.0;
     
+    final isDesktop = MediaQuery.of(context).size.width >= 900;
+    
+    if (isDesktop) {
+      return Row(children: [
+        _StatCard(icon: Icons.library_books_outlined, value: '${summary['completed_modules']}/${summary['total_modules']}', label: l10n.modules, color: PharmColors.primary),
+        const SizedBox(width: 12),
+        _StatCard(icon: Icons.view_in_ar, value: '${summary['vr_sessions_count']}', label: l10n.vrSessions, color: PharmColors.info),
+        const SizedBox(width: 12),
+        _StatCard(icon: Icons.speed, value: '${progress.toStringAsFixed(0)}%', label: l10n.avgScore, color: progress > 80 ? PharmColors.success : PharmColors.warning),
+        const SizedBox(width: 12),
+        _StatCard(icon: Icons.diamond_outlined, value: '${summary['total_xp']}', label: l10n.xpGained, color: PharmColors.warning),
+      ]);
+    }
+
     return Column(
       children: [
         Row(children: [
@@ -664,7 +669,7 @@ class _InfoRow extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: tinted ? PharmColors.primary.withValues(alpha: 0.05) : Theme.of(context).colorScheme.surface,
+            color: tinted ? PharmColors.primary.withOpacity(0.05) : Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: tinted ? PharmColors.primary.withOpacity(0.1) : (Theme.of(context).brightness == Brightness.dark ? PharmColors.cardBorder : PharmColors.dividerLight)),
           ),

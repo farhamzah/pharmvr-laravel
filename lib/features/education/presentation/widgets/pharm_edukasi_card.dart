@@ -50,7 +50,7 @@ class PharmEdukasiCard extends StatelessWidget {
                   children: [
                     if (module.effectiveThumbnailUrl != null)
                       PharmNetworkImage(
-                        url: NetworkConstants.sanitizeUrl(module.effectiveThumbnailUrl!),
+                        url: module.effectiveThumbnailUrl!,
                         fit: BoxFit.cover,
                       )
                     else
@@ -152,7 +152,7 @@ class PharmEdukasiCard extends StatelessWidget {
                   children: [
                     if (module.effectiveThumbnailUrl != null)
                       PharmNetworkImage(
-                        url: NetworkConstants.sanitizeUrl(module.effectiveThumbnailUrl!),
+                        url: module.effectiveThumbnailUrl!,
                         fit: BoxFit.cover,
                       )
                     else
@@ -425,7 +425,7 @@ class PharmEdukasiCard extends StatelessWidget {
                       // Base Image
                       if (module.effectiveThumbnailUrl != null)
                         PharmNetworkImage(
-                          url: NetworkConstants.sanitizeUrl(module.effectiveThumbnailUrl!),
+                          url: module.effectiveThumbnailUrl!,
                           fit: BoxFit.cover,
                           errorWidget: _buildPlaceholderIcon(isVideo),
                         )

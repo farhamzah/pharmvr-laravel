@@ -60,7 +60,7 @@ class _PharmTextFieldState extends State<PharmTextField> {
       validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-        color: PharmColors.textPrimary,
+        color: Theme.of(context).textTheme.bodyLarge?.color,
         fontWeight: FontWeight.w600,
       ),
       cursorColor: PharmColors.primary,
@@ -108,7 +108,11 @@ class _PharmTextFieldState extends State<PharmTextField> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Theme.of(context).dividerColor.withOpacity(0.1)),
+          borderSide: BorderSide(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Theme.of(context).dividerColor.withOpacity(0.1)
+                : Theme.of(context).dividerColor.withOpacity(0.3),
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),

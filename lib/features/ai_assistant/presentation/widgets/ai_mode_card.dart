@@ -30,7 +30,7 @@ class AiModeCard extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: isSelected 
-              ? PharmColors.primary.withValues(alpha: 0.1) 
+              ? PharmColors.primary.withOpacity(0.1) 
               : Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
@@ -42,7 +42,7 @@ class AiModeCard extends StatelessWidget {
             boxShadow: [
               if (isSelected)
                 BoxShadow(
-                  color: PharmColors.primary.withValues(alpha: 0.3),
+                  color: PharmColors.primary.withOpacity(0.3),
                   blurRadius: 15,
                   spreadRadius: -2,
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:go_router/go_router.dart';
 
 // Shell & Screens
@@ -8,6 +9,7 @@ import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/forgot_password_screen.dart';
+import '../../features/landing/presentation/screens/landing_screen.dart';
 import '../../features/news/presentation/screens/news_screen.dart';
 import '../../features/news/presentation/screens/news_detail_screen.dart';
 import '../../features/news/presentation/screens/news_external_detail_screen.dart';
@@ -24,7 +26,7 @@ import '../../features/profile/presentation/screens/change_password_screen.dart'
 import '../../features/profile/presentation/screens/notifications_screen.dart';
 import '../../features/profile/presentation/screens/language_screen.dart';
 import '../../features/profile/presentation/screens/appearance_screen.dart';
-import '../../features/profile/presentation/screens/about_screen.dart';
+import 'package:pharmvrpro/features/profile/presentation/screens/about_screen.dart';
 import '../../features/profile/presentation/screens/help_center_screen.dart';
 import '../../features/profile/presentation/screens/legal_content_screen.dart';
 
@@ -47,10 +49,15 @@ final GlobalKey<NavigatorState> shellNavigatorHubKey = GlobalKey<NavigatorState>
 final GlobalKey<NavigatorState> shellNavigatorAiKey = GlobalKey<NavigatorState>(debugLabel: 'ai');
 final GlobalKey<NavigatorState> shellNavigatorProfileKey = GlobalKey<NavigatorState>(debugLabel: 'profile');
 
-final goRouter = GoRouter(
-  navigatorKey: rootNavigatorKey,
-  initialLocation: '/splash',
-  routes: [
+class AppRouter {
+  static final GoRouter router = GoRouter(
+    navigatorKey: rootNavigatorKey,
+    initialLocation: kIsWeb ? '/' : '/splash',
+    routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const LandingScreen(),
+    ),
     GoRoute(
       path: '/splash',
       builder: (context, state) => const SplashScreen(),
@@ -289,7 +296,7 @@ final goRouter = GoRouter(
                 ),
                 GoRoute(
                   path: 'about',
-                  builder: (context, state) => const AboutPharmVrScreen(),
+                  builder: (context, state) => const AboutPharmVrScreenNew(),
                 ),
                 GoRoute(
                   path: 'privacy-policy',
@@ -311,6 +318,7 @@ final goRouter = GoRouter(
     ),
   ],
 );
+}
 
 /// Premium fade + slide-up page transition for detail/overlay screens.
 CustomTransitionPage<void> _fadeSlide(GoRouterState state, Widget child) {

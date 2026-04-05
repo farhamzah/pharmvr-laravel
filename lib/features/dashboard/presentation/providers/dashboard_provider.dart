@@ -1,7 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/network/dio_provider.dart';
 import '../../data/repositories/home_repository.dart';
 import '../../domain/models/home_hub.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../../core/models/user.dart';
+import '../../../../core/models/user_profile.dart';
 
 final homeRepositoryProvider = Provider<HomeRepository>((ref) {
   final dio = ref.watch(dioProvider);

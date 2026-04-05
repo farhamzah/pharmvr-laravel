@@ -140,12 +140,12 @@ class _AiQuickChatModalState extends ConsumerState<AiQuickChatModal> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: PharmColors.primary.withValues(alpha: 0.2),
+                        color: PharmColors.primary.withOpacity(0.2),
                         blurRadius: 10,
                       )
                     ],
                     color: PharmColors.surface,
-                    border: Border.all(color: PharmColors.primary.withValues(alpha: 0.3)),
+                    border: Border.all(color: PharmColors.primary.withOpacity(0.3)),
                   ),
                   child: const Icon(Icons.auto_awesome, size: 18, color: PharmColors.primary),
                 ),
@@ -174,7 +174,7 @@ class _AiQuickChatModalState extends ConsumerState<AiQuickChatModal> {
             ),
           ),
           const SizedBox(height: 8),
-          Divider(height: 1, color: PharmColors.cardBorder.withValues(alpha: 0.5)),
+          Divider(height: 1, color: PharmColors.cardBorder.withOpacity(0.5)),
 
           // Messages
           Expanded(
@@ -218,14 +218,14 @@ class _AiQuickChatModalState extends ConsumerState<AiQuickChatModal> {
                   : MediaQuery.of(context).padding.bottom + 16,
             ),
             decoration: BoxDecoration(
-              color: PharmColors.surface.withValues(alpha: 0.98),
+              color: PharmColors.surface.withOpacity(0.98),
               borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
               border: Border(
-                top: BorderSide(color: PharmColors.primary.withValues(alpha: 0.2), width: 1.5),
+                top: BorderSide(color: PharmColors.primary.withOpacity(0.2), width: 1.5),
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.3),
+                  color: Colors.black.withOpacity(0.3),
                   blurRadius: 15,
                   offset: const Offset(0, -4),
                 ),
@@ -240,7 +240,7 @@ class _AiQuickChatModalState extends ConsumerState<AiQuickChatModal> {
                     decoration: BoxDecoration(
                       color: PharmColors.background,
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: PharmColors.primary.withValues(alpha: 0.2)),
+                      border: Border.all(color: PharmColors.primary.withOpacity(0.2)),
                     ),
                     child: TextField(
                       controller: _controller,
@@ -252,7 +252,7 @@ class _AiQuickChatModalState extends ConsumerState<AiQuickChatModal> {
                       onSubmitted: _send,
                       decoration: InputDecoration(
                         hintText: 'Tanya PharmAI...',
-                        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.15), fontSize: 13),
+                        hintStyle: TextStyle(color: Colors.white.withOpacity(0.15), fontSize: 13),
                         border: InputBorder.none,
                         contentPadding: const EdgeInsets.symmetric(vertical: 10),
                       ),
@@ -293,7 +293,7 @@ class _AiQuickChatModalState extends ConsumerState<AiQuickChatModal> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.auto_awesome, size: 40, color: PharmColors.primary.withValues(alpha: 0.2)),
+            Icon(Icons.auto_awesome, size: 40, color: PharmColors.primary.withOpacity(0.2)),
             const SizedBox(height: 16),
             Text(
               'QUICK_INQUIRIES',
@@ -316,9 +316,9 @@ class _AiQuickChatModalState extends ConsumerState<AiQuickChatModal> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
-                          color: PharmColors.surfaceLight.withValues(alpha: 0.5),
+                          color: PharmColors.surfaceLight.withOpacity(0.5),
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: PharmColors.primary.withValues(alpha: 0.2)),
+                          border: Border.all(color: PharmColors.primary.withOpacity(0.2)),
                         ),
                         child: Center(
                           child: Text(

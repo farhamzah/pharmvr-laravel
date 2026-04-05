@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
-import 'core/router/app_router.dart';
+import 'package:pharmvrpro/core/router/app_router.dart';
 import 'core/theme/pharm_theme.dart';
 import 'core/theme/theme_provider.dart';
 import 'core/localization/locale_provider.dart';
@@ -45,7 +45,7 @@ class PharmVrApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      routerConfig: goRouter,
+      routerConfig: AppRouter.router,
       debugShowCheckedModeBanner: false,
     );
   }

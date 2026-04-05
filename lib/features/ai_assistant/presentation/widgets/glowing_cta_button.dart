@@ -25,7 +25,7 @@ class GlowingCtaButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: PharmColors.primary.withValues(alpha: 0.3),
+            color: PharmColors.primary.withOpacity(0.3),
             blurRadius: 20,
             spreadRadius: -5,
           ),

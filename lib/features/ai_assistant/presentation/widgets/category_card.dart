@@ -18,7 +18,7 @@ class CategoryCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: PharmColors.surface.withValues(alpha: 0.5),
+          color: PharmColors.surface.withOpacity(0.5),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: PharmColors.cardBorder),
         ),

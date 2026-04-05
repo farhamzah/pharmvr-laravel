@@ -148,7 +148,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   Widget _buildDivider() {
-    return Divider(height: 1, indent: 16, endIndent: 16, color: PharmColors.divider.withValues(alpha: 0.5));
+    return Divider(height: 1, indent: 16, endIndent: 16, color: PharmColors.divider.withOpacity(0.5));
   }
 }
 
@@ -191,7 +191,7 @@ class _ToggleItem extends StatelessWidget {
                 value: value,
                 onChanged: onChanged,
                 activeColor: PharmColors.primary,
-                activeTrackColor: PharmColors.primary.withValues(alpha: 0.3),
+                activeTrackColor: PharmColors.primary.withOpacity(0.3),
                 inactiveThumbColor: PharmColors.textTertiary,
                 inactiveTrackColor: PharmColors.surfaceLight,
               ),

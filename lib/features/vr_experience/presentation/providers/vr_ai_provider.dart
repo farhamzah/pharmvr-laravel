@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/vr_ai_interaction.dart';
-import '../data/repositories/vr_repository.dart';
+import '../../data/repositories/vr_repository.dart';
 
 class VrAiNotifier extends Notifier<VrAiInteraction?> {
   @override

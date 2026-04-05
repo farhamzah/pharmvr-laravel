@@ -10,6 +10,7 @@ import '../providers/profile_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../../core/theme/theme_provider.dart';
 import '../../../../core/config/network_constants.dart';
+import '../../../../core/widgets/pharm_network_avatar.dart';
 import 'package:pharmvrpro/l10n/app_localizations.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -24,73 +25,78 @@ class ProfileScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final themeLabel = themeMode == ThemeMode.light 
         ? l10n.themeLight 
-        : themeMode == ThemeMode.dark 
-            ? l10n.themeDark 
-            : l10n.themeSystem;
+        : l10n.themeDark;
+
+    final isDesktop = MediaQuery.of(context).size.width >= 900;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Header
-            _ProfileHeader(
-              name: user?.name ?? 'PharmVR User',
-              email: user?.email ?? 'user@pharmvr.com',
-              avatarUrl: user?.profile?.avatarUrl,
-              role: user?.role ?? 'VR Learner',
-              university: user?.profile?.university,
-              nim: user?.profile?.nim,
-            ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: isDesktop ? 800 : double.infinity),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Header
+                _ProfileHeader(
+                  name: user?.name ?? 'PharmVR User',
+                  email: user?.email ?? 'user@pharmvr.cloud',
+                  avatarUrl: user?.profile?.avatarUrl,
+                  role: user?.role ?? 'VR Learner',
+                  university: user?.profile?.university,
+                  nim: user?.profile?.nim,
+                ),
 
-            // Sections
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Account
-                  _SectionGroup(title: l10n.account, items: [
-                    _MenuItem(icon: Icons.person_outline, label: l10n.editProfile,
-                      onTap: () => context.push('/profile/edit')),
-                    _MenuItem(icon: Icons.lock_outline, label: l10n.changePassword, 
-                      onTap: () => context.push('/profile/change-password')),
-                  ]),
-                  const SizedBox(height: 20),
+                // Sections
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Account
+                      _SectionGroup(title: l10n.account, items: [
+                        _MenuItem(icon: Icons.person_outline, label: l10n.editProfile,
+                          onTap: () => context.push('/profile/edit')),
+                        _MenuItem(icon: Icons.lock_outline, label: l10n.changePassword, 
+                          onTap: () => context.push('/profile/change-password')),
+                      ]),
+                      const SizedBox(height: 20),
 
-                  // Preferences
-                  _SectionGroup(title: l10n.preferences, items: [
-                    _MenuItem(icon: Icons.notifications_none, label: l10n.notifications, trailing: 'On', 
-                      onTap: () => context.push('/settings/notifications')),
-                    _MenuItem(icon: Icons.language, label: l10n.language, trailing: Localizations.localeOf(context).languageCode == 'id' ? l10n.indonesian : l10n.english, 
-                      onTap: () => context.push('/settings/language')),
-                    _MenuItem(icon: Icons.palette_outlined, label: l10n.appearance, trailing: themeLabel, 
-                      onTap: () => context.push('/settings/appearance')),
-                  ]),
-                  const SizedBox(height: 20),
+                      // Preferences
+                      _SectionGroup(title: l10n.preferences, items: [
+                        _MenuItem(icon: Icons.notifications_none, label: l10n.notifications, trailing: 'On', 
+                          onTap: () => context.push('/settings/notifications')),
+                        _MenuItem(icon: Icons.language, label: l10n.language, trailing: Localizations.localeOf(context).languageCode == 'id' ? l10n.indonesian : l10n.english, 
+                          onTap: () => context.push('/settings/language')),
+                        _MenuItem(icon: Icons.palette_outlined, label: l10n.appearance, trailing: themeLabel, 
+                          onTap: () => context.push('/settings/appearance')),
+                      ]),
+                      const SizedBox(height: 20),
 
-                  // Support
-                  _SectionGroup(title: l10n.support, items: [
-                    _MenuItem(icon: Icons.help_outline, label: l10n.helpCenter, 
-                      onTap: () => context.push('/support/help-center')),
-                    _MenuItem(icon: Icons.info_outline, label: l10n.aboutPharmVr, 
-                      onTap: () => context.push('/support/about')),
-                  ]),
-                  const SizedBox(height: 20),
+                      // Support
+                      _SectionGroup(title: l10n.support, items: [
+                        _MenuItem(icon: Icons.help_outline, label: l10n.helpCenter, 
+                          onTap: () => context.push('/support/help-center')),
+                        _MenuItem(icon: Icons.info_outline, label: l10n.aboutPharmVr, 
+                          onTap: () => context.push('/support/about')),
+                      ]),
+                      const SizedBox(height: 20),
 
-                  // Logout
-                  _LogoutButton(onTap: () => _showLogout(context, ref)),
-                  const SizedBox(height: 24),
+                      // Logout
+                      _LogoutButton(onTap: () => _showLogout(context, ref)),
+                      const SizedBox(height: 24),
 
-                  // Version
-                  Center(
-                    child: Text('PharmVR v1.0.0', style: PharmTextStyles.caption.copyWith(color: Theme.of(context).textTheme.labelSmall?.color)),
+                      // Version
+                      Center(
+                        child: Text('PharmVR v1.0.0', style: PharmTextStyles.caption.copyWith(color: Theme.of(context).textTheme.labelSmall?.color)),
+                      ),
+                      const SizedBox(height: 100),
+                    ],
                   ),
-                  const SizedBox(height: 100),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -112,7 +118,7 @@ class ProfileScreen extends ConsumerWidget {
                 width: 56, height: 56,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: PharmColors.error.withValues(alpha: 0.1),
+                  color: PharmColors.error.withOpacity(0.1),
                 ),
                 child: const Icon(Icons.logout, color: PharmColors.error, size: 26),
               ),
@@ -206,7 +212,7 @@ class _ProfileHeader extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Theme.of(context).primaryColor.withValues(alpha: 0.12),
+            Theme.of(context).primaryColor.withOpacity(0.12),
             Theme.of(context).scaffoldBackgroundColor,
           ],
         ),
@@ -216,21 +222,11 @@ class _ProfileHeader extends StatelessWidget {
           // Avatar
           Hero(
             tag: 'profile_avatar',
-            child: Container(
-              width: 88, height: 88,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Theme.of(context).primaryColor.withValues(alpha: 0.4), width: 2.5),
-                boxShadow: [BoxShadow(color: Theme.of(context).primaryColor.withValues(alpha: 0.15), blurRadius: 24, spreadRadius: 4)],
-              ),
-              child: CircleAvatar(
-                backgroundColor: Theme.of(context).colorScheme.surface,
-                backgroundImage: avatarUrl != null ? CachedNetworkImageProvider(NetworkConstants.sanitizeUrl(avatarUrl!)) : null,
-                child: avatarUrl == null
-                    ? Text(name.isNotEmpty ? name[0].toUpperCase() : 'U',
-                        style: PharmTextStyles.h1.copyWith(color: Theme.of(context).primaryColor, fontSize: 34))
-                    : null,
-              ),
+            child: PharmNetworkAvatar(
+              url: avatarUrl,
+              displayName: name,
+              size: 88,
+              borderWidth: 2.5,
             ),
           ),
           const SizedBox(height: 14),
@@ -241,14 +237,14 @@ class _ProfileHeader extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               '${university ?? ""}${university != null && nim != null ? " • " : ""}${nim ?? ""}',
-              style: PharmTextStyles.caption.copyWith(color: Theme.of(context).primaryColor.withValues(alpha: 0.8), fontWeight: FontWeight.w500),
+              style: PharmTextStyles.caption.copyWith(color: Theme.of(context).primaryColor.withOpacity(0.8), fontWeight: FontWeight.w500),
             ),
           ],
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor.withValues(alpha: 0.15),
+              color: Theme.of(context).primaryColor.withOpacity(0.15),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
@@ -380,9 +376,9 @@ class _LogoutButton extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
-            color: PharmColors.error.withValues(alpha: 0.06),
+            color: PharmColors.error.withOpacity(0.06),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: PharmColors.error.withValues(alpha: 0.12)),
+            border: Border.all(color: PharmColors.error.withOpacity(0.12)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

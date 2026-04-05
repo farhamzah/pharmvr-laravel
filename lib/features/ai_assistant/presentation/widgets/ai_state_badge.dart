@@ -18,20 +18,20 @@ class AiStateBadge extends StatelessWidget {
 
     switch (responseMode) {
       case 'grounded':
-        bgColor = PharmColors.primary.withValues(alpha: 0.1);
+        bgColor = PharmColors.primary.withOpacity(0.1);
         textColor = PharmColors.primary;
         label = 'GROUNDED ANSWER';
         icon = Icons.verified_user_outlined;
         break;
       case 'restricted':
-        bgColor = Colors.amber.withValues(alpha: 0.1);
+        bgColor = Colors.amber.withOpacity(0.1);
         textColor = Colors.amber;
         label = 'RESTRICTED TOPIC';
         icon = Icons.shield_outlined;
         break;
       case 'neutral':
       default:
-        bgColor = Colors.white.withValues(alpha: 0.05);
+        bgColor = Colors.white.withOpacity(0.05);
         textColor = Colors.white54;
         label = 'INSUFFICIENT CONTEXT';
         icon = Icons.help_outline;
@@ -44,7 +44,7 @@ class AiStateBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: textColor.withValues(alpha: 0.3)),
+        border: Border.all(color: textColor.withOpacity(0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

@@ -8,6 +8,8 @@ import '../../data/repositories/auth_repository_impl.dart';
 import '../../../dashboard/presentation/providers/dashboard_provider.dart';
 import '../../../news/presentation/providers/news_provider.dart';
 import '../../../education/presentation/providers/education_provider.dart';
+import '../../../../core/services/local_storage_service.dart';
+import '../../../../core/services/secure_storage_service.dart';
 
 final authDataSourceProvider = Provider<AuthDataSource>((ref) {
   final dio = ref.watch(dioProvider);
@@ -69,6 +71,14 @@ class AuthNotifier extends Notifier<AuthState> {
       // ALWAYS save token for the current session to ensure Dio interceptor picks it up
       final secureStorage = ref.read(secureStorageProvider);
       await secureStorage.saveToken(response.token);
+
+      // Persist email if Remember Me is checked
+      final localStorage = ref.read(localStorageProvider);
+      if (rememberMe) {
+        await localStorage.saveRememberMeEmail(email);
+      } else {
+        await localStorage.clearRememberMeEmail();
+      }
 
       state = state.copyWith(
         isLoading: false, 

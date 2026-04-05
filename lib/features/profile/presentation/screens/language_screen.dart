@@ -120,7 +120,7 @@ class _LanguageOptionCard extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
-        color: isSelected ? PharmColors.primary.withValues(alpha: 0.08) : PharmColors.surface,
+        color: isSelected ? PharmColors.primary.withOpacity(0.08) : PharmColors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isSelected ? PharmColors.primary : PharmColors.cardBorder,
@@ -129,7 +129,7 @@ class _LanguageOptionCard extends StatelessWidget {
         boxShadow: isSelected
             ? [
                 BoxShadow(
-                  color: PharmColors.primary.withValues(alpha: 0.15),
+                  color: PharmColors.primary.withOpacity(0.15),
                   blurRadius: 16,
                   spreadRadius: 2,
                 )
@@ -150,7 +150,7 @@ class _LanguageOptionCard extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: isSelected ? PharmColors.primary.withValues(alpha: 0.15) : PharmColors.surfaceLight,
+                    color: isSelected ? PharmColors.primary.withOpacity(0.15) : PharmColors.surfaceLight,
                     shape: BoxShape.circle,
                   ),
                   child: Center(
@@ -198,7 +198,7 @@ class _LanguageOptionCard extends StatelessWidget {
                 else
                   Icon(
                     Icons.circle_outlined,
-                    color: PharmColors.textTertiary.withValues(alpha: 0.5),
+                    color: PharmColors.textTertiary.withOpacity(0.5),
                     size: 24,
                   ),
               ],

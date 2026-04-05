@@ -11,8 +11,8 @@ import '../../domain/models/app_setting.dart';
 
 /// A premium informational screen explaining PharmVR's identity,
 /// mission, and version metadata.
-class AboutPharmVrScreen extends ConsumerWidget {
-  const AboutPharmVrScreen({super.key});
+class AboutPharmVrScreenNew extends ConsumerWidget {
+  const AboutPharmVrScreenNew({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -76,10 +76,10 @@ class AboutPharmVrScreen extends ConsumerWidget {
           decoration: BoxDecoration(
             color: PharmColors.surfaceLight,
             shape: BoxShape.circle,
-            border: Border.all(color: PharmColors.primary.withValues(alpha: 0.3), width: 2),
+            border: Border.all(color: PharmColors.primary.withOpacity(0.3), width: 2),
             boxShadow: [
               BoxShadow(
-                color: PharmColors.primary.withValues(alpha: 0.2),
+                color: PharmColors.primary.withOpacity(0.2),
                 blurRadius: 32,
                 spreadRadius: 8,
               ),
@@ -105,9 +105,9 @@ class AboutPharmVrScreen extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           decoration: BoxDecoration(
-            color: PharmColors.primary.withValues(alpha: 0.1),
+            color: PharmColors.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: PharmColors.primary.withValues(alpha: 0.2)),
+            border: Border.all(color: PharmColors.primary.withOpacity(0.2)),
           ),
           child: Text(
             'Virtual Reality for CPOB Learning',
@@ -225,7 +225,7 @@ class AboutPharmVrScreen extends ConsumerWidget {
   Widget _buildDivider() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Divider(height: 1, color: PharmColors.divider.withValues(alpha: 0.5)),
+      child: Divider(height: 1, color: PharmColors.divider.withOpacity(0.5)),
     );
   }
 

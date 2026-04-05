@@ -8,7 +8,7 @@ class ThemeNotifier extends Notifier<ThemeMode> {
   @override
   ThemeMode build() {
     // We can't do async build easily in build() without returning a Future,
-    // so we'll initialize it synchronously as System and then load the real value.
+    // so we'll initialize it synchronously as Dark and then load the real value.
     _loadTheme();
     return ThemeMode.dark;
   }
@@ -20,7 +20,7 @@ class ThemeNotifier extends Notifier<ThemeMode> {
     if (themeStr != null) {
       state = _fromStr(themeStr);
     } else {
-      // On first launch, explicitly save 'dark' to ensure "System Default" isn't the fallback
+      // On first launch, explicitly save 'dark' and set state
       await prefs.setString(_themeKey, 'dark');
       state = ThemeMode.dark;
     }
@@ -36,7 +36,7 @@ class ThemeNotifier extends Notifier<ThemeMode> {
     switch (mode) {
       case ThemeMode.light: return 'light';
       case ThemeMode.dark: return 'dark';
-      default: return 'system';
+      default: return 'dark'; // Fallback to dark
     }
   }
 
@@ -44,7 +44,6 @@ class ThemeNotifier extends Notifier<ThemeMode> {
     switch (str) {
       case 'light': return ThemeMode.light;
       case 'dark': return ThemeMode.dark;
-      case 'system': return ThemeMode.system;
       default: return ThemeMode.dark; // Absolute default
     }
   }

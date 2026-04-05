@@ -51,12 +51,12 @@ class AiMessageBubble extends StatelessWidget {
                       bottomRight: Radius.circular(isAi ? 20 : 4),
                     ),
                     border: isAi 
-                      ? Border.all(color: PharmColors.cardBorder.withValues(alpha: 0.5))
+                      ? Border.all(color: PharmColors.cardBorder.withOpacity(0.5))
                       : null,
                     boxShadow: [
                       if (!isAi)
                         BoxShadow(
-                          color: PharmColors.primary.withValues(alpha: 0.2),
+                          color: PharmColors.primary.withOpacity(0.2),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -70,7 +70,7 @@ class AiMessageBubble extends StatelessWidget {
                       Text(
                         message.text,
                         style: PharmTextStyles.bodyMedium.copyWith(
-                          color: isAi ? Colors.white.withValues(alpha: 0.9) : Colors.white,
+                          color: isAi ? Colors.white.withOpacity(0.9) : Colors.white,
                           height: 1.5,
                           fontStyle: message.isRestricted ? FontStyle.italic : null,
                         ),
@@ -107,10 +107,10 @@ class AiMessageBubble extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: PharmColors.surface,
-        border: Border.all(color: PharmColors.primary.withValues(alpha: 0.3)),
+        border: Border.all(color: PharmColors.primary.withOpacity(0.3)),
         boxShadow: [
           BoxShadow(
-            color: PharmColors.primary.withValues(alpha: 0.1),
+            color: PharmColors.primary.withOpacity(0.1),
             blurRadius: 8,
           ),
         ],
@@ -128,7 +128,7 @@ class AiMessageBubble extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: PharmColors.surfaceLight,
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
       ),
       child: const Center(
         child: Icon(Icons.person_outline, color: Colors.white70, size: 18),
@@ -141,9 +141,9 @@ class AiMessageBubble extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.amber.withValues(alpha: 0.1),
+        color: Colors.amber.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
+        border: Border.all(color: Colors.amber.withOpacity(0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -203,9 +203,9 @@ class AiMessageBubble extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: PharmColors.primary.withValues(alpha: 0.1),
+          color: PharmColors.primary.withOpacity(0.1),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: PharmColors.primary.withValues(alpha: 0.2)),
+          border: Border.all(color: PharmColors.primary.withOpacity(0.2)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -231,7 +231,7 @@ class AiMessageBubble extends StatelessWidget {
           Text(
             'NEURAL_SUGGESTIONS:',
             style: PharmTextStyles.overline.copyWith(
-              color: Colors.white.withValues(alpha: 0.3),
+              color: Colors.white.withOpacity(0.3),
               fontSize: 8,
               letterSpacing: 2.0,
             ),
@@ -246,9 +246,9 @@ class AiMessageBubble extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: Colors.white.withOpacity(0.05),
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  border: Border.all(color: Colors.white.withOpacity(0.1)),
                 ),
                 child: Text(
                   t.toUpperCase(),

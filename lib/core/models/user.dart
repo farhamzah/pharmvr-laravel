@@ -73,10 +73,10 @@ class User {
     return User(
       id: 1,
       name: 'Farhan Maulana',
-      email: 'farhan@pharmvr.com',
+      email: 'farhan@pharmvr.cloud',
       role: 'Mahasiswa',
       profile: UserProfile(
-        university: 'Universitas Indonesia',
+        university: 'University of Padjadjaran',
         nim: '2006543210',
         semester: 6,
       ),

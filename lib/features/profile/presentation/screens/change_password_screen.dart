@@ -114,9 +114,9 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: PharmColors.error.withValues(alpha: 0.1),
+                color: PharmColors.error.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: PharmColors.error.withValues(alpha: 0.3)),
+                border: Border.all(color: PharmColors.error.withOpacity(0.3)),
               ),
               child: Row(
                 children: [
@@ -142,7 +142,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: PharmColors.cardBorder),
               boxShadow: [
-                BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 20, offset: const Offset(0, 8)),
+                BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 8)),
               ],
             ),
             child: Column(
@@ -158,7 +158,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   textInputAction: TextInputAction.next,
                 ),
                 const SizedBox(height: 24),
-                Divider(color: PharmColors.divider.withValues(alpha: 0.5), height: 1),
+                Divider(color: PharmColors.divider.withOpacity(0.5), height: 1),
                 const SizedBox(height: 24),
                 PharmTextField(
                   labelText: 'New Password',
@@ -203,10 +203,10 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       decoration: BoxDecoration(
         color: PharmColors.surface,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: PharmColors.success.withValues(alpha: 0.3)),
+        border: Border.all(color: PharmColors.success.withOpacity(0.3)),
         boxShadow: [
           BoxShadow(
-            color: PharmColors.success.withValues(alpha: 0.1),
+            color: PharmColors.success.withOpacity(0.1),
             blurRadius: 40,
             spreadRadius: 10,
           )
@@ -217,7 +217,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: PharmColors.success.withValues(alpha: 0.15),
+              color: PharmColors.success.withOpacity(0.15),
               shape: BoxShape.circle,
             ),
             child: const Icon(Icons.check_circle, size: 64, color: PharmColors.success),

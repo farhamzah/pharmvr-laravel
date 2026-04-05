@@ -99,9 +99,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: PharmColors.primary.withValues(alpha: 0.1),
+                      color: PharmColors.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: PharmColors.primary.withValues(alpha: 0.3)),
+                      border: Border.all(color: PharmColors.primary.withOpacity(0.3)),
                     ),
                     child: Text(
                       'STABIL & REAL',

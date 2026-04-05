@@ -108,9 +108,9 @@ class HelpCenterScreen extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
                   decoration: BoxDecoration(
-                    color: PharmColors.primary.withValues(alpha: 0.1),
+                    color: PharmColors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: PharmColors.primary.withValues(alpha: 0.2)),
+                    border: Border.all(color: PharmColors.primary.withOpacity(0.2)),
                   ),
                   child: Column(
                     children: [
@@ -184,7 +184,7 @@ class HelpCenterScreen extends StatelessWidget {
     for (int i = 0; i < items.length; i++) {
       result.add(items[i]);
       if (i < items.length - 1) {
-        result.add(Divider(height: 1, indent: 16, endIndent: 16, color: PharmColors.divider.withValues(alpha: 0.5)));
+        result.add(Divider(height: 1, indent: 16, endIndent: 16, color: PharmColors.divider.withOpacity(0.5)));
       }
     }
     return result;

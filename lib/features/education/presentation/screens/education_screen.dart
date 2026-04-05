@@ -98,14 +98,16 @@ class _EducationScreenState extends ConsumerState<EducationScreen> with SingleTi
       );
     }
 
-    if (type == 'video') {
+    final isDesktop = MediaQuery.of(context).size.width >= 900;
+
+    if (type == 'video' || isDesktop) {
       return GridView.builder(
         padding: PharmSpacing.allLg,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: PharmSpacing.md,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: isDesktop ? 3 : 2,
+          crossAxisSpacing: PharmSpacing.lg,
           mainAxisSpacing: PharmSpacing.lg,
-          childAspectRatio: 0.85,
+          childAspectRatio: type == 'video' ? 0.85 : (type == 'module' ? 0.95 : 1.0),
         ),
         itemCount: filteredItems.length,
         itemBuilder: (context, index) {

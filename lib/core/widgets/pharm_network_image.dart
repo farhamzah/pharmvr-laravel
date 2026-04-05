@@ -27,36 +27,44 @@ class PharmNetworkImage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (url.isEmpty) return _buildError();
 
-    // Ensure the URL is absolute for the emulator/device
-    String finalUrl = url;
-    if (!url.startsWith('http')) {
-      // If relative, prepend the base storage URL (assumed to be root for now)
-      // Actually, sanitizeUrl should have handled it if it came from backend as localhost
-      // but if it's just 'storage/news/abc.png', we need to help it.
-      final baseUrl = NetworkConstants.baseUrl.replaceAll('/api/v1', '');
-      finalUrl = '$baseUrl/${url.startsWith('/') ? url.substring(1) : url}';
-    }
+    // Use centralized sanitization logic
+    final String finalUrl = NetworkConstants.sanitizeUrl(url);
 
-    if (kDebugMode && finalUrl.contains('10.0.2.2')) {
+    if (kDebugMode && finalUrl.contains('localhost')) {
       debugPrint('PharmNetworkImage Loading: $finalUrl');
     }
 
-    Widget image = CachedNetworkImage(
-      imageUrl: finalUrl,
-      width: width,
-      height: height,
-      fit: fit,
-      placeholder: (context, url) => _buildPlaceholder(),
-      errorWidget: (context, url, error) {
-        if (kDebugMode) {
-          debugPrint('PharmNetworkImage Error [$url]: $error');
-        }
-        return errorWidget ?? _buildError();
-      },
-      // Add memory cache optimization
-      memCacheWidth: 800, 
-      maxWidthDiskCache: 1200,
-    );
+    Widget image;
+    if (kIsWeb) {
+      image = Image.network(
+        finalUrl,
+        width: width,
+        height: height,
+        fit: fit,
+        errorBuilder: (context, error, stackTrace) {
+          if (kDebugMode) debugPrint('PharmNetworkImage Web Error [$finalUrl]: $error');
+          return errorWidget ?? _buildError();
+        },
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return _buildPlaceholder();
+        },
+      );
+    } else {
+      image = CachedNetworkImage(
+        imageUrl: finalUrl,
+        width: width,
+        height: height,
+        fit: fit,
+        placeholder: (context, url) => _buildPlaceholder(),
+        errorWidget: (context, url, error) {
+          if (kDebugMode) debugPrint('PharmNetworkImage Error [$url]: $error');
+          return errorWidget ?? _buildError();
+        },
+        memCacheWidth: 800,
+        maxWidthDiskCache: 1200,
+      );
+    }
 
     if (borderRadius != null) {
       return ClipRRect(

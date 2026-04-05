@@ -31,18 +31,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
 
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
-  late AnimationController _fadeController;
-  late Animation<double> _fadeAnim;
-  late Animation<Offset> _slideAnim;
-
   @override
   void initState() {
     super.initState();
-    _fadeController = AnimationController(vsync: this, duration: const Duration(milliseconds: 900));
-    _fadeAnim = CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
-    _slideAnim = Tween<Offset>(begin: const Offset(0, 0.08), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeOutCubic));
-    _fadeController.forward();
     
     // Clear any previous state on entry with a slight delay
     // to override any OS-level Autofill values
@@ -76,7 +67,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
     _emailFocus.dispose();
     _passwordFocus.dispose();
     _confirmFocus.dispose();
-    _fadeController.dispose();
     super.dispose();
   }
 
@@ -116,56 +106,23 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
     return PharmResponsiveWrapper(
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: Stack(
-          children: [
-            // ── Background glow orbs ──
-            Positioned(
-              top: -80, left: -60,
-              child: Container(
-                width: 240, height: 240,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(colors: [PharmColors.primary.withOpacity(0.07), Colors.transparent]),
-                ),
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildBranding(),
+                  const SizedBox(height: 32),
+                  _buildRegisterCard(authState),
+                  const SizedBox(height: 28),
+                  _buildBottomHelper(),
+                  const SizedBox(height: 16),
+                ],
               ),
             ),
-            Positioned(
-              bottom: -100, right: -80,
-              child: Container(
-                width: 280, height: 280,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(colors: [PharmColors.primaryDark.withOpacity(0.05), Colors.transparent]),
-                ),
-              ),
-            ),
-
-            // ── Main content ──
-            SafeArea(
-              child: Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
-                  child: FadeTransition(
-                    opacity: _fadeAnim,
-                    child: SlideTransition(
-                      position: _slideAnim,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildBranding(),
-                          const SizedBox(height: 32),
-                          _buildRegisterCard(authState),
-                          const SizedBox(height: 28),
-                          _buildBottomHelper(),
-                          const SizedBox(height: 16),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -186,7 +143,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
           ),
           child: ClipOval(
             child: Image.asset(
-              'assets/images/logo.png',
+              'assets/images/Pharmvrlogo.png',
               fit: BoxFit.contain,
               errorBuilder: (_, __, ___) => Container(
                 decoration: BoxDecoration(
@@ -200,12 +157,21 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen>
           ),
         ),
         const SizedBox(height: 12),
-        Text('PharmVR', style: PharmTextStyles.h1.copyWith(color: PharmColors.primary, fontSize: 30)),
+        // App name
+        Text(
+          'PharmVR',
+          style: PharmTextStyles.h1.copyWith(
+            color: PharmColors.primary,
+            fontSize: 30,
+          ),
+        ),
         const SizedBox(height: 4),
         Text(
           'Start your immersive CPOB learning journey',
           style: PharmTextStyles.bodyMedium.copyWith(
-            color: Theme.of(context).textTheme.labelSmall?.color?.withOpacity(0.6),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Theme.of(context).textTheme.labelSmall?.color?.withOpacity(0.6)
+                : Theme.of(context).textTheme.labelSmall?.color?.withOpacity(0.85),
             letterSpacing: 0.2,
             fontWeight: FontWeight.w500,
           ),

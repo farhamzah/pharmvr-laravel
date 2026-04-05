@@ -12,7 +12,7 @@ class PharmResponsiveWrapper extends StatelessWidget {
   const PharmResponsiveWrapper({
     super.key,
     required this.child,
-    this.maxWidth = 800, // Elevated from 520 for better Detail Page readability
+    this.maxWidth = 1100, // Increased for a more professional desktop experience
     this.showSidePanelDecoration = true,
   });
 
@@ -25,20 +25,24 @@ class PharmResponsiveWrapper extends StatelessWidget {
           return child;
         }
 
-        // Tablet/Desktop — center with max width
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+
+        // Tablet/Desktop — center with max width and premium background
         return Container(
-          color: Theme.of(context).brightness == Brightness.dark 
-              ? Theme.of(context).colorScheme.surface.withValues(alpha: 0.5)
-              : Theme.of(context).dividerColor.withValues(alpha: 0.05), 
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: isDark
+                  ? [const Color(0xFF0A0F14), const Color(0xFF06090D)]
+                  : [const Color(0xFFF5F7F9), const Color(0xFFE8ECEF)],
+            ),
+          ),
           child: Center(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Optional left decoration panel on very wide screens
-                if (showSidePanelDecoration && constraints.maxWidth > 1200)
-                  Expanded(
-                    child: _SideBranding(),
-                  ),
-                // Main content area — constrained
+                // Main content area — constrained with elegant shadow
                 ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: maxWidth),
                   child: Container(
@@ -46,14 +50,14 @@ class PharmResponsiveWrapper extends StatelessWidget {
                       color: Theme.of(context).scaffoldBackgroundColor,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 30,
-                          spreadRadius: 5,
+                          color: Colors.black.withOpacity(isDark ? 0.3 : 0.08),
+                          blurRadius: 50,
+                          spreadRadius: 2,
                         ),
                       ],
                       border: Border.symmetric(
                         vertical: BorderSide(
-                          color: Theme.of(context).dividerColor.withOpacity(0.1),
+                          color: Theme.of(context).dividerColor.withOpacity(0.05),
                           width: 1,
                         ),
                       ),
@@ -61,54 +65,11 @@ class PharmResponsiveWrapper extends StatelessWidget {
                     child: child,
                   ),
                 ),
-                // Optional right panel
-                if (showSidePanelDecoration && constraints.maxWidth > 1200)
-                  Expanded(
-                    child: _SideBranding(isRight: true),
-                  ),
               ],
             ),
           ),
         );
       },
-    );
-  }
-}
-
-/// Subtle branding panel shown on desktop sides
-class _SideBranding extends StatelessWidget {
-  final bool isRight;
-  const _SideBranding({this.isRight = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF060A0E) : Colors.white10,
-      child: Center(
-        child: Opacity(
-          opacity: 0.04, // Refined from 0.06 for more subtle persistence
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                isRight ? Icons.view_in_ar : Icons.vaccines,
-                size: 80,
-                color: PharmColors.primary,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                isRight ? 'VR TRIPLE SIM' : 'PHARM VR',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                  color: PharmColors.primary,
-                  letterSpacing: 8,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

@@ -48,7 +48,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
             center: const Alignment(0, -0.4),
             radius: 1.2,
             colors: [
-              PharmColors.primary.withValues(alpha: 0.05),
+              PharmColors.primary.withOpacity(0.05),
               Colors.transparent,
             ],
           ),
@@ -140,7 +140,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
               Text(
                 'Choose a mode, then ask your own question or use a suggested starter.',
                 style: PharmTextStyles.caption.copyWith(
-                  color: PharmColors.primary.withValues(alpha: 0.5),
+                  color: PharmColors.primary.withOpacity(0.5),
                   fontSize: 10,
                   fontStyle: FontStyle.italic,
                 ),
@@ -212,7 +212,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
         Container(
           width: 24,
           height: 1,
-          color: PharmColors.primary.withValues(alpha: 0.3),
+          color: PharmColors.primary.withOpacity(0.3),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -228,7 +228,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
         Expanded(
           child: Container(
             height: 1,
-            color: PharmColors.primary.withValues(alpha: 0.3),
+            color: PharmColors.primary.withOpacity(0.3),
           ),
         ),
       ],
@@ -248,7 +248,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: PharmColors.primary.withValues(alpha: 0.1),
+                color: PharmColors.primary.withOpacity(0.1),
                 blurRadius: 40,
                 spreadRadius: 10,
               ),
@@ -262,7 +262,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: PharmColors.primary.withValues(alpha: 0.2),
+              color: PharmColors.primary.withOpacity(0.2),
               width: 1,
             ),
           ),
@@ -275,12 +275,12 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
             shape: BoxShape.circle,
             color: Theme.of(context).colorScheme.surface,
             border: Border.all(
-              color: PharmColors.primary.withValues(alpha: 0.4),
+              color: PharmColors.primary.withOpacity(0.4),
               width: 2,
             ),
             boxShadow: [
               BoxShadow(
-                color: PharmColors.primary.withValues(alpha: 0.2),
+                color: PharmColors.primary.withOpacity(0.2),
                 blurRadius: 15,
                 spreadRadius: 2,
               ),

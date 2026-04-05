@@ -55,12 +55,12 @@ class ChatHistoryScreen extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.history_toggle_off, color: PharmColors.primary.withValues(alpha: 0.2), size: 64),
+          Icon(Icons.history_toggle_off, color: PharmColors.primary.withOpacity(0.2), size: 64),
           const SizedBox(height: 16),
           Text(
             'ARCHIVE_EMPTY',
             style: PharmTextStyles.overline.copyWith(
-              color: PharmColors.primary.withValues(alpha: 0.4),
+              color: PharmColors.primary.withOpacity(0.4),
               letterSpacing: 4.0,
             ),
           ),
@@ -108,7 +108,7 @@ class _SessionTile extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: PharmColors.surface.withValues(alpha: 0.6),
+            color: PharmColors.surface.withOpacity(0.6),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: PharmColors.cardBorder),
           ),
@@ -119,7 +119,7 @@ class _SessionTile extends StatelessWidget {
                 height: 48,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: PharmColors.primary.withValues(alpha: 0.1),
+                  color: PharmColors.primary.withOpacity(0.1),
                 ),
                 child: const Icon(Icons.chat_bubble_outline, color: PharmColors.primary, size: 20),
               ),
@@ -142,7 +142,7 @@ class _SessionTile extends StatelessWidget {
                     Text(
                       session.lastMessagePreview ?? 'No neural data recorded.',
                       style: PharmTextStyles.caption.copyWith(
-                        color: Colors.white.withValues(alpha: 0.4),
+                        color: Colors.white.withOpacity(0.4),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

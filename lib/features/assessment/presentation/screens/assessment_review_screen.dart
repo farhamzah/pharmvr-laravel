@@ -82,13 +82,13 @@ class AssessmentReviewScreen extends ConsumerWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           color: current
-                              ? PharmColors.primary.withValues(alpha: 0.12)
+                              ? PharmColors.primary.withOpacity(0.12)
                               : answered
-                                  ? PharmColors.success.withValues(alpha: 0.1)
+                                  ? PharmColors.success.withOpacity(0.1)
                                   : Theme.of(context).colorScheme.surface,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: current ? PharmColors.primary : answered ? PharmColors.success.withValues(alpha: 0.4) : Theme.of(context).dividerColor,
+                            color: current ? PharmColors.primary : answered ? PharmColors.success.withOpacity(0.4) : Theme.of(context).dividerColor,
                             width: current ? 2 : 1,
                           ),
                         ),

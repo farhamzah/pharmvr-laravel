@@ -302,17 +302,17 @@ class _VrLaunchSessionScreenState extends State<VrLaunchSessionScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            PharmColors.primary.withValues(alpha: 0.15),
-            PharmColors.primary.withValues(alpha: 0.05),
+            PharmColors.primary.withOpacity(0.15),
+            PharmColors.primary.withOpacity(0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: PharmColors.primary.withValues(alpha: 0.2)),
+        border: Border.all(color: PharmColors.primary.withOpacity(0.2)),
         boxShadow: [
           BoxShadow(
-            color: PharmColors.accentGlow.withValues(alpha: 0.1),
+            color: PharmColors.accentGlow.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -348,7 +348,7 @@ class _VrLaunchSessionScreenState extends State<VrLaunchSessionScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: PharmColors.primary.withValues(alpha: 0.1),
+                color: PharmColors.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(

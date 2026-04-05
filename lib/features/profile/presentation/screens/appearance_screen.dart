@@ -58,9 +58,9 @@ class _AppearanceScreenState extends ConsumerState<AppearanceScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: PharmColors.primary.withValues(alpha: 0.1),
+                  color: PharmColors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: PharmColors.primary.withValues(alpha: 0.3)),
+                  border: Border.all(color: PharmColors.primary.withOpacity(0.3)),
                 ),
                 child: Row(
                   children: [
@@ -82,15 +82,6 @@ class _AppearanceScreenState extends ConsumerState<AppearanceScreen> {
                 style: PharmTextStyles.overline.copyWith(color: PharmColors.textTertiary, letterSpacing: 1.5),
               ),
               const SizedBox(height: 12),
-              
-              _ThemeOptionCard(
-                title: 'System Default',
-                description: 'Match your device settings automatically.',
-                icon: Icons.brightness_auto,
-                isSelected: themeMode == ThemeMode.system,
-                onTap: () => _handleThemeSelect(ThemeMode.system),
-              ),
-              const SizedBox(height: 16),
               
               _ThemeOptionCard(
                 title: 'Dark Mode (Flagship)',
@@ -140,7 +131,7 @@ class _ThemeOptionCard extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
         color: isSelected 
-            ? PharmColors.primary.withValues(alpha: 0.08) 
+            ? PharmColors.primary.withOpacity(0.08) 
             : Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
@@ -152,7 +143,7 @@ class _ThemeOptionCard extends StatelessWidget {
         boxShadow: isSelected
             ? [
                 BoxShadow(
-                  color: PharmColors.primary.withValues(alpha: 0.15),
+                  color: PharmColors.primary.withOpacity(0.15),
                   blurRadius: 16,
                   spreadRadius: 2,
                 )
@@ -173,7 +164,7 @@ class _ThemeOptionCard extends StatelessWidget {
                   height: 48,
                   decoration: BoxDecoration(
                     color: isSelected || isFlagship
-                        ? PharmColors.primary.withValues(alpha: 0.15)
+                        ? PharmColors.primary.withOpacity(0.15)
                         : (Theme.of(context).brightness == Brightness.dark ? PharmColors.surfaceLight : PharmColors.backgroundLight),
                     shape: BoxShape.circle,
                   ),
@@ -208,7 +199,7 @@ class _ThemeOptionCard extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
-                                color: PharmColors.primary.withValues(alpha: 0.1),
+                                color: PharmColors.primary.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
@@ -244,7 +235,7 @@ class _ThemeOptionCard extends StatelessWidget {
                 else
                   Icon(
                     Icons.circle_outlined,
-                    color: Theme.of(context).textTheme.labelSmall?.color?.withValues(alpha: 0.5),
+                    color: Theme.of(context).textTheme.labelSmall?.color?.withOpacity(0.5),
                     size: 24,
                   ),
               ],

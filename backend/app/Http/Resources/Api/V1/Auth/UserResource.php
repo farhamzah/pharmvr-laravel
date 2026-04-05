@@ -25,7 +25,7 @@ class UserResource extends JsonResource
                     'first_name' => $this->profile->first_name,
                     'last_name'  => $this->profile->last_name,
                     'phone'      => $this->profile->phone,
-                    'avatar_url' => $this->profile->avatar_url ? \Illuminate\Support\Facades\Storage::url($this->profile->avatar_url) : null,
+                    'avatar_url' => \App\Services\AssetUrlService::resolve($this->profile->avatar_url),
                     'bio'        => $this->profile->bio,
                     'birth_date' => $this->profile->birth_date,
                     'gender'     => $this->profile->gender,

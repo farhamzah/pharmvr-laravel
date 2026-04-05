@@ -110,6 +110,34 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                     );
                   }
                   
+                  final isDesktop = MediaQuery.of(context).size.width >= 900;
+
+                  if (isDesktop) {
+                    return GridView.builder(
+                      padding: const EdgeInsets.all(PharmSpacing.lg),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1.1, // Adjusted for card content
+                        crossAxisSpacing: PharmSpacing.lg,
+                        mainAxisSpacing: PharmSpacing.lg,
+                      ),
+                      itemCount: articles.length,
+                      itemBuilder: (context, index) {
+                        final article = articles[index];
+                        return PharmNewsCard(
+                          article: article,
+                          onTap: () {
+                            if (article.isExternal) {
+                              context.push('/news/external/${article.slug}');
+                            } else {
+                              context.push('/news/detail/${article.slug}');
+                            }
+                          },
+                        );
+                      },
+                    );
+                  }
+                  
                   return ListView.separated(
                     padding: const EdgeInsets.all(PharmSpacing.lg),
                     physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),

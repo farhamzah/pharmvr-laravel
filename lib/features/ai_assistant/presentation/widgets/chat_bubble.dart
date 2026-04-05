@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/pharm_colors.dart';
 import '../../../../core/theme/pharm_spacing.dart';
 import '../../../../core/theme/pharm_text_styles.dart';
-import '../../domain/models/chat_message.dart';
+import '../../domain/models/ai_message.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 class ChatBubble extends StatelessWidget {
-  final ChatMessage message;
+  final AiMessage message;
 
   const ChatBubble({
     super.key,
@@ -16,11 +16,11 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (message.sender) {
-      case ChatSender.user:
+      case AiSender.user:
         return _buildUserBubble(context);
-      case ChatSender.ai:
+      case AiSender.assistant:
         return _buildAiBubble(context);
-      case ChatSender.system:
+      case AiSender.system:
         return _buildSystemBubble(context);
     }
   }
@@ -93,7 +93,7 @@ class ChatBubble extends StatelessWidget {
             ),
             
             // Render Citation if available
-            if (message.citationSource != null) ...[
+            if (message.citations != null && message.citations!.isNotEmpty) ...[
               const SizedBox(height: PharmSpacing.sm),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -108,7 +108,7 @@ class ChatBubble extends StatelessWidget {
                     const Icon(Icons.menu_book_rounded, size: 12, color: PharmColors.primary),
                     const SizedBox(width: 4),
                     Text(
-                      message.citationSource!,
+                      message.citations!.first.title,
                       style: PharmTextStyles.caption.copyWith(
                         color: Theme.of(context).textTheme.bodySmall?.color,
                       ),
@@ -129,7 +129,7 @@ class ChatBubble extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: PharmSpacing.md),
         padding: const EdgeInsets.symmetric(horizontal: PharmSpacing.md, vertical: 8),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
+          color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Theme.of(context).dividerColor),
         ),

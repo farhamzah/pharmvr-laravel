@@ -52,7 +52,7 @@ class PharmSettingsCardGroup extends StatelessWidget {
                 Divider(
                   height: 1,
                   indent: 56, // Align divider with text, not icon
-                  color: PharmColors.divider.withValues(alpha: 0.5),
+                  color: PharmColors.divider.withOpacity(0.5),
                 ),
             ],
           );
@@ -166,7 +166,7 @@ class PharmSettingsToggleItem extends StatelessWidget {
             value: value,
             onChanged: onChanged,
             activeColor: PharmColors.primary,
-            activeTrackColor: PharmColors.primary.withValues(alpha: 0.3),
+            activeTrackColor: PharmColors.primary.withOpacity(0.3),
             inactiveThumbColor: PharmColors.textSecondary,
             inactiveTrackColor: PharmColors.surfaceLight,
           ),
@@ -199,10 +199,10 @@ class PharmSettingsSelectableItem extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: isSelected ? PharmColors.primary.withValues(alpha: 0.05) : PharmColors.surface,
+        color: isSelected ? PharmColors.primary.withOpacity(0.05) : PharmColors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isSelected ? PharmColors.primary.withValues(alpha: 0.5) : PharmColors.cardBorder,
+          color: isSelected ? PharmColors.primary.withOpacity(0.5) : PharmColors.cardBorder,
           width: isSelected ? 1.5 : 1.0,
         ),
       ),
@@ -237,7 +237,7 @@ class PharmSettingsSelectableItem extends StatelessWidget {
                 if (isSelected)
                   const Icon(Icons.check_circle, color: PharmColors.primary, size: 24)
                 else
-                  Icon(Icons.circle_outlined, color: PharmColors.textTertiary.withValues(alpha: 0.5), size: 24),
+                  Icon(Icons.circle_outlined, color: PharmColors.textTertiary.withOpacity(0.5), size: 24),
               ],
             ),
           ),
@@ -262,13 +262,13 @@ class PharmHelperNote extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.info_outline, size: 16, color: PharmColors.textSecondary.withValues(alpha: 0.7)),
+          Icon(Icons.info_outline, size: 16, color: PharmColors.textSecondary.withOpacity(0.7)),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               text,
               style: PharmTextStyles.caption.copyWith(
-                color: PharmColors.textSecondary.withValues(alpha: 0.8),
+                color: PharmColors.textSecondary.withOpacity(0.8),
                 height: 1.5,
               ),
             ),
@@ -295,7 +295,7 @@ class _SettingsIcon extends StatelessWidget {
       height: 38,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: isActive ? PharmColors.primary.withValues(alpha: 0.1) : PharmColors.surfaceLight,
+        color: isActive ? PharmColors.primary.withOpacity(0.1) : PharmColors.surfaceLight,
       ),
       child: Icon(
         icon,

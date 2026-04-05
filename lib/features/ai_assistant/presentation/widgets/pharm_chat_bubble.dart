@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/pharm_colors.dart';
 import '../../../../core/theme/pharm_text_styles.dart';
-import '../../domain/models/chat_message.dart';
+import '../../domain/models/ai_message.dart';
 
 class PharmChatBubble extends StatelessWidget {
-  final ChatMessage message;
+  final AiMessage message;
 
   const PharmChatBubble({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
-    final isUser = message.sender == ChatSender.user;
+    final isUser = message.sender == AiSender.user;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -86,7 +86,7 @@ class PharmChatBubble extends StatelessWidget {
           ),
 
           // ── Citation ──
-          if (!isUser && message.citationSource != null)
+          if (!isUser && message.citations != null && message.citations!.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 6, left: 40),
               child: InkWell(
@@ -104,7 +104,7 @@ class PharmChatBubble extends StatelessWidget {
                       const Icon(Icons.menu_book_outlined, size: 12, color: PharmColors.primary),
                       const SizedBox(width: 5),
                       Text(
-                        message.citationSource!,
+                        message.citations!.first.title,
                         style: PharmTextStyles.caption.copyWith(color: PharmColors.primary),
                       ),
                     ],

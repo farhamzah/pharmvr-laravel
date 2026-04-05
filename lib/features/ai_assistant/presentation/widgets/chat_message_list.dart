@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/pharm_colors.dart';
 import '../../../../core/theme/pharm_spacing.dart';
 import '../../../../core/theme/pharm_text_styles.dart';
-import '../../domain/models/chat_message.dart';
+import '../../domain/models/ai_message.dart';
 import 'chat_bubble.dart';
 
 class ChatMessageList extends StatelessWidget {
-  final List<ChatMessage> messages;
+  final List<AiMessage> messages;
   final bool isTyping;
   final ScrollController? scrollController;
 

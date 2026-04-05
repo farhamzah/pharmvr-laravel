@@ -75,7 +75,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.5),
+              color: Colors.black.withOpacity(0.5),
               blurRadius: 40,
               offset: const Offset(0, -10),
             ),
@@ -88,7 +88,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               width: 40, height: 4,
               margin: const EdgeInsets.only(bottom: 24),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: Colors.white.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -288,7 +288,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 color: PharmColors.background,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.4),
+                    color: Colors.black.withOpacity(0.4),
                     blurRadius: 20,
                     offset: const Offset(0, -5),
                   ),
@@ -299,7 +299,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: PharmColors.primary.withValues(alpha: 0.25),
+                      color: PharmColors.primary.withOpacity(0.25),
                       blurRadius: 15,
                       spreadRadius: -2,
                     ),
@@ -333,9 +333,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               width: 96, height: 96,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: PharmColors.primary.withValues(alpha: 0.35), width: 2),
+                border: Border.all(color: PharmColors.primary.withOpacity(0.35), width: 2),
                 boxShadow: [
-                  BoxShadow(color: PharmColors.primary.withValues(alpha: 0.2), blurRadius: 25, spreadRadius: 2),
+                  BoxShadow(color: PharmColors.primary.withOpacity(0.2), blurRadius: 25, spreadRadius: 2),
                 ],
               ),
               child: CircleAvatar(
@@ -398,9 +398,9 @@ class _FormSection extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           child: Container(
             decoration: BoxDecoration(
-              color: PharmColors.surface.withValues(alpha: 0.4),
+              color: PharmColors.surface.withOpacity(0.4),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+              border: Border.all(color: Colors.white.withOpacity(0.08)),
             ),
             child: Stack(
               children: [
@@ -443,7 +443,7 @@ class _ImageSourceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white.withValues(alpha: 0.05),
+      color: Colors.white.withOpacity(0.05),
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
@@ -455,7 +455,7 @@ class _ImageSourceTile extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: PharmColors.primary.withValues(alpha: 0.1),
+                  color: PharmColors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: PharmColors.primary, size: 24),
