@@ -44,18 +44,18 @@ flutter_launcher_icons:
   ios: true
   web:
     generate: true
-    image_path: "assets/images/logo.png"
+    image_path: "assets/images/Pharmvrlogo.png"
     background_color: "#0A0F14"
     theme_color: "#00E5FF"
-  image_path: "assets/images/logo.png"
+  image_path: "assets/images/Pharmvrlogo.png"
   adaptive_icon_background: "#0A0F14"
-  adaptive_icon_foreground: "assets/images/logo.png"
+  adaptive_icon_foreground: "assets/images/Pharmvrlogo.png"
 
 flutter_native_splash:
   color: "#0A0F14"
-  image: "assets/images/logo.png"
+  image: "assets/images/Pharmvrlogo.png"
   android_12:
-    image: "assets/images/logo.png"
+    image: "assets/images/Pharmvrlogo.png"
     color: "#0A0F14"
   web: false
 
