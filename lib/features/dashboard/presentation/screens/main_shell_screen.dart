@@ -84,7 +84,7 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
     final navigationShell = widget.navigationShell;
     final isAiTab = navigationShell.currentIndex == 2;
     final size = MediaQuery.of(context).size;
-    final isDesktop = size.width >= 900;
+    final isDesktop = size.width >= 768; // Lowered from 900 to ensure side rail on tablets/laptops
     
     if (isDesktop) {
       return Scaffold(

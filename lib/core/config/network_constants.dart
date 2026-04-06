@@ -8,8 +8,14 @@ class NetworkConstants {
 
   static String get baseUrl {
     if (kIsWeb) {
-      // For web production builds, strictly use the SSL-secured API endpoint
-      if (!kDebugMode) return 'https://admin.pharmvr.cloud/api/v1';
+      // Dynamic detection for Web environment
+      // If we are running on the production domain, use the secured production API
+      final String currentHost = Uri.base.host;
+      if (currentHost.contains('pharmvr.cloud')) {
+        return 'https://admin.pharmvr.cloud/api/v1';
+      }
+      
+      // Default for local development or other web hosts
       return 'http://localhost:8000/api/v1';
     }
     
@@ -28,42 +34,47 @@ class NetworkConstants {
   static String sanitizeUrl(String? url) {
     if (url == null || url.isEmpty) return '';
 
-    // Step 1: Prepend base storage URL for relative paths if needed
-    // This is a safety layer for paths that don't start with http/assets
+    final isProduction = !kDebugMode;
     String sanitized = url;
-    if (!url.startsWith('http')) {
-      final currentBase = baseUrl.replaceAll('/api/v1', '');
-      sanitized = '$currentBase/${url.startsWith('/') ? url.substring(1) : url}';
+
+    // Step 1: Force HTTPS for production domain to avoid Mixed Content blocks
+    if (isProduction && sanitized.contains('pharmvr.cloud') && sanitized.startsWith('http://')) {
+      sanitized = sanitized.replaceFirst('http://', 'https://');
     }
 
-    // Step 2: Ensure the URL points to the correct host based on the environment
-    // This handles data that was saved with 10.0.2.2/127.0.0.1 during local testing.
+    // Step 2: Prepend base storage URL for relative paths if needed
+    if (!sanitized.startsWith('http')) {
+      final currentBase = baseUrl.replaceAll('/api/v1', '');
+      sanitized = '$currentBase/${sanitized.startsWith('/') ? sanitized.substring(1) : sanitized}';
+    }
+
+    // Step 3: Ensure the URL points to the correct host based on the environment
     final localPatterns = [
       '//localhost',
       '//127.0.0.1',
       '//10.0.2.2',
       '//10.100.0.97',
       '//192.168.1.3',
+      '//202.10.42.226', // VPS IP - Essential for production asset sanitization
     ];
 
-    final isProduction = !kDebugMode;
-    
     for (final pattern in localPatterns) {
       if (sanitized.contains(pattern)) {
         if (isProduction) {
-          // In production (Web/Live), always point to the real domain
           sanitized = sanitized.replaceFirst(
-            RegExp(r'//(localhost|127\.0\.0\.1|10\.0\.2\.2|10\.100\.0\.97|192\.168\.1\.3)(:\d+)?'), 
+            RegExp(r'//(localhost|127\.0\.0\.1|10\.0\.2\.2|10\.100\.0\.97|192\.168\.1\.3|202\.10\.42\.226)(:\d+)?'), 
             '//admin.pharmvr.cloud'
           );
+          // Re-verify HTTPS after replacement
+          if (sanitized.startsWith('http://')) {
+            sanitized = sanitized.replaceFirst('http://', 'https://');
+          }
         } else if (kIsWeb) {
-          // In local web debug, ensure we point to localhost of the dev machine
           sanitized = sanitized.replaceFirst(
             RegExp(r'//(127\.0\.0\.1|10\.0\.2\.2|10\.100\.0\.97|192\.168\.1\.3)(:\d+)?'), 
             '//localhost'
           );
         } else {
-          // In local mobile debug, point to the emulator gateway
           sanitized = sanitized.replaceFirst(
             RegExp(r'//(localhost|127\.0\.0\.1|10\.100\.0\.97|192\.168\.1\.3)(:\d+)?'), 
             '//10.0.2.2'
@@ -73,14 +84,24 @@ class NetworkConstants {
       }
     }
 
-    // Step 3: Web-specific CORS bypass
-    // On Web, direct storage access often fails with CORS because Laravel's static file server 
-    // doesn't send the headers. We use our /api/v1/media proxy instead.
+    // Step 4: Web-specific CORS bypass
+    // On Web, direct storage/asset access often fails with CORS. 
+    // We route remote assets through our backend media proxy.
+    // CRITICAL: We MUST exclude local assets (icons, manifest) from being proxied.
     if (kIsWeb) {
-      if (sanitized.contains('/storage/') && !sanitized.contains('/api/v1/media/')) {
-        sanitized = sanitized.replaceFirst('/storage/', '/api/v1/media/');
-      } else if (sanitized.contains('/assets/') && !sanitized.contains('/api/v1/media/')) {
-        sanitized = sanitized.replaceFirst('/assets/', '/api/v1/media/assets/');
+      final isLocalAsset = sanitized.startsWith('assets/') || 
+                           sanitized.startsWith('packages/') || 
+                           sanitized.contains('AssetManifest');
+      
+      if (!isLocalAsset) {
+        if (sanitized.contains('/storage/') && !sanitized.contains('/api/v1/media/')) {
+          sanitized = sanitized.replaceFirst('/storage/', '/api/v1/media/');
+        } else if (sanitized.contains('/assets/') && !sanitized.contains('/api/v1/media/')) {
+          // Only proxy if it looks like a remote asset (has http or domain)
+          if (sanitized.contains('http') || sanitized.contains('pharmvr.cloud')) {
+            sanitized = sanitized.replaceFirst('/assets/', '/api/v1/media/assets/');
+          }
+        }
       }
     }
 

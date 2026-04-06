@@ -98,7 +98,7 @@ class _EducationScreenState extends ConsumerState<EducationScreen> with SingleTi
       );
     }
 
-    final isDesktop = MediaQuery.of(context).size.width >= 900;
+    final isDesktop = MediaQuery.of(context).size.width >= 768; // Lowered to match MainShell breakpoint
 
     if (type == 'video' || isDesktop) {
       return GridView.builder(

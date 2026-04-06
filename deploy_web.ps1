@@ -19,5 +19,13 @@ Set-Location build/web
 tar -czf ../web_dist.tar.gz .
 Set-Location ../..
 
-Write-Host "Build Complete! Ready for manual upload."
-Write-Host "Step: Run 'scp build/web_dist.tar.gz root@202.10.42.65:/tmp/'"
+Write-Host "Build Complete! Syncing to VPS..."
+
+# Step 4: Upload to VPS
+scp build/web_dist.tar.gz root@202.10.42.65:/tmp/
+
+# Step 5: Extract on VPS
+ssh root@202.10.42.65 "rm -rf /var/www/pharmvr-frontend/* && tar -xzf /tmp/web_dist.tar.gz -C /var/www/pharmvr-frontend/ && rm /tmp/web_dist.tar.gz"
+
+Write-Host "Deployment Complete! 🚀"
+Write-Host "Website: https://pharmvr.cloud"
