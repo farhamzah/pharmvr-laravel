@@ -11,33 +11,67 @@ class MediaController extends Controller
 {
     /**
      * Proxies storage files to ensure CORS headers are sent.
-     * Essential for Flutter Web when using 'php artisan serve'.
      */
     public function serve(Request $request, $path)
     {
-        // 1. Security: Ensure path doesn't try to go outside of public storage
         if (str_contains($path, '..')) {
             abort(403, 'Invalid path');
         }
 
-        // 2. Pre-processing: Strip redundant 'storage/' or '/storage/' if present
         $cleanPath = preg_replace('#^/?storage/#', '', $path);
 
-        // 3. Check in 'public' disk (which maps to storage/app/public)
+        // 1. Try public disk (storage/app/public)
         if (Storage::disk('public')->exists($cleanPath)) {
             $file = Storage::disk('public')->get($cleanPath);
             $type = Storage::disk('public')->mimeType($cleanPath);
-        } else {
-            // 4. New: Also check the regular public directory (for assets/ and similar)
-            $publicFilePath = public_path($path);
-            if (file_exists($publicFilePath) && is_file($publicFilePath)) {
-                $file = file_get_contents($publicFilePath);
-                $type = mime_content_type($publicFilePath);
-            } else {
-                abort(404, 'File not found: ' . $path);
-            }
+            return $this->responseWithCors($file, $type);
         }
 
+        // 2. Try root public directory (for static assets)
+        $publicFilePath = public_path($path);
+        if (file_exists($publicFilePath) && is_file($publicFilePath)) {
+            $file = file_get_contents($publicFilePath);
+            $type = mime_content_type($publicFilePath);
+            return $this->responseWithCors($file, $type);
+        }
+
+        // 3. Fallback: Return a Premium Placeholder SVG if file not found
+        return $this->getPlaceholderResponse($path);
+    }
+
+    /**
+     * Generate a professional SVG placeholder for missing images.
+     */
+    private function getPlaceholderResponse($path)
+    {
+        $isModule = str_contains($path, 'module') || str_contains($path, 'course');
+        $isNews = str_contains($path, 'news') || str_contains($path, 'post');
+        
+        $color = $isModule ? '#00E5FF' : ($isNews ? '#FF4081' : '#00A8FF');
+        $bg = '#121B22';
+        $label = $isModule ? 'Module' : ($isNews ? 'News' : 'Asset');
+        
+        $svg = "<svg width='400' height='300' xmlns='http://www.w3.org/2000/svg'>
+            <rect width='400' height='300' fill='$bg'/>
+            <defs>
+                <linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                    <stop offset='0%' style='stop-color:$color;stop-opacity:0.2' />
+                    <stop offset='100%' style='stop-color:$color;stop-opacity:0.05' />
+                </linearGradient>
+            </defs>
+            <rect width='400' height='300' fill='url(#grad)'/>
+            <path d='M200 120 L230 180 L170 180 Z' fill='none' stroke='$color' stroke-width='2' opacity='0.5'/>
+            <text x='50%' y='60%' font-family='sans-serif' font-size='20' fill='$color' text-anchor='middle' opacity='0.8'>$label Preview</text>
+            <text x='50%' y='70%' font-family='sans-serif' font-size='12' fill='$color' text-anchor='middle' opacity='0.4'>PharmVR Professional Content</text>
+        </svg>";
+
+        return response($svg, 200)->header('Content-Type', 'image/svg+xml')
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Cache-Control', 'public, max-age=3600');
+    }
+
+    private function responseWithCors($file, $type)
+    {
         return response($file, 200)
             ->header('Content-Type', $type)
             ->header('Access-Control-Allow-Origin', '*')

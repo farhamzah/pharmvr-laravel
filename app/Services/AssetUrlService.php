@@ -8,15 +8,6 @@ class AssetUrlService
 {
     /**
      * Resolve a stored path/URL into a full, publicly accessible URL.
-     *
-     * Handles:
-     * - null → null
-     * - Full external URLs (https://...) → returned as-is
-     * - Legacy absolute URLs (http://localhost:8000/...) → stripped and re-resolved
-     * - Static asset paths (assets/...) → APP_URL + path
-     * - Storage-relative paths (news/xxx.jpg) → Storage URL
-     * - Paths with 'storage/' prefix → stripped, then Storage URL
-     * - Paths with '/storage/' prefix → stripped, then Storage URL
      */
     public static function resolve(?string $path): ?string
     {
@@ -24,19 +15,31 @@ class AssetUrlService
             return null;
         }
 
-        // 1. External URLs (https://, ftp://, etc) — keep as-is
+        // 1. External URLs (https://, etc) — handle localhost/legacy first
         if (preg_match('#^https?://#i', $path)) {
-            // Check for legacy localhost / 127.0.0.1 / 10.0.2.2 URLs
             if (self::isLegacyLocalUrl($path)) {
-                $relativePath = self::extractRelativePath($path);
-                return self::resolveRelativePath($relativePath);
+                $path = self::extractRelativePath($path);
+            } else {
+                // For external URLs on production, force HTTPS for pharmvr.cloud subdomains
+                if (app()->environment('production') && str_contains($path, 'pharmvr.cloud')) {
+                    $path = str_replace('http://', 'https://', $path);
+                }
+                return $path;
             }
-            return $path;
         }
 
-        // 2. Remove leading slash if present
+        // 2. Clean prefix before resolve
         $path = ltrim($path, '/');
+        $path = preg_replace('#^storage/#', '', $path);
 
+        // 3. In Production (VPS), we ALWAYS want to use the Media Proxy to avoid CORS/Mixed Content
+        if (app()->environment('production')) {
+            $apiUrl = config('app.url'); // Should be https://admin.pharmvr.cloud
+            $apiUrl = rtrim($apiUrl, '/');
+            return "$apiUrl/api/v1/media/$path";
+        }
+
+        // 4. Default Local/Dev behavior
         return self::resolveRelativePath($path);
     }
 
