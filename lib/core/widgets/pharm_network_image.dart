@@ -92,10 +92,30 @@ class PharmNetworkImage extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      color: PharmColors.surfaceLight,
-      child: const Icon(
-        Icons.image_not_supported_outlined,
-        color: PharmColors.textTertiary,
+      decoration: BoxDecoration(
+        color: PharmColors.surfaceLight.withOpacity(0.1),
+        borderRadius: borderRadius,
+      ),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.image_not_supported_outlined,
+              color: PharmColors.primary.withOpacity(0.2),
+              size: 24,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Content Preview',
+              style: TextStyle(
+                color: PharmColors.primary.withOpacity(0.3),
+                fontSize: 8,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
