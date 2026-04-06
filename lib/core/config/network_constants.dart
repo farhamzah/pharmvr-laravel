@@ -62,7 +62,7 @@ class NetworkConstants {
       if (sanitized.contains(pattern)) {
         if (isProduction) {
           sanitized = sanitized.replaceFirst(
-            RegExp(r'//(localhost|127\.0\.0\.1|10\.0\.2\.2|10\.100\.0\.97|192\.168\.1\.3|202\.10\.42\.226)(:\d+)?'), 
+            RegExp(r'//(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|localhost|127\.0\.0\.1)(:\d+)?'), 
             '//admin.pharmvr.cloud'
           );
           // Re-verify HTTPS after replacement
