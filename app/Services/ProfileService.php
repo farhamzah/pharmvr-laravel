@@ -30,13 +30,36 @@ class ProfileService
 
             // Update profile table
             $profileData = [];
-            if (isset($data['phone_number'])) {
-                $profileData['phone'] = $data['phone_number'];
+            if (array_key_exists('full_name', $data)) {
+                $parts = explode(' ', trim($data['full_name']));
+                $profileData['first_name'] = $parts[0];
+                $profileData['last_name'] = count($parts) > 1 ? implode(' ', array_slice($parts, 1)) : '';
             }
-            foreach (['university', 'semester', 'nim'] as $field) {
-                if (isset($data[$field])) {
-                    $profileData[$field] = $data[$field];
+            
+            // Map phone_number to phone
+            if (array_key_exists('phone_number', $data)) {
+                $profileData['phone'] = $data['phone_number'];
+            } elseif (array_key_exists('phone', $data)) {
+                $profileData['phone'] = $data['phone'];
+            }
+
+            // Map university/institution
+            if (array_key_exists('university', $data)) {
+                $profileData['university'] = $data['university'];
+            }
+            if (array_key_exists('institution', $data)) {
+                $profileData['institution'] = $data['institution'];
+                // Fallback for university if only institution is provided
+                if (!isset($profileData['university'])) {
+                    $profileData['university'] = $data['institution'];
                 }
+            }
+
+            if (array_key_exists('semester', $data)) {
+                $profileData['semester'] = $data['semester'];
+            }
+            if (array_key_exists('nim', $data)) {
+                $profileData['nim'] = $data['nim'];
             }
 
             if (!empty($profileData)) {
@@ -55,7 +78,7 @@ class ProfileService
                 );
             }
 
-            return $user->load('profile');
+            return $user->refresh()->load('profile');
         });
     }
 
