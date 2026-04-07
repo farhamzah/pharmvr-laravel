@@ -34,34 +34,22 @@ class NetworkConstants {
   static String sanitizeUrl(String? url) {
     if (url == null || url.isEmpty) return '';
 
-    final isProduction = !kDebugMode;
     String sanitized = url;
 
-    // 1. If it's already a full absolute URL, check if it needs HTTPS fixing
+    // 1. If it's already an absolute URL (from Backend AssetUrlService):
     if (sanitized.startsWith('http')) {
-      if (isProduction && sanitized.contains('pharmvr.cloud') && sanitized.startsWith('http://')) {
+      // Ensure production cloud URLs use HTTPS
+      if (!kDebugMode && sanitized.contains('pharmvr.cloud') && sanitized.startsWith('http://')) {
         sanitized = sanitized.replaceFirst('http://', 'https://');
       }
-      
-      // If it's a legacy localhost URL from an old DB record, extract and re-resolve
-      if (sanitized.contains('localhost') || sanitized.contains('127.0.0.1') || sanitized.contains('10.0.2.2')) {
-         final path = sanitized.split('/storage/').last;
-         final currentBase = baseUrl.replaceAll('/api/v1', '');
-         sanitized = '$currentBase/storage/$path';
-      }
-
       return sanitized;
     }
 
-    // 2. Prepend base URL for relative paths
+    // 2. Relative Path Fallback (if any):
+    // Construct absolute URL based on the current base
     final currentBase = baseUrl.replaceAll('/api/v1', '');
     sanitized = '$currentBase/${sanitized.startsWith('/') ? sanitized.substring(1) : sanitized}';
     
-    // 3. Web-specific: Ensure dynamic storage access goes through Media Proxy
-    if (kIsWeb && sanitized.contains('/storage/')) {
-       sanitized = sanitized.replaceFirst('/storage/', '/api/v1/media/');
-    }
-
     return sanitized;
   }
 
