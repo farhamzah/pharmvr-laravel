@@ -42,6 +42,16 @@ class NetworkConstants {
       if (!kDebugMode && sanitized.contains('pharmvr.cloud') && sanitized.startsWith('http://')) {
         sanitized = sanitized.replaceFirst('http://', 'https://');
       }
+      
+      // Fix for Mobile Emulator: If the backend Absolute URL contains localhost or 127.0.0.1, map to 10.0.2.2
+      if (kDebugMode && !kIsWeb && const bool.fromEnvironment('dart.library.io', defaultValue: true)) {
+         final hostBase = baseUrl.replaceAll('/api/v1', '');
+         if (hostBase.contains('10.0.2.2')) {
+           sanitized = sanitized.replaceFirst('localhost', '10.0.2.2');
+           sanitized = sanitized.replaceFirst('127.0.0.1', '10.0.2.2');
+         }
+      }
+
       return sanitized;
     }
 

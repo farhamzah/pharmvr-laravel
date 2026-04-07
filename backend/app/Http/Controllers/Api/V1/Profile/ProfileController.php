@@ -27,7 +27,7 @@ class ProfileController extends Controller
      */
     public function show(Request $request): JsonResponse
     {
-        $user = new UserResource($request->user());
+        $user = new UserResource($request->user()->load('profile'));
         return $this->successResponse($user, 'Profile retrieved successfully.');
     }
 
@@ -36,7 +36,16 @@ class ProfileController extends Controller
      */
     public function update(UpdateProfileRequest $request): JsonResponse
     {
-        $user = $this->profileService->updateProfile($request->user(), $request->validated());
+        $data = $request->validated();
+        
+        // Ensure avatar is handled if present
+        if ($request->hasFile('avatar')) {
+            $data['avatar'] = $request->file('avatar');
+        }
+
+        \Log::info("Profile update request received: ", $data);
+
+        $user = $this->profileService->updateProfile($request->user(), $data);
         return $this->successResponse(new UserResource($user), 'Profile updated successfully.');
     }
 

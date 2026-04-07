@@ -44,8 +44,15 @@ class ProfileState {
 class ProfileNotifier extends Notifier<ProfileState> {
   @override
   ProfileState build() {
-    // Sync with authProvider user initial state
-    final authUser = ref.watch(authProvider.select((s) => s.user));
+    // Listen to changes in authProvider globally so profile dynamically updates
+    ref.listen(authProvider.select((s) => s.user), (previous, next) {
+      if (next != state.user) {
+        state = state.copyWith(user: next);
+      }
+    });
+
+    // Start with authProvider user initial state
+    final authUser = ref.read(authProvider).user;
     return ProfileState(user: authUser);
   }
 

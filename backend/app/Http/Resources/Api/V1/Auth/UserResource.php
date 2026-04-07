@@ -20,21 +20,20 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'role'  => $this->role,
             'can_bypass_prerequisites' => $this->can_bypass_prerequisites,
-            'profile' => $this->whenLoaded('profile', function () {
-                return [
-                    'first_name' => $this->profile->first_name,
-                    'last_name'  => $this->profile->last_name,
-                    'phone'      => $this->profile->phone,
-                    'avatar_url' => \App\Services\AssetUrlService::resolve($this->profile->avatar_url),
-                    'bio'        => $this->profile->bio,
-                    'birth_date' => $this->profile->birth_date,
-                    'gender'     => $this->profile->gender,
-                    'institution' => $this->profile->institution,
-                    'university'  => $this->profile->university,
-                    'semester'    => $this->profile->semester,
-                    'nim'         => $this->profile->nim,
-                ];
-            }),
+            'profile' => [
+                'first_name'   => $this->profile?->first_name,
+                'last_name'    => $this->profile?->last_name,
+                'phone'        => $this->profile?->phone,
+                'phone_number' => $this->profile?->phone, // Alias for consistency
+                'avatar_url'   => \App\Services\AssetUrlService::resolve($this->profile?->avatar_url),
+                'bio'          => $this->profile?->bio,
+                'university'   => $this->profile?->university,
+                'institution'  => $this->profile?->university, // For backward compatibility
+                'semester'     => $this->profile?->semester ? (int) $this->profile->semester : null,
+                'nim'          => $this->profile?->nim,
+                'birth_date'   => $this->profile?->birth_date,
+                'gender'       => $this->profile?->gender,
+            ],
             'preferences' => $this->whenLoaded('preferences', function () {
                 return (object) ($this->preferences->settings ?? []);
             }),

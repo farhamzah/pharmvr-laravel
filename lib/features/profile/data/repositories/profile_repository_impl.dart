@@ -19,13 +19,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<User> getProfile() async {
     final response = await _dataSource.getProfile();
-    return User.fromJson(response['data']);
+    return User.fromJson(response);
   }
 
   @override
   Future<User> updateProfile(Map<String, dynamic> data) async {
     final response = await _dataSource.updateProfile(data);
-    return User.fromJson(response['data']);
+    return User.fromJson(response);
   }
 
   @override

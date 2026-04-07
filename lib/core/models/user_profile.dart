@@ -11,7 +11,7 @@ class UserProfile {
   final int? semester;
   final String? nim;
 
-  UserProfile({
+  const UserProfile({
     this.firstName,
     this.lastName,
     this.phone,
@@ -27,17 +27,45 @@ class UserProfile {
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
-      firstName: json['first_name'] as String?,
-      lastName: json['last_name'] as String?,
-      phone: json['phone'] as String?,
-      avatarUrl: json['avatar_url'] as String?,
-      bio: json['bio'] as String?,
-      birthDate: json['birth_date'] != null ? DateTime.parse(json['birth_date'] as String) : null,
-      gender: json['gender'] as String?,
-      institution: json['institution'] as String?,
-      university: json['university'] as String?,
-      semester: json['semester'] as int?,
-      nim: json['nim'] as String?,
+      firstName: json['first_name']?.toString(),
+      lastName: json['last_name']?.toString(),
+      phone: json['phone']?.toString() ?? json['phone_number']?.toString(),
+      avatarUrl: json['avatar_url']?.toString(),
+      bio: json['bio']?.toString(),
+      birthDate: json['birth_date'] != null ? DateTime.tryParse(json['birth_date'].toString()) : null,
+      gender: json['gender']?.toString(),
+      institution: json['institution']?.toString(),
+      university: json['university']?.toString(),
+      semester: json['semester'] != null ? int.tryParse(json['semester'].toString()) : null,
+      nim: json['nim']?.toString(),
+    );
+  }
+
+  UserProfile copyWith({
+    String? firstName,
+    String? lastName,
+    String? phone,
+    String? avatarUrl,
+    String? bio,
+    DateTime? birthDate,
+    String? gender,
+    String? institution,
+    String? university,
+    int? semester,
+    String? nim,
+  }) {
+    return UserProfile(
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      phone: phone ?? this.phone,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      bio: bio ?? this.bio,
+      birthDate: birthDate ?? this.birthDate,
+      gender: gender ?? this.gender,
+      institution: institution ?? this.institution,
+      university: university ?? this.university,
+      semester: semester ?? this.semester,
+      nim: nim ?? this.nim,
     );
   }
 

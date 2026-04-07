@@ -9,7 +9,7 @@ class ProfileDataSource {
 
   Future<Map<String, dynamic>> getProfile() async {
     final response = await _dio.get('/profile');
-    return response.data;
+    return response.data['data'];
   }
 
   Future<Map<String, dynamic>> updateProfile(Map<String, dynamic> data) async {
@@ -18,14 +18,20 @@ class ProfileDataSource {
     if (data.containsKey('avatar_path') && data['avatar_path'] != null) {
       final file = XFile(data['avatar_path']);
       final bytes = await file.readAsBytes();
-      final ext = file.name.split('.').last.toLowerCase();
-      final mimeType = ext == 'png' ? 'image/png' : 'image/jpeg';
+      
+      String filename = file.name;
+      final ext = filename.contains('.') ? filename.split('.').last.toLowerCase() : 'jpg';
+      final mimeType = (ext == 'png') ? 'image/png' : 'image/jpeg';
+      
+      if (!filename.contains('.')) {
+        filename += (ext == 'png') ? '.png' : '.jpg';
+      }
       
       formData.files.add(MapEntry(
         'avatar',
         MultipartFile.fromBytes(
           bytes, 
-          filename: file.name,
+          filename: filename,
           contentType: MediaType.parse(mimeType),
         ),
       ));
@@ -33,12 +39,18 @@ class ProfileDataSource {
       formData.fields.removeWhere((e) => e.key == 'avatar_path');
     }
 
-    final response = await _dio.post(
-      '/profile', 
-      data: formData,
-      options: Options(contentType: 'multipart/form-data'),
-    );
-    return response.data;
+    try {
+      final response = await _dio.post(
+        '/profile', 
+        data: formData,
+      );
+      return response.data['data'];
+    } catch (e) {
+      if (e is DioException) {
+        print('Profile Update Error Response: ${e.response?.data}');
+      }
+      rethrow;
+    }
   }
 
   Future<void> changePassword({

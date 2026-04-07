@@ -64,3 +64,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/Pharmvrlogo.png
+    - assets/images/Pharmvrlogo2.png
+    - assets/images/app_icon.png
+    - assets/images/web_landing_hero.png

@@ -21,13 +21,18 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'role'  => $this->role,
             'profile' => [
-                'phone'      => $this->profile?->phone,
-                'avatar_url' => AssetUrlService::resolve($this->profile?->avatar_url),
-                'bio'        => $this->profile?->bio,
-                'university' => $this->profile?->university,
-                'semester'   => (int) $this->profile?->semester,
-                'nim'        => $this->profile?->nim,
-                'institution'=> $this->profile?->university, // For backward compatibility if needed
+                'first_name'   => $this->profile?->first_name,
+                'last_name'    => $this->profile?->last_name,
+                'phone'        => $this->profile?->phone,
+                'phone_number' => $this->profile?->phone, // Alias for consistency
+                'avatar_url'   => AssetUrlService::resolve($this->profile?->avatar_url),
+                'bio'          => $this->profile?->bio,
+                'university'   => $this->profile?->university,
+                'institution'  => $this->profile?->university, // For backward compatibility
+                'semester'     => $this->profile?->semester ? (int) $this->profile->semester : null,
+                'nim'          => $this->profile?->nim,
+                'birth_date'   => $this->profile?->birth_date,
+                'gender'       => $this->profile?->gender,
             ],
             'preferences' => $this->preferences?->settings ?? (object)[],
             'created_at'  => $this->created_at,

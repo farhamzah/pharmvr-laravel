@@ -169,6 +169,18 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Watch profileProvider to update controllers if data arrives asynchronously
+    ref.listen(profileProvider.select((s) => s.user), (previous, next) {
+      if (next != null) {
+        if (_nameCtrl.text.isEmpty) _nameCtrl.text = next.name;
+        if (_emailCtrl.text.isEmpty) _emailCtrl.text = next.email;
+        if (_phoneCtrl.text.isEmpty) _phoneCtrl.text = next.phone ?? '';
+        if (_uniCtrl.text.isEmpty) _uniCtrl.text = next.university ?? '';
+        if (_semCtrl.text.isEmpty) _semCtrl.text = next.semester?.toString() ?? '';
+        if (_nimCtrl.text.isEmpty) _nimCtrl.text = next.nim ?? '';
+      }
+    });
+
     final editState = ref.watch(editProfileProvider);
 
     ref.listen<EditProfileState>(editProfileProvider, (prev, next) {

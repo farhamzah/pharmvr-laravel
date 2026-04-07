@@ -64,15 +64,23 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
           final auth = ref.read(authProvider.notifier);
           final currentUser = ref.read(authProvider).user;
           
-          final updatedUser = User(
-            id: currentUser?.id ?? 0,
-            name: greeting['full_name'] as String? ?? currentUser?.name ?? 'User',
-            email: greeting['email'] as String? ?? currentUser?.email ?? '',
-            role: greeting['role'] as String? ?? currentUser?.role ?? 'Mahasiswa',
-            profile: UserProfile(
-              avatarUrl: greeting['avatar_url'] as String? ?? currentUser?.profile?.avatarUrl,
-              university: greeting['institution'] as String? ?? currentUser?.profile?.university,
-            ),
+          final updatedProfile = (currentUser?.profile ?? const UserProfile()).copyWith(
+            avatarUrl: greeting['avatar_url'] as String?,
+            university: (greeting['institution'] as String?) ?? (greeting['university'] as String?),
+            firstName: greeting['full_name'] as String?,
+          );
+
+          final updatedUser = currentUser?.copyWith(
+            name: greeting['full_name'] as String?,
+            email: greeting['email'] as String?,
+            role: greeting['role'] as String?,
+            profile: updatedProfile,
+          ) ?? User(
+            id: 0,
+            name: greeting['full_name'] as String? ?? 'User',
+            email: greeting['email'] as String? ?? '',
+            role: greeting['role'] as String? ?? 'Mahasiswa',
+            profile: updatedProfile,
           );
 
           debugPrint('MainShellScreen Syncing User: ${updatedUser.name}');

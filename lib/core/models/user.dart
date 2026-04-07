@@ -46,9 +46,9 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
-      name: json['name'] as String,
-      email: json['email'] as String,
-      role: json['role'] as String? ?? 'Mahasiswa',
+      name: json['name']?.toString() ?? '',
+      email: json['email']?.toString() ?? '',
+      role: json['role']?.toString() ?? 'student',
       profile: json['profile'] != null 
           ? UserProfile.fromJson(json['profile'] as Map<String, dynamic>) 
           : null,
