@@ -24,7 +24,7 @@ class EditProfileRequest {
       'email': email,
       'phone_number': phoneNumber,
       'university': university,
-      'semester': semester,
+      'semester': int.tryParse(semester),
       'nim': nim,
     };
   }
