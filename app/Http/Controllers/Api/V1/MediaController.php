@@ -19,6 +19,7 @@ class MediaController extends Controller
         }
 
         $cleanPath = preg_replace('#^/?storage/#', '', $path);
+        $cleanPath = ltrim($cleanPath, '/');
 
         // 1. Try public disk (storage/app/public)
         if (Storage::disk('public')->exists($cleanPath)) {
@@ -27,15 +28,28 @@ class MediaController extends Controller
             return $this->responseWithCors($file, $type);
         }
 
-        // 2. Try root public directory (for static assets)
-        $publicFilePath = public_path($path);
-        if (file_exists($publicFilePath) && is_file($publicFilePath)) {
-            $file = file_get_contents($publicFilePath);
-            $type = mime_content_type($publicFilePath);
-            return $this->responseWithCors($file, $type);
+        // 2. Try root public directory recursively for assets/ etc.
+        $possiblePaths = [
+            public_path($path),
+            public_path($cleanPath),
+            public_path('storage/' . $cleanPath),
+        ];
+
+        foreach ($possiblePaths as $fullPath) {
+            if (file_exists($fullPath) && is_file($fullPath)) {
+                $file = file_get_contents($fullPath);
+                $type = mime_content_type($fullPath);
+                return $this->responseWithCors($file, $type);
+            }
         }
 
-        // 3. Fallback: Return a Premium Placeholder SVG if file not found
+        // 3. Fallback logic: 
+        // In local, we skip the SVG placeholder to avoid "reverting to basics" visuals if assets are missing.
+        if (app()->environment('local')) {
+            abort(404, 'Asset not found locally: ' . $path);
+        }
+
+        // In Production, return the stylized SVG placeholder
         return $this->getPlaceholderResponse($path);
     }
 

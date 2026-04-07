@@ -9,18 +9,22 @@ class AssetUrlService
     /**
      * Resolve a stored path/URL into a full, publicly accessible URL.
      */
+    /**
+     * Resolve a stored path/URL into a full, publicly accessible URL.
+     */
     public static function resolve(?string $path): ?string
     {
         if (empty($path)) {
             return null;
         }
 
-        // 1. External URLs (https://, etc) — handle localhost/legacy first
+        // 1. External URLs (youtube, etc) — handle localhost/legacy first
         if (preg_match('#^https?://#i', $path)) {
+            // If it's a localhost/local URL, extract the relative part and proceed
             if (self::isLegacyLocalUrl($path)) {
                 $path = self::extractRelativePath($path);
             } else {
-                // For external URLs on production, force HTTPS for pharmvr.cloud subdomains
+                // External URL (e.g. YouTube thumbnail), keep as-is with HTTPS upgrade
                 if (app()->environment('production') && str_contains($path, 'pharmvr.cloud')) {
                     $path = str_replace('http://', 'https://', $path);
                 }
@@ -28,35 +32,29 @@ class AssetUrlService
             }
         }
 
-        // 2. Clean prefix before resolve
+        // 2. Normalize and clean the path
         $path = ltrim($path, '/');
+        // Strip 'storage/' prefix if the DB path includes it
         $path = preg_replace('#^storage/#', '', $path);
 
-        // 3. In Production (VPS), we ALWAYS want to use the Media Proxy to avoid CORS/Mixed Content
-        if (app()->environment('production')) {
-            $apiUrl = config('app.url'); // Should be https://admin.pharmvr.cloud
-            $apiUrl = rtrim($apiUrl, '/');
-            return "$apiUrl/api/v1/media/$path";
-        }
+        // 3. Environment-aware Base URL
+        $apiUrl = config('app.url'); // e.g. http://localhost:8000 or https://admin.pharmvr.cloud
+        $apiUrl = rtrim($apiUrl, '/');
 
-        // 4. Default Local/Dev behavior
-        return self::resolveRelativePath($path);
+        // 4. Force Media Proxy for everything dynamic or static in Public/Storage
+        // This ensures the MediaController attached CORS headers to every asset.
+        return "$apiUrl/api/v1/media/$path";
     }
 
     /**
-     * Resolve a relative path to a full URL.
+     * Resolve a relative path to a full URL (Legacy fallback/unused in Deep Fix logic).
      */
     private static function resolveRelativePath(string $path): string
     {
-        // Strip 'storage/' or '/storage/' prefix
         $cleanPath = preg_replace('#^/?storage/#', '', $path);
-
-        // If it starts with 'assets/', it's a public static file
         if (str_starts_with($cleanPath, 'assets/')) {
             return url($cleanPath);
         }
-
-        // Otherwise, it's a storage dynamic file
         return url('storage/' . $cleanPath);
     }
 

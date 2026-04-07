@@ -35,24 +35,24 @@ class CleanAssetPaths extends Command
         $this->info('Starting Asset Path Normalization...');
 
         DB::transaction(function () {
-            // 1. News
-            $this->processModel(News::class, 'thumbnail_url', 'News');
+            // 1. News - Correct column: image_url
+            $this->processModel(News::class, 'image_url', 'News');
 
-            // 2. EducationContent
+            // 2. EducationContent - Correct column: thumbnail_url
             $this->processModel(EducationContent::class, 'thumbnail_url', 'EducationContent');
 
-            // 3. TrainingModule
+            // 3. TrainingModule - Correct column: cover_image_path
             $this->processModel(TrainingModule::class, 'cover_image_path', 'TrainingModule');
 
-            // 4. UserProfile
-            $this->processModel(UserProfile::class, 'avatar_path', 'UserProfile');
+            // 4. UserProfile - Correct column: avatar_url
+            $this->processModel(UserProfile::class, 'avatar_url', 'UserProfile');
 
-            // 5. AiAvatarProfile
-            $this->processModel(AiAvatarProfile::class, 'avatar_url', 'AiAvatarProfile');
+            // 5. AiAvatarProfile - Correct column: avatar_model_path
+            $this->processModel(AiAvatarProfile::class, 'avatar_model_path', 'AiAvatarProfile');
         });
 
         $this->info('Successfully normalized all asset paths!');
-        return Command::SUCCESS;
+        return self::SUCCESS;
     }
 
     /**
