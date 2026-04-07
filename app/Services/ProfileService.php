@@ -40,15 +40,19 @@ class ProfileService
             }
 
             if (!empty($profileData)) {
-                $user->profile()->update($profileData);
+                $user->profile()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    $profileData
+                );
             }
 
             // Handle Avatar Upload
             if (isset($data['avatar']) && $data['avatar'] instanceof \Illuminate\Http\UploadedFile) {
                 $path = $data['avatar']->store('avatars', 'public');
-                $user->profile()->update([
-                    'avatar_url' => $path
-                ]);
+                $user->profile()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    ['avatar_url' => $path]
+                );
             }
 
             return $user->load('profile');
