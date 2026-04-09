@@ -15,13 +15,22 @@ echo "🚀 Starting PharmVR Pro Backend Deployment..."
 # 2. Pull Latest Code
 echo "📥 Pulling latest code from Git..."
 git gc --auto
-git pull origin master
+# Resetting to origin/master to handle divergent branches after force push
+git fetch origin
+git reset --hard origin/master
 
 # 3. Install/Update Composer Dependencies
 echo "📦 Installing composer dependencies..."
 composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
-# 4. Clear old caches
+# 4. Install/Update NPM Dependencies & Build Assets
+echo "📦 Installing NPM dependencies..."
+npm install --no-interaction
+
+echo "🏗️ Building frontend assets (responsiveness)..."
+npm run build
+
+# 5. Clear old caches
 echo "🧹 Clearing old caches..."
 php artisan config:clear
 php artisan route:clear
