@@ -33,7 +33,7 @@
                         <td class="px-8 py-6">
                             <div class="flex items-center gap-6">
                                 <div class="relative w-32 h-20 rounded-xl overflow-hidden border border-divider group-hover:border-primary/50 transition-all bg-background">
-                                    <img src="{{ $video->thumbnail_url ?: 'https://img.youtube.com/vi/'.$video->video_id.'/hqdefault.jpg' }}" 
+                                    <img src="{{ $video->thumbnail_full_url ?: 'https://img.youtube.com/vi/'.$video->video_id.'/hqdefault.jpg' }}" 
                                          class="w-full h-full object-cover"
                                          onerror="this.src='https://img.youtube.com/vi/{{ $video->video_id }}/mqdefault.jpg'">
                                     <div class="absolute inset-0 bg-background/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">

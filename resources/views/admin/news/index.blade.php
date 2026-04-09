@@ -110,7 +110,7 @@
                                 <div class="w-20 h-20 flex-shrink-0 rounded-[2rem] bg-surface-light border border-divider flex items-center justify-center text-text-tertiary overflow-hidden transition-all shadow-premium group-hover:scale-105 duration-700">
                                     @if($article->image_url)
                                         <div class="w-full h-full relative">
-                                            <img src="{{ Str::startsWith($article->image_url, 'http') ? $article->image_url : asset($article->image_url) }}" 
+                                            <img src="{{ $article->image_full_url }}" 
                                                 alt="{{ $article->title }}" 
                                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                                                 onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'w-full h-full flex items-center justify-center bg-surface\'><svg class=\'w-6 h-6 opacity-10\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z\'></path></svg></div>';">

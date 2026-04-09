@@ -75,7 +75,7 @@
                             <div class="flex items-start gap-5">
                                 <div class="w-14 h-18 bg-slate-800 rounded-xl overflow-hidden flex-shrink-0 border border-slate-700 shadow-xl group-hover:border-indigo-500/50 transition-all duration-500 group-hover:scale-105">
                                     @if($doc->thumbnail_url)
-                                        <img src="{{ Str::startsWith($doc->thumbnail_url, 'http') ? $doc->thumbnail_url : asset('storage/' . $doc->thumbnail_url) }}" class="w-full h-full object-cover" alt="">
+                                        <img src="{{ $doc->thumbnail_full_url }}" class="w-full h-full object-cover" alt="">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center text-slate-600">
                                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
