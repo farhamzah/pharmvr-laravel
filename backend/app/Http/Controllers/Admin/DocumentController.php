@@ -17,7 +17,7 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        $contents = EducationContent::where('type', 'document')
+        $contents = EducationContent::where('type', 'Document')
             ->with('trainingModule')
             ->latest()
             ->get();

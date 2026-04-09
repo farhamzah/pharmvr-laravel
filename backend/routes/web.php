@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\Ai\AiScenePromptWebController;
 use App\Http\Controllers\Admin\Ai\AiLogWebController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/admin');
 });
 
 // Storage Fallback for local development (Windows symlink issues)

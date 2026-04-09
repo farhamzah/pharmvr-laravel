@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/pharm_colors.dart';
 import '../../../../core/theme/pharm_text_styles.dart';
 import '../../../../core/theme/pharm_spacing.dart';
+import '../../../../core/utils/responsive_helper.dart';
 import '../../../profile/presentation/providers/app_setting_provider.dart';
 
 class LandingScreen extends ConsumerStatefulWidget {
@@ -16,6 +17,7 @@ class LandingScreen extends ConsumerStatefulWidget {
 
 class _LandingScreenState extends ConsumerState<LandingScreen> {
   late ScrollController _scrollController;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   double _scrollOpacity = 0;
 
   @override
@@ -44,32 +46,38 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     final settingsAsync = ref.watch(appSettingProvider);
-    final size = MediaQuery.of(context).size;
-    final isDesktop = size.width > 900;
+    final isDesktop = ResponsiveHelper.isDesktop(context);
+    final isTablet = ResponsiveHelper.isTablet(context);
+    final isMobile = ResponsiveHelper.isMobile(context);
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: PharmColors.background,
+      endDrawer: !isDesktop ? _MobileDrawer() : null, // Add simple drawer
       body: Stack(
         children: [
-          SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              children: [
-                const SizedBox(height: 100), // Space for header
-                _HeroSection(isDesktop: isDesktop),
-                _DashboardPreviewSection(isDesktop: isDesktop),
-                settingsAsync.when(
-                  data: (settings) => _AboutSection(
-                    mission: settings.aboutMission,
-                    description: settings.aboutDescription,
-                    isDesktop: isDesktop,
+          Positioned.fill(
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  const SizedBox(height: 100), // Space for header
+                  _HeroSection(isDesktop: isDesktop, isTablet: isTablet, isMobile: isMobile),
+                  _DashboardPreviewSection(isDesktop: isDesktop),
+                  settingsAsync.when(
+                    data: (settings) => _AboutSection(
+                      mission: settings.aboutMission,
+                      description: settings.aboutDescription,
+                      isDesktop: isDesktop,
+                    ),
+                    loading: () => const SizedBox(height: 200),
+                    error: (_, __) => const SizedBox(height: 200),
                   ),
-                  loading: () => const SizedBox(height: 200),
-                  error: (_, __) => const SizedBox(height: 200),
-                ),
-                _TutorialSection(isDesktop: isDesktop),
-                _FooterSection(isDesktop: isDesktop),
-              ],
+                  _TutorialSection(isDesktop: isDesktop),
+                  _FooterSection(isDesktop: isDesktop),
+                ],
+              ),
             ),
           ),
           Positioned(
@@ -80,6 +88,77 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _MobileDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      backgroundColor: PharmColors.background,
+      child: Container(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset('assets/images/Pharmvrlogo.png', height: 40),
+                IconButton(
+                  icon: const Icon(Icons.close, color: PharmColors.textPrimary),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 60),
+            _DrawerLink(label: 'ABOUT', onTap: () => Navigator.pop(context)),
+            _DrawerLink(label: 'TUTORIAL', onTap: () => Navigator.pop(context)),
+            _DrawerLink(label: 'CONTACT', onTap: () => Navigator.pop(context)),
+            const Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.push('/auth/login');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: PharmColors.primary,
+                  foregroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: const Text('LOGIN', style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DrawerLink extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+  const _DrawerLink({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 32),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Text(
+          label,
+          style: PharmTextStyles.h3.copyWith(
+            color: PharmColors.textPrimary,
+            letterSpacing: 1.2,
+          ),
+        ),
       ),
     );
   }
@@ -125,7 +204,7 @@ class _LandingHeader extends StatelessWidget {
                 style: PharmTextStyles.h2.copyWith(
                   color: PharmColors.textPrimary,
                   letterSpacing: 2.0,
-                  fontSize: 22,
+                  fontSize: isDesktop ? 22 : 18,
                 ),
               ),
               const Spacer(),
@@ -136,23 +215,22 @@ class _LandingHeader extends StatelessWidget {
                 const SizedBox(width: 32),
                 _HeaderLink(label: 'CONTACT', onTap: () {}),
                 const SizedBox(width: 40),
-              ],
-              ElevatedButton(
-                onPressed: () => context.push('/auth/login'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: PharmColors.primary,
-                  foregroundColor: PharmColors.background,
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                  elevation: 0,
-                ).copyWith(
-                  shadowColor: WidgetStateProperty.all(PharmColors.primary.withOpacity(0.4)),
-                  elevation: WidgetStateProperty.resolveWith((states) => 
-                    states.contains(WidgetState.hovered) ? 10 : 0
+                ElevatedButton(
+                  onPressed: () => context.push('/auth/login'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: PharmColors.primary,
+                    foregroundColor: PharmColors.background,
+                    padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    elevation: 0,
                   ),
+                  child: const Text('LOGIN', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
                 ),
-                child: const Text('LOGIN', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
-              ),
+              ] else 
+                IconButton(
+                  icon: const Icon(Icons.menu_rounded, color: PharmColors.textPrimary, size: 28),
+                  onPressed: () => Scaffold.of(context).openEndDrawer(),
+                ),
             ],
           ),
         ),
@@ -183,12 +261,18 @@ class _HeaderLink extends StatelessWidget {
 
 class _HeroSection extends StatelessWidget {
   final bool isDesktop;
-  const _HeroSection({required this.isDesktop});
+  final bool isTablet;
+  final bool isMobile;
+  const _HeroSection({
+    required this.isDesktop,
+    required this.isTablet,
+    required this.isMobile,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: isDesktop ? 700 : 600,
+      height: isDesktop ? 700 : (isTablet ? 600 : 550),
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: isDesktop ? 80 : 20),
       child: Stack(
@@ -268,18 +352,20 @@ class _HeroSection extends StatelessWidget {
                       Text(
                         isDesktop 
                             ? 'Immersive CPOB Learning \nPowered by VR & AI' 
-                            : 'Immersive CPOB \nLearning Platform',
+                            : (isTablet ? 'Immersive CPOB Learning \nPlatform' : 'Immersive CPOB \nLearning Platform'),
                         textAlign: TextAlign.center,
                         style: PharmTextStyles.h1.copyWith(
                           color: PharmColors.textPrimary,
-                          fontSize: isDesktop ? 72 : 42,
+                          fontSize: isDesktop ? 72 : (isTablet ? 56 : 32),
                           height: 1.1,
                           letterSpacing: -1.0,
                         ),
                       ),
                       const SizedBox(height: 24),
-                      SizedBox(
-                        width: 800,
+                      Container(
+                        constraints: BoxConstraints(
+                          maxWidth: isDesktop ? 800 : (isTablet ? 600 : double.infinity),
+                        ),
                         child: Text(
                           'Empower your team with cutting-edge Virtual Reality simulations \nand intelligent diagnostics for modern pharmaceutical excellence.',
                           textAlign: TextAlign.center,
@@ -294,15 +380,32 @@ class _HeroSection extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 64),
-                ElevatedButton(
-                  onPressed: () => context.push('/auth/register'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: PharmColors.background,
-                    padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                  ),
-                  child: const Text('GET STARTED NOW', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+                Wrap(
+                  spacing: 20,
+                  runSpacing: 20,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => context.push('/auth/register'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: PharmColors.background,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isDesktop ? 48 : 32, 
+                          vertical: isDesktop ? 24 : 18
+                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      ),
+                      child: Text(
+                        'GET STARTED NOW', 
+                        style: TextStyle(
+                          fontSize: isDesktop ? 16 : 14, 
+                          fontWeight: FontWeight.w900, 
+                          letterSpacing: 1.5
+                        )
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -346,19 +449,27 @@ class _DashboardPreviewSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          SizedBox(
-            width: 600,
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: isDesktop ? 600 : double.infinity,
+            ),
             child: Text(
               'Track your progress, manage modules, and analyze VR performance results with our integrated intelligence suite.',
               textAlign: TextAlign.center,
-              style: PharmTextStyles.bodyLarge.copyWith(color: PharmColors.textSecondary),
+              style: PharmTextStyles.bodyLarge.copyWith(
+                color: PharmColors.textSecondary,
+                fontSize: isDesktop ? 18 : 16,
+              ),
             ),
           ),
           const SizedBox(height: 80),
           // Glassmorphic Preview Card
           Container(
-            width: isDesktop ? 1100 : double.infinity,
-            height: isDesktop ? 600 : 400,
+            constraints: BoxConstraints(
+              maxWidth: isDesktop ? 1100 : double.infinity,
+            ),
+            width: double.infinity,
+            height: isDesktop ? 600 : (ResponsiveHelper.isTablet(context) ? 500 : 400),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
               border: Border.all(color: Colors.white.withOpacity(0.15)),
@@ -403,32 +514,35 @@ class _DashboardPreviewSection extends StatelessWidget {
                   // Mock Dashboard UI Elements
                   Positioned(
                     top: isDesktop ? 60 : 30, 
-                    left: isDesktop ? 60 : 30,
+                    left: isDesktop ? 60 : 20,
                     child: _MockStatCard(
                       label: 'TOTAL XP', 
                       value: '12,450', 
                       icon: Icons.diamond_rounded,
                       color: PharmColors.primary,
+                      isDesktop: isDesktop,
                     ),
                   ),
                   Positioned(
-                    top: isDesktop ? 180 : 130, 
-                    left: isDesktop ? 60 : 30,
+                    top: isDesktop ? 180 : (ResponsiveHelper.isTablet(context) ? 130 : 120), 
+                    left: isDesktop ? 60 : 20,
                     child: _MockStatCard(
                       label: 'MODULES COMPLETED', 
                       value: '8/12', 
                       icon: Icons.library_books_rounded,
                       color: Colors.purpleAccent,
+                      isDesktop: isDesktop,
                     ),
                   ),
                   Positioned(
-                    top: isDesktop ? 300 : 230, 
-                    left: isDesktop ? 60 : 30,
+                    top: isDesktop ? 300 : (ResponsiveHelper.isTablet(context) ? 230 : 210), 
+                    left: isDesktop ? 60 : 20,
                     child: _MockStatCard(
                       label: 'VR ACCURACY', 
                       value: '94.2%', 
                       icon: Icons.track_changes_rounded,
                       color: Colors.greenAccent,
+                      isDesktop: isDesktop,
                     ),
                   ),
                   
@@ -451,11 +565,13 @@ class _MockStatCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color color;
+  final bool isDesktop;
   const _MockStatCard({
     required this.label, 
     required this.value, 
     required this.icon,
     this.color = PharmColors.primary,
+    this.isDesktop = true,
   });
 
   @override
@@ -465,8 +581,8 @@ class _MockStatCard extends StatelessWidget {
       child: BackdropFilter(
         filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
         child: Container(
-          width: 280,
-          padding: const EdgeInsets.all(24),
+          width: isDesktop ? 280 : 240,
+          padding: EdgeInsets.all(isDesktop ? 24 : 16),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.05),
             borderRadius: BorderRadius.circular(20),
@@ -475,14 +591,14 @@ class _MockStatCard extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: EdgeInsets.all(isDesktop ? 12 : 8),
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Icon(icon, color: color, size: 28),
+                child: Icon(icon, color: color, size: isDesktop ? 28 : 22),
               ),
-              const SizedBox(width: 20),
+              SizedBox(width: isDesktop ? 20 : 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -491,6 +607,7 @@ class _MockStatCard extends StatelessWidget {
                     style: PharmTextStyles.overline.copyWith(
                       color: PharmColors.textTertiary,
                       letterSpacing: 1.5,
+                      fontSize: isDesktop ? 12 : 10,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -498,7 +615,7 @@ class _MockStatCard extends StatelessWidget {
                     value, 
                     style: PharmTextStyles.h3.copyWith(
                       color: PharmColors.textPrimary,
-                      fontSize: 24,
+                      fontSize: isDesktop ? 24 : 18,
                     ),
                   ),
                 ],
@@ -595,28 +712,32 @@ class _AboutSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 48),
-          SizedBox(
-            width: 900,
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: isDesktop ? 900 : double.infinity,
+            ),
             child: Text(
               mission.isNotEmpty ? mission : 'Bridging the gap between theoretical knowledge and practical training for pharmaceutical excellence.',
               textAlign: TextAlign.center,
               style: PharmTextStyles.h2.copyWith(
                 color: PharmColors.textPrimary, 
                 height: 1.3,
-                fontSize: isDesktop ? 42 : 28,
+                fontSize: isDesktop ? 42 : 24,
               ),
             ),
           ),
           const SizedBox(height: 32),
-          SizedBox(
-            width: 800,
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: isDesktop ? 800 : double.infinity,
+            ),
             child: Text(
               description.isNotEmpty ? description : 'PharmVR is a next-generation immersion platform designed to train the next generation of pharmaceutical professionals using VR & AI.',
               textAlign: TextAlign.center,
               style: PharmTextStyles.bodyLarge.copyWith(
                 color: PharmColors.textSecondary, 
                 height: 1.8,
-                fontSize: isDesktop ? 18 : 16,
+                fontSize: isDesktop ? 18 : 14,
               ),
             ),
           ),
@@ -769,78 +890,32 @@ class _FooterSection extends StatelessWidget {
             children: [
               Expanded(
                 flex: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset('assets/images/Pharmvrlogo.png', height: 40),
-                        const SizedBox(width: 12),
-                        Text(
-                          'PharmVR',
-                          style: PharmTextStyles.h3.copyWith(
-                            color: PharmColors.textPrimary,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'Revolutionizing pharmaceutical training through \nimmersive Virtual Reality and Intelligent AI diagnostics.',
-                      style: PharmTextStyles.bodyMedium.copyWith(color: PharmColors.textSecondary, height: 1.8),
-                    ),
-                  ],
-                ),
+                child: _FooterBrandSection(),
               ),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('PLATFORM', style: PharmTextStyles.label.copyWith(color: PharmColors.textPrimary, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 24),
-                    _FooterLink(label: 'Experience VR'),
-                    _FooterLink(label: 'Modules Catalog'),
-                    _FooterLink(label: 'Intelligence Hub'),
-                  ],
-                ),
+                child: _FooterPlatformSection(),
               ),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('LEGAL', style: PharmTextStyles.label.copyWith(color: PharmColors.textPrimary, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 24),
-                    _FooterLink(label: 'Privacy Policy'),
-                    _FooterLink(label: 'Terms of Service'),
-                    _FooterLink(label: 'Cookie Policy'),
-                  ],
-                ),
+                child: _FooterLegalSection(),
               ),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('CONTACT', style: PharmTextStyles.label.copyWith(color: PharmColors.textPrimary, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 24),
-                    Row(
-                      children: [
-                        const Icon(Icons.email_outlined, color: PharmColors.primary, size: 16),
-                        const SizedBox(width: 12),
-                        Text('support@pharmvr.cloud', style: PharmTextStyles.bodySmall.copyWith(color: PharmColors.textSecondary)),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        const Icon(Icons.location_on_outlined, color: PharmColors.primary, size: 16),
-                        const SizedBox(width: 12),
-                        Text('Jakarta, Indonesia', style: PharmTextStyles.bodySmall.copyWith(color: PharmColors.textSecondary)),
-                      ],
-                    ),
-                  ],
-                ),
+                child: _FooterContactSection(),
               ),
+            ],
+          ) else Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _FooterBrandSection(),
+              const SizedBox(height: 48),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: _FooterPlatformSection()),
+                  Expanded(child: _FooterLegalSection()),
+                ],
+              ),
+              const SizedBox(height: 48),
+              _FooterContactSection(),
             ],
           ),
           const SizedBox(height: 80),
@@ -864,6 +939,100 @@ class _FooterSection extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _FooterBrandSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Image.asset('assets/images/Pharmvrlogo.png', height: 40),
+            const SizedBox(width: 12),
+            Text(
+              'PharmVR',
+              style: PharmTextStyles.h3.copyWith(
+                color: PharmColors.textPrimary,
+                letterSpacing: 1.5,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+        Text(
+          'Revolutionizing pharmaceutical training through \nimmersive Virtual Reality and Intelligent AI diagnostics.',
+          style: PharmTextStyles.bodyMedium.copyWith(color: PharmColors.textSecondary, height: 1.8),
+        ),
+      ],
+    );
+  }
+}
+
+class _FooterPlatformSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('PLATFORM', style: PharmTextStyles.label.copyWith(color: PharmColors.textPrimary, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 24),
+        _FooterLink(label: 'Experience VR'),
+        _FooterLink(label: 'Modules Catalog'),
+        _FooterLink(label: 'Intelligence Hub'),
+      ],
+    );
+  }
+}
+
+class _FooterLegalSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('LEGAL', style: PharmTextStyles.label.copyWith(color: PharmColors.textPrimary, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 24),
+        _FooterLink(label: 'Privacy Policy'),
+        _FooterLink(label: 'Terms of Service'),
+        _FooterLink(label: 'Cookie Policy'),
+      ],
+    );
+  }
+}
+
+class _FooterContactSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('CONTACT', style: PharmTextStyles.label.copyWith(color: PharmColors.textPrimary, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 24),
+        Row(
+          children: [
+            const Icon(Icons.email_outlined, color: PharmColors.primary, size: 16),
+            const SizedBox(width: 12),
+            Text('support@pharmvr.cloud', style: PharmTextStyles.bodySmall.copyWith(color: PharmColors.textSecondary)),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            const Icon(Icons.location_on_outlined, color: PharmColors.primary, size: 16),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                'Universitas Padjadjaran, Bandung, Indonesia', 
+                style: PharmTextStyles.bodySmall.copyWith(color: PharmColors.textSecondary)
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
