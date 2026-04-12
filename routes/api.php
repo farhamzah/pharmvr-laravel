@@ -28,6 +28,8 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/login', [AuthController::class, 'login']);
     Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/auth/reset-password', [AuthController::class, 'resetPassword']);
+    // Public App Routes (Settings, etc)
+    Route::get('/app/settings', [AppSettingController::class, 'index']);
 
     // Protected Routes
     Route::middleware('auth:sanctum')->group(function () {
@@ -42,7 +44,6 @@ Route::prefix('v1')->group(function () {
 
         // Home Hub
         Route::get('/home', [HomeController::class, 'index']);
-        Route::get('/app/settings', [AppSettingController::class, 'index']);
 
         // Edukasi
         Route::get('/edukasi', [EducationController::class, 'index']);
