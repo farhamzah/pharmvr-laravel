@@ -45,6 +45,7 @@ class VrSessionEvent extends Model
         'training_module_id',
         'device_id',
         'event_type',
+        'event_category',
         'event_timestamp',
         'event_payload',
     ];

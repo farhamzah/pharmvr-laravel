@@ -62,14 +62,19 @@ class VrSession extends Model
         'user_id',
         'device_id',
         'training_module_id',
+        'scene_id',
         'pairing_id',
         'session_status',
+        'platform',
         'started_at',
         'last_activity_at',
         'completed_at',
         'interrupted_at',
         'current_step',
         'progress_percentage',
+        'total_score',
+        'duration_seconds',
+        'total_mistakes',
         'summary_json',
     ];
 
@@ -79,6 +84,9 @@ class VrSession extends Model
         'completed_at' => 'datetime',
         'interrupted_at' => 'datetime',
         'summary_json' => 'array',
+        'total_score' => 'integer',
+        'duration_seconds' => 'integer',
+        'total_mistakes' => 'integer',
     ];
 
     public function user()
@@ -119,5 +127,15 @@ class VrSession extends Model
     public function analytics()
     {
         return $this->hasOne(SessionAnalytics::class);
+    }
+
+    public function scene()
+    {
+        return $this->belongsTo(Scene::class);
+    }
+
+    public function stepCompletions()
+    {
+        return $this->hasMany(VrStepCompletion::class);
     }
 }

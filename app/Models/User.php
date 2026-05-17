@@ -91,6 +91,8 @@ class User extends Authenticatable
         'role',
         'status',
         'can_bypass_prerequisites',
+        'google_id',
+        'avatar_url',
     ];
 
     // Helper Methods

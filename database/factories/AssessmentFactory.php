@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\AssessmentType;
+use App\Enums\AssessmentStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,13 +19,17 @@ class AssessmentFactory extends Factory
     public function definition(): array
     {
         return [
-            'training_module_id' => \App\Models\TrainingModule::factory(),
-            'type'               => $this->faker->randomElement(['pre_test', 'post_test']),
+            'module_id' => \App\Models\TrainingModule::factory(),
+            'type'               => $this->faker->randomElement([
+                AssessmentType::PRETEST->value,
+                AssessmentType::POSTTEST->value,
+            ]),
             'title'              => $this->faker->sentence(4),
             'description'        => $this->faker->paragraph(2),
-            'min_score'          => 80,
-            'duration_minutes'   => 15,
-            'is_active'          => true,
+            'status'             => AssessmentStatus::ACTIVE->value,
+            'number_of_questions_to_take' => 10,
+            'passing_score'      => 80,
+            'time_limit_minutes' => 15,
         ];
     }
 }

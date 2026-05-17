@@ -89,4 +89,21 @@ class AuthController extends Controller
 
         return $this->successResponse(null, 'Logged out successfully');
     }
+
+    /**
+     * Handle Google login.
+     */
+    public function googleLogin(Request $request): JsonResponse
+    {
+        $request->validate([
+            'id_token' => 'required|string',
+        ]);
+
+        $data = $this->authService->googleLogin($request->id_token);
+
+        return $this->successResponse([
+            'user'  => new UserResource($data['user']->load(['profile', 'preferences'])),
+            'token' => $data['token'],
+        ], 'Google login successful');
+    }
 }

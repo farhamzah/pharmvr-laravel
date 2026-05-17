@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Api\V1\Vr;
 
+use App\Enums\AssessmentType;
+use App\Enums\AssessmentStatus;
 use App\Models\User;
 use App\Models\TrainingModule;
 use App\Models\VrDevice;
@@ -524,11 +526,13 @@ class VrPhase4Test extends TestCase
 
         // 2. Setup Assessment (Pre-test)
         $assessment = \App\Models\Assessment::create([
-            'training_module_id' => $this->module->id,
-            'type' => 'pre_test',
+            'module_id' => $this->module->id,
+            'type' => AssessmentType::PRETEST->value,
             'title' => 'GMP Pre-test',
-            'min_score' => 80,
-            'is_active' => true,
+            'status' => AssessmentStatus::ACTIVE->value,
+            'number_of_questions_to_take' => 10,
+            'passing_score' => 80,
+            'time_limit_minutes' => 15,
         ]);
 
         // 3. Complete Pre-test
@@ -536,7 +540,8 @@ class VrPhase4Test extends TestCase
             'user_id' => $this->user->id,
             'assessment_id' => $assessment->id,
             'score' => 85,
-            'status' => 'passed',
+            'passed' => true,
+            'status' => 'completed',
             'completed_at' => now(),
         ]);
 
@@ -564,18 +569,21 @@ class VrPhase4Test extends TestCase
     {
         // 1. Setup readiness (Pre-test passed)
         $assessment = \App\Models\Assessment::create([
-            'training_module_id' => $this->module->id,
-            'type' => 'pre_test',
+            'module_id' => $this->module->id,
+            'type' => AssessmentType::PRETEST->value,
             'title' => 'GMP Pre-test',
-            'min_score' => 80,
-            'is_active' => true,
+            'status' => AssessmentStatus::ACTIVE->value,
+            'number_of_questions_to_take' => 10,
+            'passing_score' => 80,
+            'time_limit_minutes' => 15,
         ]);
 
         \App\Models\AssessmentAttempt::create([
             'user_id' => $this->user->id,
             'assessment_id' => $assessment->id,
             'score' => 90,
-            'status' => 'passed',
+            'passed' => true,
+            'status' => 'completed',
             'completed_at' => now(),
         ]);
 

@@ -86,11 +86,18 @@ class MediaController extends Controller
 
     private function responseWithCors($file, $type)
     {
-        return response($file, 200)
+        $response = response($file, 200)
             ->header('Content-Type', $type)
-            ->header('Access-Control-Allow-Origin', '*')
-            ->header('Access-Control-Allow-Methods', 'GET, OPTIONS')
-            ->header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With')
             ->header('Cache-Control', 'public, max-age=86400');
+
+        // Only add CORS headers if NOT in production. 
+        // In production, Nginx handles CORS with 'always' flag to ensure correctness.
+        if (config('app.env') !== 'production') {
+            $response->header('Access-Control-Allow-Origin', '*')
+                     ->header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+                     ->header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With');
+        }
+
+        return $response;
     }
 }

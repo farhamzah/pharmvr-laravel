@@ -235,7 +235,7 @@ class VrSessionController extends Controller
         if ($preTest) {
             $preTestAttempt = \App\Models\AssessmentAttempt::where('user_id', $user->id)
                 ->where('assessment_id', $preTest->id)
-                ->where('status', 'passed')
+                ->where('passed', true)
                 ->first();
             
             if (!$preTestAttempt || $preTestAttempt->score < ($preTest->min_score ?? 80)) {

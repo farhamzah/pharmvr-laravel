@@ -26,10 +26,15 @@ Route::prefix('v1')->group(function () {
     // Public Auth Routes
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::post('/auth/login', [AuthController::class, 'login']);
+    Route::post('/auth/google', [AuthController::class, 'googleLogin']);
     Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/auth/reset-password', [AuthController::class, 'resetPassword']);
     // Public App Routes (Settings, etc)
     Route::get('/app/settings', [AppSettingController::class, 'index']);
+
+    // Public Certificate Verification (no auth required)
+    Route::get('/public/certificates/{certificateId}/verify', [\App\Http\Controllers\Api\V1\Vr\CertificateVerificationController::class, 'verify'])
+        ->middleware('throttle:60,1');
 
     // Protected Routes
     Route::middleware('auth:sanctum')->group(function () {
@@ -76,11 +81,32 @@ Route::prefix('v1')->group(function () {
                 Route::post('/{pairing}/cancel', [\App\Http\Controllers\Api\V1\Vr\VrPairingController::class, 'cancel']);
             });
             
-            // Session Initiation
+            // Session Initiation (Mobile/Legacy)
             Route::prefix('sessions')->group(function () {
                 Route::get('/current', [\App\Http\Controllers\Api\V1\Vr\VrSessionController::class, 'current']);
                 Route::post('/start', [\App\Http\Controllers\Api\V1\Vr\VrSessionController::class, 'mobileStart']);
                 Route::get('/{session}', [\App\Http\Controllers\Api\V1\Vr\VrSessionController::class, 'show']);
+            });
+
+            // Scene Registry (WebXR + Flutter) - moved to public
+
+            // Production Path Report & Certificate
+            Route::get('/reports/production-path', [\App\Http\Controllers\Api\V1\Vr\ProductionPathReportController::class, 'show']);
+            Route::post('/certificates/production-path/generate', [\App\Http\Controllers\Api\V1\Vr\ProductionPathReportController::class, 'generateCertificate']);
+            Route::get('/certificates/production-path/download', [\App\Http\Controllers\Api\V1\Vr\ProductionPathReportController::class, 'download']);
+
+            // WebXR Session Lifecycle (Browser-based VR)
+            Route::prefix('webxr/sessions')->group(function () {
+                Route::post('/start', [\App\Http\Controllers\Api\V1\Vr\WebxrSessionController::class, 'start']);
+                Route::get('/current', [\App\Http\Controllers\Api\V1\Vr\WebxrSessionController::class, 'current']);
+                Route::get('/{session}', [\App\Http\Controllers\Api\V1\Vr\WebxrSessionController::class, 'show']);
+                Route::post('/{session}/events', [\App\Http\Controllers\Api\V1\Vr\WebxrSessionController::class, 'storeEvent'])
+                    ->middleware('throttle:120,1');
+                Route::post('/{session}/step-complete', [\App\Http\Controllers\Api\V1\Vr\WebxrSessionController::class, 'stepComplete'])
+                    ->middleware('throttle:30,1');
+                Route::post('/{session}/mistakes', [\App\Http\Controllers\Api\V1\Vr\WebxrSessionController::class, 'storeMistake'])
+                    ->middleware('throttle:60,1');
+                Route::post('/{session}/finish', [\App\Http\Controllers\Api\V1\Vr\WebxrSessionController::class, 'finish']);
             });
 
             // Status & Readiness
@@ -177,6 +203,13 @@ Route::prefix('v1')->group(function () {
             Route::post('/reminder', [VrAiController::class, 'generateReminder']);
             Route::post('/feedback', [VrAiController::class, 'generateFeedback']);
         })->middleware('throttle:60,1');
+
+        // Scene Registry (Public Access for Terminals)
+        Route::prefix('scenes')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\V1\Vr\SceneController::class, 'index']);
+            Route::get('/{slug}', [\App\Http\Controllers\Api\V1\Vr\SceneController::class, 'show']);
+            Route::get('/{slug}/steps', [\App\Http\Controllers\Api\V1\Vr\SceneController::class, 'steps']);
+        });
 
         // Legacy/Alias for compatibility
         Route::post('/pairings/confirm', [\App\Http\Controllers\Api\V1\Vr\VrPairingController::class, 'confirmPairing']);

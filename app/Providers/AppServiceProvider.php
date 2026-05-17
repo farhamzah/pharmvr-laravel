@@ -26,16 +26,17 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\User::observe(\App\Observers\UserObserver::class);
 
         // RBAC Gates: Dynamic Permission Check
-        if (Schema::hasTable('permissions')) {
-            try {
+        // Guard against missing DB connection (e.g. during testing bootstrap)
+        try {
+            if (Schema::hasTable('permissions')) {
                 Permission::get()->each(function ($permission) {
                     Gate::define($permission->name, function ($user) use ($permission) {
                         return $user->hasPermission($permission);
                     });
                 });
-            } catch (\Exception $e) {
-                // Silently fail if table is empty or migration hasn't run
             }
+        } catch (\Exception $e) {
+            // Silently fail if DB is not available or migration hasn't run
         }
 
         // Backward compatibility for existing hardcoded roles
