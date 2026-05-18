@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ContentSeeder::class,
             AssessmentSeeder::class,
+            HygieneAssessmentSeeder::class,
+            ProductionPathAssessmentSeeder::class,
             VrSeeder::class,
             AiSeeder::class,
         ]);

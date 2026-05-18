@@ -17,12 +17,12 @@ class AssessmentResource extends JsonResource
         $user = $request->user();
         $latestAttempt = $this->attempts()->where('user_id', $user->id)->latest()->first();
         $highScore = $this->attempts()->where('user_id', $user->id)->max('score') ?? 0;
-        $hasPassed = $this->attempts()->where('user_id', $user->id)->where('status', 'passed')->exists();
+        $hasPassed = $this->attempts()->where('user_id', $user->id)->where('passed', true)->exists();
 
         // VR Completion Gating for Post-Test
         $isSimulationCompleted = \App\Models\UserTrainingProgress::where('user_id', $user->id)
             ->where('training_module_id', $this->module_id)
-            ->where('status', 'simulation_completed')
+            ->where('vr_status', 'completed')
             ->exists();
 
         $isEligible = true;
@@ -40,7 +40,7 @@ class AssessmentResource extends JsonResource
             'description'        => $this->description,
             'total_questions'    => $this->questions_count ?? $this->questions()->count(),
             'estimated_duration' => $this->time_limit_minutes . ' menit',
-            'passing_score'      => $this->min_score,
+            'passing_score'      => $this->passing_score,
             'module_summary'     => [
                 'slug'  => $this->trainingModule->slug,
                 'title' => $this->trainingModule->title,
@@ -55,7 +55,7 @@ class AssessmentResource extends JsonResource
             ],
             'is_eligible'        => $isEligible,
             'eligibility_message'=> $eligibilityMessage,
-            'can_start'          => $isEligible && (!$hasPassed || $this->type === 'post_test'),
+            'can_start'          => $isEligible && (!$hasPassed || $this->type === \App\Enums\AssessmentType::POSTTEST),
             'recommended_action' => $this->getRecommendedAction($hasPassed, $latestAttempt, $isEligible),
         ];
     }

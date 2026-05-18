@@ -2,6 +2,10 @@
 
 namespace Tests\Feature\Api\V1\Vr;
 
+use App\Enums\AssessmentStatus;
+use App\Enums\AssessmentType;
+use App\Models\Assessment;
+use App\Models\AssessmentAttempt;
 use App\Models\Certificate;
 use App\Models\Scene;
 use App\Models\TrainingModule;
@@ -26,14 +30,15 @@ class ProductionPathCertificateTest extends TestCase
     private function createCompletedUser(): User
     {
         $user = User::factory()->create();
-        $module = TrainingModule::create([
-            'title' => 'Produksi Tablet Non-Steril',
-            'slug' => 'produksi-tablet-non-steril',
-            'description' => 'Test module',
-            'is_active' => true,
-        ]);
 
         foreach (self::PRODUCTION_PATH_SCENES as $index => $slug) {
+            $module = TrainingModule::create([
+                'title' => str_replace('_', ' ', $slug),
+                'slug' => $slug,
+                'description' => 'Test module',
+                'is_active' => true,
+            ]);
+
             $scene = Scene::create([
                 'training_module_id' => $module->id,
                 'slug' => $slug,
@@ -65,7 +70,69 @@ class ProductionPathCertificateTest extends TestCase
                     ],
                 ],
             ]);
+
+            $assessment = Assessment::create([
+                'module_id' => $module->id,
+                'type' => AssessmentType::POSTTEST->value,
+                'title' => str_replace('_', ' ', $slug) . ' Post-Test',
+                'status' => AssessmentStatus::ACTIVE->value,
+                'number_of_questions_to_take' => 5,
+                'randomize_questions' => false,
+                'randomize_options' => false,
+                'passing_score' => 70,
+                'time_limit_minutes' => 10,
+            ]);
+
+            AssessmentAttempt::create([
+                'user_id' => $user->id,
+                'assessment_id' => $assessment->id,
+                'score' => 100,
+                'passed' => true,
+                'status' => 'completed',
+                'started_at' => now()->subMinutes(5),
+                'completed_at' => now(),
+            ]);
         }
+
+        return $user;
+    }
+
+    private function createVrCompletedUserWithoutFinalPosttest(): User
+    {
+        $user = $this->createCompletedUser();
+
+        $secondaryAssessment = Assessment::whereHas('trainingModule', function ($query) {
+            $query->where('slug', 'secondary_packing');
+        })->where('type', AssessmentType::POSTTEST->value)->firstOrFail();
+
+        AssessmentAttempt::where('user_id', $user->id)
+            ->where('assessment_id', $secondaryAssessment->id)
+            ->delete();
+
+        return $user;
+    }
+
+    private function createVrCompletedUserWithFailedFinalPosttest(): User
+    {
+        $user = $this->createCompletedUser();
+
+        $secondaryAssessment = Assessment::whereHas('trainingModule', function ($query) {
+            $query->where('slug', 'secondary_packing');
+        })->where('type', AssessmentType::POSTTEST->value)->firstOrFail();
+
+        AssessmentAttempt::where('user_id', $user->id)
+            ->where('assessment_id', $secondaryAssessment->id)
+            ->delete();
+
+        AssessmentAttempt::create([
+            'user_id' => $user->id,
+            'assessment_id' => $secondaryAssessment->id,
+            'score' => 0,
+            'passed' => false,
+            'status' => 'completed',
+            'started_at' => now()->subMinutes(5),
+            'completed_at' => now(),
+        ]);
 
         return $user;
     }
@@ -160,6 +227,42 @@ class ProductionPathCertificateTest extends TestCase
             ->assertJsonStructure([
                 'data' => ['certificate_id', 'download_url'],
             ]);
+    }
+
+    public function test_final_vr_completion_without_secondary_posttest_does_not_unlock_certificate(): void
+    {
+        $user = $this->createVrCompletedUserWithoutFinalPosttest();
+
+        $this->actingAs($user)
+            ->getJson('/api/v1/vr/reports/production-path')
+            ->assertStatus(200)
+            ->assertJsonPath('data.completed_scenes', 10)
+            ->assertJsonPath('data.production_path_completed', false)
+            ->assertJsonPath('data.certificate.eligible', false);
+
+        $this->actingAs($user)
+            ->postJson('/api/v1/vr/certificates/production-path/generate')
+            ->assertStatus(422)
+            ->assertJsonPath('message', 'Production path is not completed.');
+    }
+
+    public function test_failed_secondary_posttest_does_not_unlock_certificate(): void
+    {
+        $user = $this->createVrCompletedUserWithFailedFinalPosttest();
+
+        $this->actingAs($user)
+            ->getJson('/api/v1/vr/reports/production-path')
+            ->assertStatus(200)
+            ->assertJsonPath('data.completed_scenes', 10)
+            ->assertJsonPath('data.production_path_completed', false)
+            ->assertJsonPath('data.certificate.eligible', false)
+            ->assertJsonPath('data.scene_results.10.vr_completed', true)
+            ->assertJsonPath('data.scene_results.10.post_test_passed', false);
+
+        $this->actingAs($user)
+            ->postJson('/api/v1/vr/certificates/production-path/generate')
+            ->assertStatus(422)
+            ->assertJsonPath('message', 'Production path is not completed.');
     }
 
     public function test_regenerate_certificate_does_not_create_duplicate(): void

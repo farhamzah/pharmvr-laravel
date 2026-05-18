@@ -427,7 +427,7 @@ class WebxrSessionController extends Controller
                 ],
                 [
                     'pre_test_status' => 'available',
-                    'vr_status' => 'not_started',
+                    'vr_status' => 'locked',
                     'post_test_status' => 'locked',
                 ]
             );
@@ -435,22 +435,49 @@ class WebxrSessionController extends Controller
             $progress->vr_status = 'completed';
             $progress->last_active_step = 'vr_sim';
 
-            // Check if all scenes in this module are completed
-            $totalScenes = Scene::where('training_module_id', $session->training_module_id)
-                ->active()->where('priority', 'P0')->count();
-            $completedScenes = VrSession::where('user_id', $session->user_id)
-                ->where('training_module_id', $session->training_module_id)
-                ->where('session_status', 'completed')
-                ->distinct('scene_id')
-                ->count('scene_id');
-
-            if ($completedScenes >= $totalScenes && $progress->post_test_status === 'locked') {
+            if ($progress->post_test_status === 'locked') {
                 $progress->post_test_status = 'available';
             }
 
             $progress->save();
+            $this->updateSceneAssessmentJourney($session);
         } catch (\Exception $e) {
             Log::warning('Failed to update journey progress: ' . $e->getMessage());
         }
+    }
+
+    private function updateSceneAssessmentJourney(VrSession $session): void
+    {
+        $session->loadMissing('scene');
+        $sceneSlug = $session->scene?->canonicalSlug() ?? $session->scene?->slug;
+        if (!$sceneSlug) {
+            return;
+        }
+
+        $sceneModule = \App\Models\TrainingModule::where('slug', $sceneSlug)->first();
+        if (!$sceneModule) {
+            return;
+        }
+
+        $progress = \App\Models\UserTrainingProgress::firstOrCreate(
+            [
+                'user_id' => $session->user_id,
+                'training_module_id' => $sceneModule->id,
+            ],
+            [
+                'pre_test_status' => 'available',
+                'vr_status' => 'locked',
+                'post_test_status' => 'locked',
+                'status' => 'in_progress',
+                'completion_percentage' => 0,
+            ]
+        );
+
+        $progress->update([
+            'vr_status' => 'completed',
+            'post_test_status' => $progress->post_test_status === 'locked' ? 'available' : $progress->post_test_status,
+            'last_active_step' => 'post_test',
+            'last_accessed_at' => now(),
+        ]);
     }
 }

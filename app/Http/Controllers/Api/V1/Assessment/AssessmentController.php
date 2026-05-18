@@ -53,7 +53,7 @@ class AssessmentController extends Controller
             ->where('training_module_id', $assessment->module_id)
             ->first();
 
-        if ($assessment->type === 'post_test') {
+        if ($assessment->type === \App\Enums\AssessmentType::POSTTEST) {
             if (!$progress || $progress->vr_status !== 'completed') {
                 return response()->json([
                     'success' => false,

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\V1\Vr;
 
 use App\Http\Controllers\Controller;
+use App\Enums\AssessmentType;
 use App\Helpers\QrCodeHelper;
+use App\Models\AssessmentAttempt;
 use App\Models\Certificate;
 use App\Models\Scene;
 use App\Models\VrSession;
@@ -119,7 +121,13 @@ class ProductionPathReportController extends Controller
             'qrSvg' => $qrSvg,
         ])->setPaper('a4', 'landscape');
 
-        return $pdf->download($filename);
+        $content = $pdf->output();
+
+        return response($content, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Cache-Control' => 'no-store, no-cache, must-revalidate',
+        ]);
     }
 
     private function buildReport(object $user): array
@@ -142,6 +150,8 @@ class ProductionPathReportController extends Controller
             ->unique(fn(VrSession $session) => $session->scene->slug)
             ->keyBy(fn(VrSession $session) => $session->scene->slug);
 
+        $postTestPassedByScene = $this->postTestPassedByScene($user->id);
+
         $sceneResults = [];
         $completedSceneSlugs = [];
         $scoreValues = [];
@@ -154,7 +164,9 @@ class ProductionPathReportController extends Controller
             $scene = $scenes->get($slug);
             $session = $latestByScene->get($slug);
             $summary = $this->completionSummary($session);
-            $completed = (bool) $session;
+            $vrCompleted = (bool) $session;
+            $postTestPassed = (bool) ($postTestPassedByScene[$slug] ?? false);
+            $completed = $vrCompleted && $postTestPassed;
 
             if ($completed) {
                 $completedSceneSlugs[] = $slug;
@@ -178,6 +190,8 @@ class ProductionPathReportController extends Controller
                 'scene_slug' => $slug,
                 'title' => $scene?->title ?? Str::headline(str_replace('_', ' ', $slug)),
                 'completed' => $completed,
+                'vr_completed' => $vrCompleted,
+                'post_test_passed' => $postTestPassed,
                 'completed_at' => $session?->completed_at?->toISOString(),
                 'score' => $score,
                 'completion_type' => $summary['completion_type'] ?? null,
@@ -205,6 +219,29 @@ class ProductionPathReportController extends Controller
             'average_score' => count($scoreValues) > 0 ? round(array_sum($scoreValues) / count($scoreValues), 2) : null,
             'certificate' => $this->certificatePayload($certificate, $productionPathCompleted),
         ];
+    }
+
+    private function postTestPassedByScene(int $userId): array
+    {
+        return AssessmentAttempt::query()
+            ->where('user_id', $userId)
+            ->where('passed', true)
+            ->whereNotNull('completed_at')
+            ->whereHas('assessment', function ($query) {
+                $query
+                    ->where('type', AssessmentType::POSTTEST->value)
+                    ->whereHas('trainingModule', function ($moduleQuery) {
+                        $moduleQuery->whereIn('slug', self::PRODUCTION_PATH_SCENES);
+                    });
+            })
+            ->with('assessment.trainingModule:id,slug')
+            ->get()
+            ->mapWithKeys(function (AssessmentAttempt $attempt) {
+                $slug = $attempt->assessment?->trainingModule?->slug;
+
+                return $slug ? [$slug => true] : [];
+            })
+            ->all();
     }
 
     private function completionSummary(?VrSession $session): array

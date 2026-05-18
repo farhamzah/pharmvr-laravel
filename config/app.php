@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'webxr_base_url' => env('WEBXR_BASE_URL', 'https://pharmvr.cloud'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

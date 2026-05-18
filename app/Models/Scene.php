@@ -159,14 +159,25 @@ class Scene extends Model
 
         $userId = $userModel?->id ?? (int) $user;
 
+        if ($this->slug === 'hygiene') {
+            return $this->hasCompletedAssessment($userId, 'hygiene', \App\Enums\AssessmentType::PRETEST);
+        }
+
         if (!$this->required_previous_scene_id) {
+            return true;
+        }
+
+        $previousScene = self::find($this->required_previous_scene_id);
+
+        if (!$previousScene) {
             return true;
         }
 
         return VrSession::where('user_id', $userId)
             ->where('scene_id', $this->required_previous_scene_id)
             ->where('session_status', 'completed')
-            ->exists();
+            ->exists()
+            && $this->hasPassedAssessment($userId, $previousScene->slug, \App\Enums\AssessmentType::POSTTEST);
     }
 
     /**
@@ -208,5 +219,37 @@ class Scene extends Model
                 ->where('session_status', 'completed')
                 ->exists(),
         ];
+    }
+
+    private function hasCompletedAssessment(int $userId, string $moduleSlug, \App\Enums\AssessmentType $type): bool
+    {
+        $assessment = \App\Models\Assessment::whereHas('trainingModule', fn($query) => $query->where('slug', $moduleSlug))
+            ->where('type', $type->value)
+            ->first();
+
+        if (!$assessment) {
+            return false;
+        }
+
+        return \App\Models\AssessmentAttempt::where('user_id', $userId)
+            ->where('assessment_id', $assessment->id)
+            ->whereNotNull('completed_at')
+            ->exists();
+    }
+
+    private function hasPassedAssessment(int $userId, string $moduleSlug, \App\Enums\AssessmentType $type): bool
+    {
+        $assessment = \App\Models\Assessment::whereHas('trainingModule', fn($query) => $query->where('slug', $moduleSlug))
+            ->where('type', $type->value)
+            ->first();
+
+        if (!$assessment) {
+            return false;
+        }
+
+        return \App\Models\AssessmentAttempt::where('user_id', $userId)
+            ->where('assessment_id', $assessment->id)
+            ->where('passed', true)
+            ->exists();
     }
 }
