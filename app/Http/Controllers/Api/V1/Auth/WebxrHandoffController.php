@@ -29,7 +29,7 @@ class WebxrHandoffController extends Controller
         ]);
 
         $webxrBaseUrl = rtrim(config('app.webxr_base_url', env('WEBXR_BASE_URL', 'https://pharmvr.cloud')), '/');
-        $webxrUrl = $webxrBaseUrl . '/lobby?handoff_token=' . rawurlencode($plainToken);
+        $webxrUrl = $webxrBaseUrl . '/scene/lobby?handoff_token=' . rawurlencode($plainToken);
 
         return $this->successResponse([
             'handoff_token' => $plainToken,

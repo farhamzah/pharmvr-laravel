@@ -96,7 +96,8 @@ class VrStatusController extends Controller
         $sceneConfig = $this->productionPath->scene($moduleSlug);
         $previousSceneSlug = $sceneConfig['previous_slug'] ?? null;
         $nextSceneSlug = $sceneConfig['next_slug'] ?? null;
-        $sceneUnlocked = !$previousSceneSlug || $this->hasPassedPosttestForSlug($user->id, $previousSceneSlug);
+        $instructorMode = $this->canUseInstructorMode($user);
+        $sceneUnlocked = $instructorMode || !$previousSceneSlug || $this->hasPassedPosttestForSlug($user->id, $previousSceneSlug);
 
         // 1. Phase 3: Pre-test Readiness
         $preTest = $module->assessments()->where('type', 'pretest')->first();
@@ -167,9 +168,9 @@ class VrStatusController extends Controller
             ->whereIn('session_status', ['starting', 'playing'])
             ->first();
 
-        $canLaunchVr = $sceneUnlocked
+        $canLaunchVr = $instructorMode || ($sceneUnlocked
             && ($preTestCompleted || $user->can_bypass_prerequisites)
-            && $vrStatus !== 'completed';
+            && $vrStatus !== 'completed');
         $eligibleToLaunch = $canLaunchVr && $quest3Paired && $quest3Connected && !$activeSession;
 
         // 4. Checklist & Reasons
@@ -234,6 +235,8 @@ class VrStatusController extends Controller
 
         return $this->successResponse([
             'scene_slug' => $module->slug,
+            'access_mode' => $instructorMode ? 'instructor' : 'student',
+            'user_role' => $user->role,
             'scene_unlocked' => $sceneUnlocked,
             'previous_scene_slug' => $previousSceneSlug,
             'next_scene_slug' => $nextSceneSlug,
@@ -311,5 +314,13 @@ class VrStatusController extends Controller
         }
 
         return $this->hasPassedPosttest($userId, (int) $moduleId);
+    }
+
+    private function canUseInstructorMode($user): bool
+    {
+        $role = strtolower((string) $user->role);
+
+        return in_array($role, ['admin', 'super_admin', 'superadmin', 'instructor', 'dosen', 'lecturer'], true)
+            || (bool) $user->can_bypass_prerequisites;
     }
 }

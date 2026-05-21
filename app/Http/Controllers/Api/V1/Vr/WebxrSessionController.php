@@ -32,9 +32,10 @@ class WebxrSessionController extends Controller
 
         $user = $request->user();
         $scene = Scene::where('slug', $request->scene_slug)->active()->firstOrFail();
+        $instructorMode = $this->canUseInstructorMode($user);
 
         // Check scene unlock
-        if (!$scene->isUnlockedFor($user)) {
+        if (!$instructorMode && !$scene->isUnlockedFor($user)) {
             return $this->errorResponse('Scene ini masih terkunci. Selesaikan scene sebelumnya terlebih dahulu.', 403);
         }
 
@@ -61,6 +62,8 @@ class WebxrSessionController extends Controller
             'summary_json' => [
                 'device_info' => $request->device_info,
                 'scene_slug' => $scene->slug,
+                'access_mode' => $instructorMode ? 'instructor' : 'student',
+                'role' => $user->role,
             ],
         ]);
 
@@ -479,5 +482,13 @@ class WebxrSessionController extends Controller
             'last_active_step' => 'post_test',
             'last_accessed_at' => now(),
         ]);
+    }
+
+    private function canUseInstructorMode($user): bool
+    {
+        $role = strtolower((string) $user->role);
+
+        return in_array($role, ['admin', 'super_admin', 'superadmin', 'instructor', 'dosen', 'lecturer'], true)
+            || (bool) $user->can_bypass_prerequisites;
     }
 }
