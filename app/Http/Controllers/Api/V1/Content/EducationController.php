@@ -24,10 +24,6 @@ class EducationController extends Controller
         if ($type) {
             $query->where('type', $type);
             
-            // If filtering for modules, ensure they are linked to a TrainingModule
-            if (strtolower($type) === 'module') {
-                $query->whereNotNull('training_module_id');
-            }
         }
 
         if ($search) {
@@ -46,7 +42,11 @@ class EducationController extends Controller
             $query->where('level', $level);
         }
 
-        $contents = $query->with('trainingModule')->latest()->paginate($request->query('per_page', 50));
+        $contents = $query
+            ->with('trainingModule')
+            ->orderBy('code')
+            ->latest()
+            ->paginate($request->query('per_page', 50));
 
         return EducationResource::collection($contents);
     }

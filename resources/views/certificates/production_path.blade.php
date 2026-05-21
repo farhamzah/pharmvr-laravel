@@ -5,191 +5,274 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>{{ $certificate->certificate_id }} - PharmVR Certificate</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        @page {
+            size: A4 landscape;
+            margin: 10mm;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: DejaVu Sans, Arial, Helvetica, sans-serif;
-            font-size: 11pt;
+            font-size: 9.6pt;
             color: #172033;
             background: #ffffff;
+            margin: 0;
+            padding: 0;
+            width: 100%;
         }
 
         .page {
+            width: auto;
+            max-width: 100%;
+            padding: 8mm;
+            border: 2.4mm solid #0b2038;
+            background: #f8fbff;
+            overflow: hidden;
+        }
+
+        .shell {
             width: 100%;
-            padding: 24px 32px;
-            border: 10px solid #0f2438;
+            max-width: 100%;
+            min-height: 160mm;
+            padding: 7mm 8mm;
+            border: 1.2pt solid #63e6f5;
+            background: #ffffff;
+            overflow: hidden;
         }
 
-        .outer-border {
-            border: 2px solid #38bdf8;
-            padding: 18px 24px;
+        .top-table,
+        .meta-table,
+        .footer-table {
+            width: 100%;
+            max-width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
         }
 
-        /* ── Header ── */
-        .brand {
-            text-align: center;
-            font-size: 13pt;
+        .brand-cell {
+            width: 45%;
+            vertical-align: top;
+        }
+
+        .badge-cell {
+            width: 55%;
+            text-align: right;
+            vertical-align: top;
+            padding-right: 4mm;
+        }
+
+        .brand-mark {
+            display: inline-block;
+            padding: 6px 10px;
+            background: #0b2038;
+            color: #67e8f9;
+            font-size: 12pt;
             font-weight: bold;
-            letter-spacing: 6px;
-            color: #0f91b8;
+            letter-spacing: 3px;
             text-transform: uppercase;
+        }
+
+        .brand-subtitle {
+            margin-top: 6px;
+            color: #526174;
+            font-size: 7pt;
+            font-weight: bold;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .completion-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border: 1px solid #22c55e;
+            background: #ecfdf5;
+            color: #0f7a45;
+            font-size: 7.2pt;
+            font-weight: bold;
+            letter-spacing: .9px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .accent-line {
+            height: 3px;
+            margin: 10px 0 14px;
+            background: #67e8f9;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 27pt;
+            font-weight: bold;
+            color: #0b2038;
+            letter-spacing: .5px;
             margin-bottom: 4px;
         }
 
-        .cert-title {
+        .subtitle {
+            width: 84%;
+            margin: 0 auto 12px;
             text-align: center;
-            font-size: 26pt;
-            font-weight: bold;
-            color: #0f2438;
-            margin-bottom: 3px;
-        }
-
-        .cert-subtitle {
-            text-align: center;
-            font-size: 9pt;
             color: #526174;
-            margin-bottom: 12px;
+            font-size: 8.5pt;
+            line-height: 1.45;
         }
 
-        .divider {
-            border: none;
-            border-top: 1px solid #94a3b8;
-            margin: 10px 0;
-        }
-
-        /* ── Recipient ── */
-        .recipient-section {
+        .recipient {
             text-align: center;
-            margin: 12px 0;
+            margin: 11px 0 11px;
         }
 
         .recipient-label {
-            font-size: 8pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
             color: #64748b;
+            font-size: 7.3pt;
+            font-weight: bold;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
         }
 
         .recipient-name {
-            font-size: 20pt;
+            margin-top: 5px;
+            color: #0b2038;
+            font-size: 21pt;
             font-weight: bold;
-            color: #0f2438;
-            margin-top: 4px;
         }
 
-        /* ── Path Title ── */
         .path-box {
-            border: 1px solid #d8e0e7;
-            background: #f8fafc;
-            padding: 8px 16px;
+            width: 82%;
+            max-width: 100%;
+            margin: 0 auto 12px;
+            padding: 8px 12px;
             text-align: center;
-            margin: 10px auto;
-            width: 75%;
+            border: 1px solid #d8e0e7;
+            background: #f6fbff;
         }
 
         .path-label {
-            font-size: 8pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
             color: #64748b;
-            margin-bottom: 3px;
+            font-size: 7pt;
+            font-weight: bold;
+            letter-spacing: 1.7px;
+            text-transform: uppercase;
         }
 
         .path-title {
-            font-size: 13pt;
+            margin-top: 4px;
+            color: #0b2038;
+            font-size: 12pt;
             font-weight: bold;
-            color: #0f2438;
         }
 
-        /* ── Meta Table ── */
         .meta-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px;
+            margin-top: 6px;
         }
 
         .meta-table td {
+            width: 25%;
+            padding: 7px 8px;
             border: 1px solid #d8e0e7;
-            padding: 8px 12px;
-            vertical-align: top;
             background: #fbfdff;
+            vertical-align: top;
+            word-wrap: break-word;
         }
 
         .meta-label {
-            font-size: 7pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #64748b;
             display: block;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
+            color: #64748b;
+            font-size: 6.5pt;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .meta-value {
-            font-size: 10pt;
-            font-weight: bold;
             color: #172033;
+            font-size: 8.5pt;
+            font-weight: bold;
+            line-height: 1.25;
+            word-wrap: break-word;
         }
 
-        /* ── Footer with QR ── */
         .footer-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
+            margin-top: 12px;
         }
 
         .footer-table td {
             vertical-align: bottom;
-            padding: 0 6px;
+            padding: 0 4px;
+            word-wrap: break-word;
         }
 
-        .footer-left {
-            font-size: 8pt;
+        .verify-cell {
+            width: 45%;
             color: #526174;
-            width: 50%;
+            font-size: 7pt;
+            line-height: 1.42;
         }
 
-        .footer-center {
+        .verify-title {
+            color: #0b2038;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .verify-url {
+            color: #0f91b8;
+            font-size: 6.2pt;
+            word-break: break-all;
+            word-wrap: break-word;
+        }
+
+        .qr-cell {
+            width: 17%;
             text-align: center;
-            width: 20%;
             vertical-align: middle;
         }
 
-        .footer-right {
+        .qr-label {
+            margin-top: 4px;
+            color: #64748b;
+            font-size: 6.8pt;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+        }
+
+        .signature-cell {
+            width: 38%;
             text-align: center;
-            width: 30%;
+            padding-right: 4mm;
         }
 
         .signature-line {
             border-top: 1px solid #94a3b8;
-            padding-top: 5px;
-            font-size: 9pt;
+            padding-top: 6px;
+            color: #0b2038;
+            font-size: 8pt;
             font-weight: bold;
-            color: #0f2438;
         }
 
-        .qr-label {
-            font-size: 7pt;
+        .signature-subtitle {
+            margin-top: 3px;
             color: #64748b;
-            text-align: center;
-            margin-top: 4px;
-        }
-
-        .verify-url {
-            font-size: 6.5pt;
-            color: #0f91b8;
-            word-break: break-all;
-            text-align: center;
-            margin-top: 2px;
+            font-size: 7pt;
+            letter-spacing: .8px;
+            text-transform: uppercase;
         }
 
         .watermark-note {
-            text-align: center;
-            font-size: 7pt;
-            color: #94a3b8;
             margin-top: 8px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 6.2pt;
+            letter-spacing: .4px;
+            word-wrap: break-word;
         }
     </style>
 </head>
@@ -206,63 +289,66 @@
     @endphp
 
     <div class="page">
-        <div class="outer-border">
+        <div class="shell">
+            <table class="top-table">
+                <tr>
+                    <td class="brand-cell">
+                        <div class="brand-mark">PharmVR</div>
+                        <div class="brand-subtitle">CPOB / GMP Virtual Training</div>
+                    </td>
+                    <td class="badge-cell">
+                        <div class="completion-badge">Production Path Completed</div>
+                    </td>
+                </tr>
+            </table>
 
-            {{-- Brand --}}
-            <div class="brand">PharmVR</div>
+            <div class="accent-line"></div>
 
-            {{-- Title --}}
-            <div class="cert-title">Certificate of Completion</div>
-            <div class="cert-subtitle">
-                This certificate is awarded for completing the PharmVR CPOB/GMP virtual reality production training path.
+            <div class="title">Certificate of Completion</div>
+            <div class="subtitle">
+                Awarded for completing the PharmVR non-sterile solid dosage Production Path with validated VR sessions and post-test completion.
             </div>
 
-            <hr class="divider">
-
-            {{-- Recipient --}}
-            <div class="recipient-section">
+            <div class="recipient">
                 <div class="recipient-label">This certifies that</div>
                 <div class="recipient-name">{{ $recipientName }}</div>
             </div>
 
-            {{-- Path Title --}}
             <div class="path-box">
                 <div class="path-label">has successfully completed</div>
                 <div class="path-title">{{ $productionPathTitle }}</div>
             </div>
 
-            {{-- Meta Grid --}}
             <table class="meta-table">
                 <tr>
-                    <td style="width:25%">
-                        <span class="meta-label">Completion</span>
-                        <span class="meta-value">Production Path Completed</span>
+                    <td>
+                        <span class="meta-label">Status</span>
+                        <span class="meta-value">Certificate Eligible</span>
                     </td>
-                    <td style="width:25%">
+                    <td>
                         <span class="meta-label">Scenes Completed</span>
                         <span class="meta-value">{{ $completedScenesCount }} / {{ $totalScenesCount }} scenes</span>
                     </td>
-                    <td style="width:25%">
+                    <td>
                         <span class="meta-label">Certificate ID</span>
                         <span class="meta-value">{{ $certificate->certificate_id }}</span>
                     </td>
-                    <td style="width:25%">
+                    <td>
                         <span class="meta-label">Issued Date</span>
                         <span class="meta-value">{{ $issuedAt }}</span>
                     </td>
                 </tr>
             </table>
 
-            {{-- Footer: left info | center QR | right signature --}}
             <table class="footer-table">
                 <tr>
-                    <td class="footer-left">
-                        PharmVR &mdash; CPOB/GMP Virtual Reality Training<br>
-                        Non-Sterile Solid Dosage Production Path<br><br>
-                        <strong>Verify this certificate:</strong><br>
-                        {{ $verifyUrl }}
+                    <td class="verify-cell">
+                        <div class="verify-title">Verify this certificate</div>
+                        <div class="verify-url">{{ $verifyUrl }}</div>
+                        <br>
+                        Official digital certificate for PharmVR CPOB/GMP training. The verification record confirms the certificate ID, recipient, issue date, and completion status.
                     </td>
-                    <td class="footer-center">
+                    <td class="qr-cell">
                         @if($qrMarkup)
                             {!! $qrMarkup !!}
                             <div class="qr-label">Scan to verify</div>
@@ -270,16 +356,16 @@
                             <div class="qr-label">Verification URL above</div>
                         @endif
                     </td>
-                    <td class="footer-right">
+                    <td class="signature-cell">
                         <div class="signature-line">Authorized by PharmVR System</div>
+                        <div class="signature-subtitle">Digital Training Record</div>
                     </td>
                 </tr>
             </table>
 
             <div class="watermark-note">
-                Official digital certificate &bull; {{ $certificate->certificate_id }} &bull; PharmVR CPOB/GMP Training
+                {{ $certificate->certificate_id }} - PharmVR CPOB/GMP Production Path Certificate
             </div>
-
         </div>
     </div>
 </body>

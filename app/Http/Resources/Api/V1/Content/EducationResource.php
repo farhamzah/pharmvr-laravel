@@ -35,6 +35,14 @@ class EducationResource extends JsonResource
         // Emulator Bridge: Standardize localhost to 10.0.2.2 if accessed from emulator
         // but dynamic URL should handle this if request host is 10.0.2.2
 
+        $learningPath = is_array($this->learning_path) ? $this->learning_path : [];
+        $sceneSlug = $learningPath['scene_slug'] ?? null;
+        $thumbnailType = $learningPath['thumbnail_type'] ?? $sceneSlug ?? $this->slug;
+        $order = $learningPath['order'] ?? null;
+        if (!$order && preg_match('/PH-CPOB-(\d+)/', (string) $this->code, $matches)) {
+            $order = (int) $matches[1];
+        }
+
         $data = [
             'id'                 => $this->id,
             'training_module_id' => $this->training_module_id,
@@ -43,13 +51,22 @@ class EducationResource extends JsonResource
             'description'        => $this->description,
             'code'               => $this->code,
             'type'               => $this->type,
+            'source_type'        => $this->source_type,
             'category'           => $this->category,
             'level'              => $this->level,
+            'scene_slug'         => $sceneSlug,
+            'order'              => $order,
+            'status'             => $this->is_active ? 'available' : 'locked',
+            'thumbnail_type'     => $thumbnailType,
+            'route'              => $learningPath['route'] ?? null,
             'thumbnail_url'      => $thumbnailUrl,
+            'image_url'          => $thumbnailUrl,
+            'file_url'           => $this->file_url,
             'video_url'          => $this->video_url,
             'video_id'           => $this->video_id,
             'platform'           => $this->platform,
             'duration_minutes'   => $this->duration_minutes,
+            'pages_count'        => $this->pages_count,
             'created_at'         => $this->created_at?->toIso8601String(),
             'updated_at'         => $this->updated_at?->toIso8601String(),
         ];
@@ -61,7 +78,7 @@ class EducationResource extends JsonResource
         ];
 
         if ($typeNormalized === 'module') {
-            $data['learning_path'] = $this->learning_path ?? [
+            $data['learning_path'] = $learningPath ?: [
                 'has_pre_test'  => true,
                 'has_vr_sim'    => true,
                 'has_post_test' => true,

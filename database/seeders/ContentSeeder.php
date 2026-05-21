@@ -77,100 +77,109 @@ class ContentSeeder extends Seeder
 
         // 3. Seed Training Modules (VR)
         $vrLab = TrainingModule::create([
-            'title'              => 'Pengenalan Lab Steril (VR)',
-            'slug'               => 'pengenalan-lab-steril',
-            'description'        => 'Tur virtual ke dalam fasilitas produksi steril CPOB.',
+            'title'              => 'Hygiene & Personnel Preparation',
+            'slug'               => 'hygiene',
+            'description'        => 'Persiapan hygiene personel sebelum memasuki jalur produksi tablet non-steril.',
             'difficulty'         => 'Beginner',
-            'estimated_duration' => 15,
+            'estimated_duration' => 20,
             'cover_image_path'   => 'assets/images/news/compliance.jpg',
         ]);
 
         $vrGowning = TrainingModule::create([
-            'title'              => 'Prosedur Gowning Level 3',
-            'slug'               => 'prosedur-gowning-level-3',
-            'description'        => 'Simulasi mengenakan pakaian steril lengkap untuk kelas A.',
+            'title'              => 'Gowning & Airlock Procedure',
+            'slug'               => 'gowning_airlock',
+            'description'        => 'Simulasi urutan gowning dan kontrol airlock untuk produksi tablet.',
             'difficulty'         => 'Intermediate',
-            'estimated_duration' => 10,
+            'estimated_duration' => 25,
             'cover_image_path'   => 'assets/images/news/lab.jpg',
         ]);
 
         $vrGmp = TrainingModule::create([
-            'title'              => 'GMP Sterile Production',
-            'slug'               => 'gmp-sterile',
-            'description'        => 'Basics of sterile production and cleanroom protocols.',
+            'title'              => 'Production Corridor & Material Flow',
+            'slug'               => 'production_corridor',
+            'description'        => 'Alur personel, material, status ruangan, dan pemisahan jalur produksi.',
             'difficulty'         => 'Beginner',
-            'estimated_duration' => 20,
+            'estimated_duration' => 25,
             'cover_image_path'   => 'assets/images/news/logistics.jpg',
         ]);
 
         // 2. Seed Education Contents
         EducationContent::create([
-            'code'             => 'PH-GMP-01',
+            'code'             => 'PH-CPOB-01',
             'training_module_id' => $vrLab->id,
-            'title'            => 'Pengenalan Lab Steril (VR)',
-            'slug'             => 'pengenalan-lab-steril-education',
+            'title'            => 'Hygiene & Personnel Preparation',
+            'slug'             => 'hygiene',
             'type'             => 'Module',
-            'category'         => 'CPOB',
-            'related_topic'    => 'Personal Hygiene & Gowning',
-            'level'            => 'Intermediate',
-            'tags'             => ['Steril', 'Validation', 'ISO 5'],
-            'learning_path'    => [
-                'has_pre_test'  => true,
-                'has_vr_sim'    => true,
-                'has_post_test' => true,
-            ],
-            'next_step_label'  => 'Mulai Pre-Test Validasi',
-            'next_step_action' => 'open_assessment',
-            'description'      => 'Modul mendalam mengenai klasifikasi ruang bersih Kelas A hingga D sesuai aneks 1 CPOB terbaru.',
-            'thumbnail_url'    => 'assets/images/news/compliance.jpg',
-            'duration_minutes' => 60,
-            'pages_count'      => 20,
-        ]);
-
-        EducationContent::create([
-            'code'             => 'PH-GW-03',
-            'training_module_id' => $vrGowning->id,
-            'title'            => 'Prosedur Gowning Level 3',
-            'slug'             => 'prosedur-gowning-level-3-education',
-            'type'             => 'Module',
-            'category'         => 'CPOB',
-            'related_topic'    => 'Gowning',
-            'level'            => 'Intermediate',
-            'tags'             => ['Steril', 'Gowning'],
-            'learning_path'    => [
-                'has_pre_test'  => true,
-                'has_vr_sim'    => true,
-                'has_post_test' => true,
-            ],
-            'next_step_label'  => 'Mulai Pre-Test Gowning',
-            'next_step_action' => 'open_assessment',
-            'description'      => 'Pelajari prosedur gowning lengkap untuk memasuki area produksi kelas A.',
-            'thumbnail_url'    => 'assets/images/news/lab.jpg',
-            'duration_minutes' => 30,
-            'pages_count'      => 15,
-        ]);
-
-        EducationContent::create([
-            'code'             => 'PH-GMP-PROD',
-            'training_module_id' => $vrGmp->id,
-            'title'            => 'GMP Sterile Production',
-            'slug'             => 'gmp-sterile-production-education',
-            'type'             => 'Module',
-            'category'         => 'CPOB',
-            'related_topic'    => 'Production',
+            'category'         => 'CPOB Non-Sterile Tablet',
+            'related_topic'    => 'Production Path',
             'level'            => 'Beginner',
-            'tags'             => ['GMP', 'Sterile', 'Production'],
+            'tags'             => ['CPOB', 'GMP', 'Non-Sterile Tablet', 'Production Path'],
             'learning_path'    => [
                 'has_pre_test'  => true,
                 'has_vr_sim'    => true,
                 'has_post_test' => true,
+                'scene_slug'    => 'hygiene',
+                'order'         => 1,
+                'thumbnail_type' => 'hygiene',
             ],
-            'next_step_label'  => 'Mulai Belajar GMP',
-            'next_step_action' => 'open_assessment',
-            'description'      => 'Pelajari dasar-dasar produksi steril sesuai standar GMP internasional.',
-            'thumbnail_url'    => 'assets/images/news/logistics.jpg',
-            'duration_minutes' => 45,
-            'pages_count'      => 12,
+            'next_step_label'  => 'Mulai Belajar',
+            'next_step_action' => 'open_production_path',
+            'description'      => 'Pelajari hygiene personel, kebersihan tangan, perilaku area produksi, dan persiapan awal sebelum memasuki jalur produksi tablet non-steril.',
+            'thumbnail_url'    => null,
+            'duration_minutes' => 20,
+            'pages_count'      => null,
+        ]);
+
+        EducationContent::create([
+            'code'             => 'PH-CPOB-02',
+            'training_module_id' => $vrGowning->id,
+            'title'            => 'Gowning & Airlock Procedure',
+            'slug'             => 'gowning_airlock',
+            'type'             => 'Module',
+            'category'         => 'CPOB Non-Sterile Tablet',
+            'related_topic'    => 'Production Path',
+            'level'            => 'Intermediate',
+            'tags'             => ['CPOB', 'GMP', 'Non-Sterile Tablet', 'Production Path'],
+            'learning_path'    => [
+                'has_pre_test'  => true,
+                'has_vr_sim'    => true,
+                'has_post_test' => true,
+                'scene_slug'    => 'gowning',
+                'order'         => 2,
+                'thumbnail_type' => 'gowning',
+            ],
+            'next_step_label'  => 'Mulai Belajar',
+            'next_step_action' => 'open_production_path',
+            'description'      => 'Latih urutan gowning dan kontrol airlock untuk menjaga kebersihan personel serta mencegah kontaminasi silang pada area produksi.',
+            'thumbnail_url'    => null,
+            'duration_minutes' => 25,
+            'pages_count'      => null,
+        ]);
+
+        EducationContent::create([
+            'code'             => 'PH-CPOB-03',
+            'training_module_id' => $vrGmp->id,
+            'title'            => 'Production Corridor & Material Flow',
+            'slug'             => 'production_corridor',
+            'type'             => 'Module',
+            'category'         => 'CPOB Non-Sterile Tablet',
+            'related_topic'    => 'Production Path',
+            'level'            => 'Beginner',
+            'tags'             => ['CPOB', 'GMP', 'Non-Sterile Tablet', 'Production Path'],
+            'learning_path'    => [
+                'has_pre_test'  => true,
+                'has_vr_sim'    => true,
+                'has_post_test' => true,
+                'scene_slug'    => 'production_corridor',
+                'order'         => 3,
+                'thumbnail_type' => 'production_corridor',
+            ],
+            'next_step_label'  => 'Mulai Belajar',
+            'next_step_action' => 'open_production_path',
+            'description'      => 'Kenali alur personel, material, status ruangan, dan prinsip pemisahan jalur dalam koridor produksi CPOB non-steril.',
+            'thumbnail_url'    => null,
+            'duration_minutes' => 25,
+            'pages_count'      => null,
         ]);
 
         EducationContent::create([
@@ -352,5 +361,7 @@ class ContentSeeder extends Seeder
                 }
             }
         }
+
+        $this->call(EducationModuleSeeder::class);
     }
 }

@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             UserSeeder::class,
             ContentSeeder::class,
+            EducationModuleSeeder::class,
             AssessmentSeeder::class,
             HygieneAssessmentSeeder::class,
             ProductionPathAssessmentSeeder::class,

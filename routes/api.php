@@ -57,6 +57,8 @@ Route::prefix('v1')->group(function () {
         // Edukasi
         Route::get('/edukasi', [EducationController::class, 'index']);
         Route::get('/edukasi/{slug}', [EducationController::class, 'show']);
+        Route::get('/education/modules', [EducationController::class, 'index']);
+        Route::get('/education/modules/{slug}', [EducationController::class, 'show']);
 
         // News
         Route::get('/news', [NewsController::class, 'index']);
