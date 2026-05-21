@@ -13,6 +13,8 @@ class WebxrHandoffTest extends TestCase
 
     public function test_authenticated_user_can_create_handoff_token(): void
     {
+        config(['app.webxr_base_url' => 'https://xr.pharmvr.cloud']);
+
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)
@@ -25,6 +27,13 @@ class WebxrHandoffTest extends TestCase
             ]);
 
         $plainToken = $response->json('data.handoff_token');
+        $webxrUrl = $response->json('data.webxr_url');
+
+        $this->assertStringStartsWith(
+            'https://xr.pharmvr.cloud/lobby?handoff_token=',
+            $webxrUrl
+        );
+        $this->assertStringContainsString(rawurlencode($plainToken), $webxrUrl);
 
         $this->assertDatabaseHas('webxr_handoff_tokens', [
             'user_id' => $user->id,
@@ -37,6 +46,26 @@ class WebxrHandoffTest extends TestCase
     {
         $this->postJson('/api/v1/auth/webxr/handoff')
             ->assertUnauthorized();
+    }
+
+    public function test_handoff_token_uses_requested_safe_webxr_target_path(): void
+    {
+        config(['app.webxr_base_url' => 'https://xr.pharmvr.cloud']);
+
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->postJson('/api/v1/auth/webxr/handoff', [
+                'target_path' => '/scene/hygiene',
+            ]);
+
+        $response->assertOk()
+            ->assertJsonPath('success', true);
+
+        $this->assertStringStartsWith(
+            'https://xr.pharmvr.cloud/scene/hygiene?handoff_token=',
+            $response->json('data.webxr_url')
+        );
     }
 
     public function test_valid_handoff_token_can_be_exchanged_once(): void

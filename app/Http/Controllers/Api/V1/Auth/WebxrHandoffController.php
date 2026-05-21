@@ -18,6 +18,10 @@ class WebxrHandoffController extends Controller
 
     public function create(Request $request): JsonResponse
     {
+        $validated = $request->validate([
+            'target_path' => ['sometimes', 'string', 'max:120'],
+        ]);
+
         $user = $request->user();
         $plainToken = Str::random(64);
         $expiresAt = now()->addSeconds(self::EXPIRY_SECONDS);
@@ -28,14 +32,31 @@ class WebxrHandoffController extends Controller
             'expires_at' => $expiresAt,
         ]);
 
-        $webxrBaseUrl = rtrim(config('app.webxr_base_url', env('WEBXR_BASE_URL', 'https://pharmvr.cloud')), '/');
-        $webxrUrl = $webxrBaseUrl . '/scene/lobby?handoff_token=' . rawurlencode($plainToken);
+        $webxrBaseUrl = rtrim(config('app.webxr_base_url', env('WEBXR_BASE_URL', 'https://xr.pharmvr.cloud')), '/');
+        $targetPath = $this->normalizeTargetPath($validated['target_path'] ?? '/lobby');
+        $webxrUrl = $webxrBaseUrl . $targetPath . '?handoff_token=' . rawurlencode($plainToken);
 
         return $this->successResponse([
             'handoff_token' => $plainToken,
             'expires_at' => $expiresAt->toISOString(),
             'webxr_url' => $webxrUrl,
         ], 'WebXR handoff token created.');
+    }
+
+    private function normalizeTargetPath(string $targetPath): string
+    {
+        $path = parse_url($targetPath, PHP_URL_PATH) ?: '/lobby';
+        $path = '/' . ltrim($path, '/');
+
+        if ($path === '/lobby' || $path === '/report/production-path') {
+            return $path;
+        }
+
+        if (preg_match('/^\/scene\/[a-z0-9_-]+$/', $path) === 1) {
+            return $path;
+        }
+
+        return '/lobby';
     }
 
     public function exchange(Request $request): JsonResponse
