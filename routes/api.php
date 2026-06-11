@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\Ai\AiKnowledgeSourceController;
 use App\Http\Controllers\Admin\Ai\AiAvatarProfileController;
 use App\Http\Controllers\Admin\Ai\AiAvatarScenePromptController;
 use App\Http\Controllers\Admin\Api\AdminDashboardSummaryController;
+use App\Http\Controllers\Admin\Api\AdminUserController;
 use App\Http\Controllers\Api\V1\Vr\VrAiController;
 use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\Analytics\AnalyticsController;
@@ -173,6 +174,13 @@ Route::prefix('v1')->group(function () {
         // Admin Dashboard MVP
         Route::get('/admin/dashboard/summary', AdminDashboardSummaryController::class)
             ->middleware('admin.dashboard');
+
+        // Admin Users and Roles MVP
+        Route::prefix('admin/users')->middleware('admin.dashboard')->group(function () {
+            Route::get('/', [AdminUserController::class, 'index']);
+            Route::get('/{user}', [AdminUserController::class, 'show']);
+            Route::patch('/{user}/role', [AdminUserController::class, 'updateRole']);
+        });
 
         // Admin AI Management (Inside V1 for now, or separate prefix if preferred)
         Route::prefix('admin/ai')->middleware(['admin'])->group(function () {
