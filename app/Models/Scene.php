@@ -160,7 +160,7 @@ class Scene extends Model
         $userId = $userModel?->id ?? (int) $user;
 
         if ($this->slug === 'hygiene') {
-            return $this->hasCompletedAssessment($userId, 'hygiene', \App\Enums\AssessmentType::PRETEST);
+            return true;
         }
 
         if (!$this->required_previous_scene_id) {
@@ -173,11 +173,7 @@ class Scene extends Model
             return true;
         }
 
-        return VrSession::where('user_id', $userId)
-            ->where('scene_id', $this->required_previous_scene_id)
-            ->where('session_status', 'completed')
-            ->exists()
-            && $this->hasPassedAssessment($userId, $previousScene->slug, \App\Enums\AssessmentType::POSTTEST);
+        return $this->hasPassedAssessment($userId, $previousScene->slug, \App\Enums\AssessmentType::POSTTEST);
     }
 
     /**

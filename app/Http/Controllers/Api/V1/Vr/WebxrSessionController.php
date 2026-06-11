@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\V1\Vr;
 
 use App\Http\Controllers\Controller;
 use App\Models\Scene;
+use App\Models\TrainingModule;
 use App\Models\VrSession;
 use App\Models\VrStepCompletion;
+use App\Services\LearningReadinessService;
 use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -18,6 +20,10 @@ use Illuminate\Support\Facades\Log;
 class WebxrSessionController extends Controller
 {
     use ApiResponse;
+
+    public function __construct(private readonly LearningReadinessService $learningReadiness)
+    {
+    }
 
     /**
      * Start a WebXR session for a scene.
@@ -33,10 +39,22 @@ class WebxrSessionController extends Controller
         $user = $request->user();
         $scene = Scene::where('slug', $request->scene_slug)->active()->firstOrFail();
         $instructorMode = $this->canUseInstructorMode($user);
+        $module = TrainingModule::where('slug', $scene->canonicalSlug())->first();
 
         // Check scene unlock
         if (!$instructorMode && !$scene->isUnlockedFor($user)) {
             return $this->errorResponse('Scene ini masih terkunci. Selesaikan scene sebelumnya terlebih dahulu.', 403);
+        }
+
+        if (!$instructorMode && $module) {
+            $readiness = $this->learningReadiness->forModule($user, $module);
+            if (!$readiness['can_launch_vr']) {
+                return $this->errorResponse(
+                    $readiness['locked_reason'] ?? 'Scene belum memenuhi syarat untuk diluncurkan.',
+                    403,
+                    ['readiness' => $readiness]
+                );
+            }
         }
 
         // Interrupt any previous active sessions

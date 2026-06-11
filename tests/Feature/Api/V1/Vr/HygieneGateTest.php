@@ -27,7 +27,7 @@ class HygieneGateTest extends TestCase
             ->assertOk()
             ->assertJsonFragment([
                 'slug' => 'hygiene',
-                'is_locked' => true,
+                'is_locked' => false,
             ]);
 
         AssessmentAttempt::create([
@@ -43,8 +43,10 @@ class HygieneGateTest extends TestCase
         $readiness = $this->actingAs($user)->getJson('/api/v1/vr/modules/hygiene/launch-readiness');
         $readiness->assertOk()
             ->assertJsonPath('data.pre_test_completed', true)
+            ->assertJsonPath('data.pretest_completed', true)
             ->assertJsonPath('data.can_launch_vr', true)
-            ->assertJsonPath('data.vr_status', 'available')
+            ->assertJsonPath('data.eligible_to_launch', true)
+            ->assertJsonPath('data.vr_status', 'not_started')
             ->assertJsonPath('data.next_action', 'launch_vr');
 
         VrSession::create([
@@ -74,8 +76,9 @@ class HygieneGateTest extends TestCase
             ->assertOk()
             ->assertJsonPath('data.vr_status', 'completed')
             ->assertJsonPath('data.post_test_passed', false)
+            ->assertJsonPath('data.can_take_posttest', true)
             ->assertJsonPath('data.can_launch_vr', false)
-            ->assertJsonPath('data.next_action', 'posttest_required');
+            ->assertJsonPath('data.next_action', 'take_posttest');
 
         $this->assertFalse($gowningScene->fresh()->isUnlockedFor($user));
 
@@ -95,7 +98,9 @@ class HygieneGateTest extends TestCase
         $this->actingAs($user)->getJson('/api/v1/vr/modules/hygiene/launch-readiness')
             ->assertOk()
             ->assertJsonPath('data.post_test_passed', true)
-            ->assertJsonPath('data.next_action', 'next_scene_unlocked')
+            ->assertJsonPath('data.posttest_passed', true)
+            ->assertJsonPath('data.is_completed', true)
+            ->assertJsonPath('data.next_action', 'completed')
             ->assertJsonPath('data.legacy_next_action', 'gowning_unlocked')
             ->assertJsonPath('data.next_scene_slug', 'gowning');
     }
@@ -148,7 +153,11 @@ class HygieneGateTest extends TestCase
             ->assertOk()
             ->assertJsonPath('data.scene_unlocked', true)
             ->assertJsonPath('data.pre_test_completed', false)
-            ->assertJsonPath('data.next_action', 'pretest_required')
+            ->assertJsonPath('data.pretest_completed', false)
+            ->assertJsonPath('data.can_launch_vr', false)
+            ->assertJsonPath('data.eligible_to_launch', false)
+            ->assertJsonPath('data.locked_reason', 'pretest_required')
+            ->assertJsonPath('data.next_action', 'take_pretest')
             ->assertJsonPath('data.recommended_next_route', '/assessments/gowning/pre_test');
 
         AssessmentAttempt::create([
@@ -164,8 +173,10 @@ class HygieneGateTest extends TestCase
         $this->actingAs($user)->getJson('/api/v1/vr/modules/gowning/launch-readiness')
             ->assertOk()
             ->assertJsonPath('data.pre_test_completed', true)
-            ->assertJsonPath('data.vr_status', 'available')
+            ->assertJsonPath('data.pretest_completed', true)
+            ->assertJsonPath('data.vr_status', 'not_started')
             ->assertJsonPath('data.can_launch_vr', true)
+            ->assertJsonPath('data.eligible_to_launch', true)
             ->assertJsonPath('data.next_action', 'launch_vr');
 
         VrSession::create([
@@ -195,7 +206,8 @@ class HygieneGateTest extends TestCase
             ->assertOk()
             ->assertJsonPath('data.vr_status', 'completed')
             ->assertJsonPath('data.post_test_passed', false)
-            ->assertJsonPath('data.next_action', 'posttest_required')
+            ->assertJsonPath('data.can_take_posttest', true)
+            ->assertJsonPath('data.next_action', 'take_posttest')
             ->assertJsonPath('data.recommended_next_route', '/assessments/gowning/post_test');
     }
 

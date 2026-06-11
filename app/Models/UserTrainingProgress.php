@@ -64,7 +64,7 @@ class UserTrainingProgress extends Model
             case 'pre_test':
                 return $this->pre_test_status !== 'locked';
             case 'vr_sim':
-                return $this->pre_test_status === 'passed';
+                return in_array($this->pre_test_status, ['passed', 'failed', 'completed'], true);
             case 'post_test':
                 return $this->vr_status === 'completed';
             default:

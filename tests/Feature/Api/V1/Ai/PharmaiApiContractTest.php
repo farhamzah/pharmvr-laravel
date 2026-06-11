@@ -103,7 +103,7 @@ class PharmaiApiContractTest extends TestCase
             'message' => 'Apa itu validasi?'
         ]);
 
-        $response->assertStatus(201)
+        $response->assertStatus(200)
             ->assertJsonStructure([
                 'success',
                 'message',

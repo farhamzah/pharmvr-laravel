@@ -519,10 +519,12 @@ class VrPhase4Test extends TestCase
         
         $response->assertStatus(200)
             ->assertJsonPath('data.eligible_to_launch', false)
+            ->assertJsonPath('data.can_launch_vr', false)
+            ->assertJsonPath('data.pretest_completed', false)
             ->assertJsonPath('data.pre_test_passed', false)
             ->assertJsonPath('data.quest3_paired', false)
-            ->assertSee('Anda harus lulus Pre-test terlebih dahulu')
-            ->assertSee('Headset Meta Quest 3 belum dipasangkan');
+            ->assertJsonPath('data.locked_reason', 'pretest_required')
+            ->assertJsonPath('data.next_action', 'take_pretest');
 
         // 2. Setup Assessment (Pre-test)
         $assessment = \App\Models\Assessment::create([
@@ -559,6 +561,8 @@ class VrPhase4Test extends TestCase
         
         $response->assertStatus(200)
             ->assertJsonPath('data.eligible_to_launch', true)
+            ->assertJsonPath('data.can_launch_vr', true)
+            ->assertJsonPath('data.vr_status', 'not_started')
             ->assertJsonPath('data.pre_test_passed', true)
             ->assertJsonPath('data.quest3_connected', true)
             ->assertJsonPath('data.recommended_next_action', 'Luncurkan Pelatihan VR');

@@ -24,8 +24,8 @@ Route::prefix('v1')->group(function () {
     Route::get('/media/{path}', [MediaController::class, 'serve'])->where('path', '.*');
 
     // Public Auth Routes
-    Route::post('/auth/register', [AuthController::class, 'register']);
-    Route::post('/auth/login', [AuthController::class, 'login']);
+    Route::post('/auth/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
+    Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
     Route::post('/auth/google', [AuthController::class, 'googleLogin']);
     Route::post('/auth/webxr/exchange', [\App\Http\Controllers\Api\V1\Auth\WebxrHandoffController::class, 'exchange'])
         ->middleware('throttle:20,1');
@@ -53,6 +53,7 @@ Route::prefix('v1')->group(function () {
 
         // Home Hub
         Route::get('/home', [HomeController::class, 'index']);
+        Route::get('/modules/{moduleSlug}/readiness', [\App\Http\Controllers\Api\V1\Vr\VrStatusController::class, 'moduleReadiness']);
 
         // Edukasi
         Route::get('/edukasi', [EducationController::class, 'index']);
@@ -75,7 +76,8 @@ Route::prefix('v1')->group(function () {
 
         // Assessment Attempts
         Route::get('/assessment-attempts/{attempt}', [\App\Http\Controllers\Api\V1\Assessment\AssessmentController::class, 'questions']);
-        Route::post('/assessment-attempts/{attempt}/submit', [\App\Http\Controllers\Api\V1\Assessment\AssessmentController::class, 'submit']);
+        Route::post('/assessment-attempts/{attempt}/submit', [\App\Http\Controllers\Api\V1\Assessment\AssessmentController::class, 'submit'])
+            ->middleware('throttle:20,1');
         Route::get('/assessment-attempts/{attempt}/result', [\App\Http\Controllers\Api\V1\Assessment\AssessmentController::class, 'results']);
 
         // Phase 4: VR Backend (Mobile Side - Auth Required)
@@ -117,6 +119,7 @@ Route::prefix('v1')->group(function () {
 
             // Status & Readiness
             Route::get('/status', [\App\Http\Controllers\Api\V1\Vr\VrStatusController::class, 'status']);
+            Route::get('/scenes/{sceneSlug}/readiness', [\App\Http\Controllers\Api\V1\Vr\VrStatusController::class, 'sceneReadiness']);
             Route::get('/modules/{moduleSlug}/launch-readiness', [\App\Http\Controllers\Api\V1\Vr\VrStatusController::class, 'launchReadiness']);
             Route::get('/readiness/{moduleId}', [\App\Http\Controllers\Api\V1\Vr\VrStatusController::class, 'readiness']);
         });
@@ -127,9 +130,11 @@ Route::prefix('v1')->group(function () {
                 Route::get('/', [PharmaiChatController::class, 'index']);
                 Route::post('/', [PharmaiChatController::class, 'store']);
                 Route::get('/{conversation}', [PharmaiChatController::class, 'show']);
-                Route::post('/{conversation}/messages', [PharmaiChatController::class, 'sendMessage']);
+                Route::post('/{conversation}/messages', [PharmaiChatController::class, 'sendMessage'])
+                    ->middleware('throttle:30,1');
             });
-            Route::post('/chat', [PharmaiChatController::class, 'statelessChat']);
+            Route::post('/chat', [PharmaiChatController::class, 'statelessChat'])
+                ->middleware('throttle:30,1');
         });
 
         // Phase 6 & 7: Analytics, Reporting & Leaderboards
@@ -148,15 +153,19 @@ Route::prefix('v1')->group(function () {
 
         // Trusted Source AI Assistant (Student Chat & VR Guide)
         Route::prefix('ai-assistant')->group(function () {
-            Route::post('/chat/start', [AiChatController::class, 'start']);
-            Route::post('/chat/ask', [AiChatController::class, 'ask']);
+            Route::post('/chat/start', [AiChatController::class, 'start'])
+                ->middleware('throttle:30,1');
+            Route::post('/chat/ask', [AiChatController::class, 'ask'])
+                ->middleware('throttle:30,1');
             Route::get('/chat/sessions', [AiChatController::class, 'sessions']);
             Route::get('/chat/sessions/{session}', [AiChatController::class, 'showSession']);
             Route::get('/chat/sessions/{session}/messages', [AiChatController::class, 'messages']);
 
             Route::get('/avatar/profiles', [AiAvatarGuideController::class, 'profiles']);
-            Route::post('/avatar/guide', [AiAvatarGuideController::class, 'guide']);
-            Route::post('/avatar/ask', [AiAvatarGuideController::class, 'ask']);
+            Route::post('/avatar/guide', [AiAvatarGuideController::class, 'guide'])
+                ->middleware('throttle:30,1');
+            Route::post('/avatar/ask', [AiAvatarGuideController::class, 'ask'])
+                ->middleware('throttle:30,1');
             Route::get('/avatar/scenes/{sceneKey}/prompts', [AiAvatarGuideController::class, 'scenePrompts']);
         });
 
