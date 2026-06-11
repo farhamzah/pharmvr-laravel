@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\Ai\AiAvatarProfileController;
 use App\Http\Controllers\Admin\Ai\AiAvatarScenePromptController;
 use App\Http\Controllers\Admin\Api\AdminDashboardSummaryController;
 use App\Http\Controllers\Admin\Api\AdminAssessmentController;
+use App\Http\Controllers\Admin\Api\AdminAttemptController;
 use App\Http\Controllers\Admin\Api\AdminModuleController;
 use App\Http\Controllers\Admin\Api\AdminQuestionController;
 use App\Http\Controllers\Admin\Api\AdminSceneController;
@@ -212,6 +213,15 @@ Route::prefix('v1')->group(function () {
             Route::get('/{question}', [AdminQuestionController::class, 'show']);
             Route::patch('/{question}', [AdminQuestionController::class, 'update']);
         });
+
+        // Admin Attempts and Scores Monitoring MVP
+        Route::prefix('admin/attempts')->middleware('admin.dashboard')->group(function () {
+            Route::get('/', [AdminAttemptController::class, 'index']);
+            Route::get('/{attempt}', [AdminAttemptController::class, 'show']);
+        });
+
+        Route::get('admin/scores/summary', [AdminAttemptController::class, 'summary'])
+            ->middleware('admin.dashboard');
 
         // Admin AI Management (Inside V1 for now, or separate prefix if preferred)
         Route::prefix('admin/ai')->middleware(['admin'])->group(function () {
