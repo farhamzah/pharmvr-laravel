@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\UserTrainingProgress;
 
 use App\Traits\Auditable;
@@ -80,6 +81,14 @@ class TrainingModule extends Model
     public function assessments()
     {
         return $this->hasMany(Assessment::class, 'module_id');
+    }
+
+    /**
+     * Get the VR scenes linked to this training module.
+     */
+    public function scenes(): HasMany
+    {
+        return $this->hasMany(Scene::class)->orderBy('order_index');
     }
 
     /**

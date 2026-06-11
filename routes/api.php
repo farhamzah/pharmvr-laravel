@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\Ai\AiKnowledgeSourceController;
 use App\Http\Controllers\Admin\Ai\AiAvatarProfileController;
 use App\Http\Controllers\Admin\Ai\AiAvatarScenePromptController;
 use App\Http\Controllers\Admin\Api\AdminDashboardSummaryController;
+use App\Http\Controllers\Admin\Api\AdminModuleController;
+use App\Http\Controllers\Admin\Api\AdminSceneController;
 use App\Http\Controllers\Admin\Api\AdminUserController;
 use App\Http\Controllers\Api\V1\Vr\VrAiController;
 use App\Http\Controllers\Api\V1\MediaController;
@@ -180,6 +182,19 @@ Route::prefix('v1')->group(function () {
             Route::get('/', [AdminUserController::class, 'index']);
             Route::get('/{user}', [AdminUserController::class, 'show']);
             Route::patch('/{user}/role', [AdminUserController::class, 'updateRole']);
+        });
+
+        // Admin Modules and Scenes Management MVP
+        Route::prefix('admin/modules')->middleware('admin.dashboard')->group(function () {
+            Route::get('/', [AdminModuleController::class, 'index']);
+            Route::get('/{module}', [AdminModuleController::class, 'show']);
+            Route::patch('/{module}', [AdminModuleController::class, 'update']);
+        });
+
+        Route::prefix('admin/scenes')->middleware('admin.dashboard')->group(function () {
+            Route::get('/', [AdminSceneController::class, 'index']);
+            Route::get('/{scene}', [AdminSceneController::class, 'show']);
+            Route::patch('/{scene}', [AdminSceneController::class, 'update']);
         });
 
         // Admin AI Management (Inside V1 for now, or separate prefix if preferred)
