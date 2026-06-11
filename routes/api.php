@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\Ai\AiAvatarScenePromptController;
 use App\Http\Controllers\Admin\Api\AdminDashboardSummaryController;
 use App\Http\Controllers\Admin\Api\AdminAssessmentController;
 use App\Http\Controllers\Admin\Api\AdminAttemptController;
+use App\Http\Controllers\Admin\Api\AdminCompletionCertificateController;
 use App\Http\Controllers\Admin\Api\AdminModuleController;
 use App\Http\Controllers\Admin\Api\AdminQuestionController;
 use App\Http\Controllers\Admin\Api\AdminReportController;
@@ -229,6 +230,17 @@ Route::prefix('v1')->group(function () {
             Route::get('/learning-outcomes', [AdminReportController::class, 'learningOutcomes']);
             Route::get('/student-performance', [AdminReportController::class, 'studentPerformance']);
             Route::get('/student-performance/export.csv', [AdminReportController::class, 'exportStudentPerformance']);
+        });
+
+        // Admin Certificate and Completion Management MVP
+        Route::prefix('admin/completions')->middleware('admin.dashboard')->group(function () {
+            Route::get('/', [AdminCompletionCertificateController::class, 'completions']);
+            Route::get('/{user}', [AdminCompletionCertificateController::class, 'completionDetail']);
+        });
+
+        Route::prefix('admin/certificates')->middleware('admin.dashboard')->group(function () {
+            Route::get('/', [AdminCompletionCertificateController::class, 'certificates']);
+            Route::get('/eligibility', [AdminCompletionCertificateController::class, 'certificateEligibility']);
         });
 
         // Admin AI Management (Inside V1 for now, or separate prefix if preferred)
