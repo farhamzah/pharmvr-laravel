@@ -15,7 +15,9 @@ use App\Http\Controllers\Admin\Ai\AiKnowledgeSourceController;
 use App\Http\Controllers\Admin\Ai\AiAvatarProfileController;
 use App\Http\Controllers\Admin\Ai\AiAvatarScenePromptController;
 use App\Http\Controllers\Admin\Api\AdminDashboardSummaryController;
+use App\Http\Controllers\Admin\Api\AdminAssessmentController;
 use App\Http\Controllers\Admin\Api\AdminModuleController;
+use App\Http\Controllers\Admin\Api\AdminQuestionController;
 use App\Http\Controllers\Admin\Api\AdminSceneController;
 use App\Http\Controllers\Admin\Api\AdminUserController;
 use App\Http\Controllers\Api\V1\Vr\VrAiController;
@@ -195,6 +197,20 @@ Route::prefix('v1')->group(function () {
             Route::get('/', [AdminSceneController::class, 'index']);
             Route::get('/{scene}', [AdminSceneController::class, 'show']);
             Route::patch('/{scene}', [AdminSceneController::class, 'update']);
+        });
+
+        // Admin Question Bank and Assessment Management MVP
+        Route::prefix('admin/assessments')->middleware('admin.dashboard')->group(function () {
+            Route::get('/', [AdminAssessmentController::class, 'index']);
+            Route::get('/{assessment}', [AdminAssessmentController::class, 'show']);
+            Route::patch('/{assessment}', [AdminAssessmentController::class, 'update']);
+        });
+
+        Route::prefix('admin/questions')->middleware('admin.dashboard')->group(function () {
+            Route::get('/', [AdminQuestionController::class, 'index']);
+            Route::post('/', [AdminQuestionController::class, 'store']);
+            Route::get('/{question}', [AdminQuestionController::class, 'show']);
+            Route::patch('/{question}', [AdminQuestionController::class, 'update']);
         });
 
         // Admin AI Management (Inside V1 for now, or separate prefix if preferred)

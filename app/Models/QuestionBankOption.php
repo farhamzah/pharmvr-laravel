@@ -11,7 +11,7 @@ class QuestionBankOption extends Model
 
     protected $fillable = [
         'question_bank_item_id',
-        'option_label',
+        'option_key',
         'option_text',
         'is_correct',
         'sort_order',
