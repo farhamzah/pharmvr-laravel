@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\Api\AdminAssessmentController;
 use App\Http\Controllers\Admin\Api\AdminAttemptController;
 use App\Http\Controllers\Admin\Api\AdminModuleController;
 use App\Http\Controllers\Admin\Api\AdminQuestionController;
+use App\Http\Controllers\Admin\Api\AdminReportController;
 use App\Http\Controllers\Admin\Api\AdminSceneController;
 use App\Http\Controllers\Admin\Api\AdminUserController;
 use App\Http\Controllers\Api\V1\Vr\VrAiController;
@@ -222,6 +223,13 @@ Route::prefix('v1')->group(function () {
 
         Route::get('admin/scores/summary', [AdminAttemptController::class, 'summary'])
             ->middleware('admin.dashboard');
+
+        // Admin Reports and Export MVP
+        Route::prefix('admin/reports')->middleware('admin.dashboard')->group(function () {
+            Route::get('/learning-outcomes', [AdminReportController::class, 'learningOutcomes']);
+            Route::get('/student-performance', [AdminReportController::class, 'studentPerformance']);
+            Route::get('/student-performance/export.csv', [AdminReportController::class, 'exportStudentPerformance']);
+        });
 
         // Admin AI Management (Inside V1 for now, or separate prefix if preferred)
         Route::prefix('admin/ai')->middleware(['admin'])->group(function () {
