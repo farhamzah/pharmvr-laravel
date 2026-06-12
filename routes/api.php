@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\Ai\AiAvatarScenePromptController;
 use App\Http\Controllers\Admin\Api\AdminDashboardSummaryController;
 use App\Http\Controllers\Admin\Api\AdminAssessmentController;
 use App\Http\Controllers\Admin\Api\AdminAttemptController;
+use App\Http\Controllers\Admin\Api\AdminAuditLogController;
 use App\Http\Controllers\Admin\Api\AdminCompletionCertificateController;
 use App\Http\Controllers\Admin\Api\AdminModuleController;
 use App\Http\Controllers\Admin\Api\AdminQuestionController;
@@ -241,6 +242,12 @@ Route::prefix('v1')->group(function () {
         Route::prefix('admin/certificates')->middleware('admin.dashboard')->group(function () {
             Route::get('/', [AdminCompletionCertificateController::class, 'certificates']);
             Route::get('/eligibility', [AdminCompletionCertificateController::class, 'certificateEligibility']);
+        });
+
+        // Admin Security Audit Log MVP
+        Route::prefix('admin/audit-logs')->middleware('admin.dashboard')->group(function () {
+            Route::get('/', [AdminAuditLogController::class, 'index']);
+            Route::get('/{auditLog}', [AdminAuditLogController::class, 'show']);
         });
 
         // Admin AI Management (Inside V1 for now, or separate prefix if preferred)

@@ -10,6 +10,7 @@ use App\Models\QuestionBankItem;
 use App\Models\Scene;
 use App\Models\TrainingModule;
 use App\Models\User;
+use App\Services\AdminAuditLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -95,6 +96,9 @@ class AdminAssessmentController extends Controller
             return $this->forbidden('Only super_admin and admin users can update assessments.');
         }
 
+        $assessment->loadMissing('trainingModule:id,title,slug');
+        $before = $this->auditSnapshot($assessment);
+
         $validator = Validator::make($request->all(), [
             'title' => ['sometimes', 'string', 'max:255'],
             'description' => ['sometimes', 'nullable', 'string'],
@@ -139,6 +143,17 @@ class AdminAssessmentController extends Controller
 
         $assessment->save();
         $assessment->refresh()->load('trainingModule.scenes');
+
+        app(AdminAuditLogService::class)->record(
+            $request,
+            $request->user(),
+            'assessment.updated',
+            'assessment',
+            $assessment->id,
+            $assessment->title,
+            $before,
+            $this->auditSnapshot($assessment)
+        );
 
         return response()->json([
             'success' => true,
@@ -215,6 +230,24 @@ class AdminAssessmentController extends Controller
         $user = $request->user();
 
         return $user instanceof User && in_array($user->role, [User::ROLE_SUPER_ADMIN, User::ROLE_ADMIN], true);
+    }
+
+    private function auditSnapshot(Assessment $assessment): array
+    {
+        $type = $assessment->type instanceof AssessmentType ? $assessment->type->value : (string) $assessment->type;
+        $status = $assessment->status instanceof AssessmentStatus ? $assessment->status->value : (string) $assessment->status;
+
+        return [
+            'title' => $assessment->title,
+            'description' => $assessment->description,
+            'type' => $type,
+            'status' => $status,
+            'passing_score' => $assessment->passing_score,
+            'number_of_questions_to_take' => $assessment->number_of_questions_to_take,
+            'time_limit_minutes' => $assessment->time_limit_minutes,
+            'module_id' => $assessment->module_id,
+            'module_slug' => $assessment->trainingModule?->slug,
+        ];
     }
 
     private function forbidden(string $message): JsonResponse

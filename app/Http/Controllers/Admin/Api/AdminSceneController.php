@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Scene;
 use App\Models\TrainingModule;
 use App\Models\User;
+use App\Services\AdminAuditLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -107,6 +108,9 @@ class AdminSceneController extends Controller
             return $this->forbidden('Only super_admin and admin users can update scenes.');
         }
 
+        $scene->loadMissing('trainingModule:id,title,slug');
+        $before = $this->auditSnapshot($scene);
+
         $validator = Validator::make($request->all(), [
             'name' => ['sometimes', 'string', 'max:255'],
             'title' => ['sometimes', 'string', 'max:255'],
@@ -160,6 +164,17 @@ class AdminSceneController extends Controller
 
         $scene->save();
         $scene->refresh()->load('trainingModule:id,title,slug');
+
+        app(AdminAuditLogService::class)->record(
+            $request,
+            $request->user(),
+            'scene.updated',
+            'scene',
+            $scene->id,
+            $scene->title,
+            $before,
+            $this->auditSnapshot($scene)
+        );
 
         return response()->json([
             'success' => true,
@@ -235,6 +250,21 @@ class AdminSceneController extends Controller
         $user = $request->user();
 
         return $user instanceof User && in_array($user->role, [User::ROLE_SUPER_ADMIN, User::ROLE_ADMIN], true);
+    }
+
+    private function auditSnapshot(Scene $scene): array
+    {
+        return [
+            'title' => $scene->title,
+            'slug' => $scene->slug,
+            'description' => $scene->description,
+            'status' => $scene->is_active ? 'active' : 'inactive',
+            'order' => $scene->order_index,
+            'difficulty' => $scene->difficulty,
+            'estimated_duration_minutes' => $scene->estimated_minutes,
+            'module_id' => $scene->training_module_id,
+            'module_slug' => $scene->trainingModule?->slug,
+        ];
     }
 
     private function forbidden(string $message): JsonResponse

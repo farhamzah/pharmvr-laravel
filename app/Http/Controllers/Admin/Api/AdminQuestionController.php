@@ -9,6 +9,7 @@ use App\Models\QuestionBankItem;
 use App\Models\QuestionBankOption;
 use App\Models\Scene;
 use App\Models\User;
+use App\Services\AdminAuditLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -119,6 +120,17 @@ class AdminQuestionController extends Controller
             return $question->load(['options', 'trainingModule.scenes']);
         });
 
+        app(AdminAuditLogService::class)->record(
+            $request,
+            $request->user(),
+            'question.created',
+            'question_bank_item',
+            $question->id,
+            $question->question_text,
+            null,
+            $this->auditSnapshot($question, $assessment)
+        );
+
         return response()->json([
             'success' => true,
             'message' => 'Question created.',
@@ -154,6 +166,8 @@ class AdminQuestionController extends Controller
         }
 
         $data = $validator->validated();
+        $question->loadMissing(['options', 'trainingModule.scenes']);
+        $before = $this->auditSnapshot($question, $this->matchingAssessment($question));
 
         DB::transaction(function () use ($data, $question) {
             if (isset($data['assessment_id'])) {
@@ -180,6 +194,18 @@ class AdminQuestionController extends Controller
         });
 
         $question->refresh()->load(['options', 'trainingModule.scenes']);
+        $assessment = $this->matchingAssessment($question);
+
+        app(AdminAuditLogService::class)->record(
+            $request,
+            $request->user(),
+            'question.updated',
+            'question_bank_item',
+            $question->id,
+            $question->question_text,
+            $before,
+            $this->auditSnapshot($question, $assessment)
+        );
 
         return response()->json([
             'success' => true,
@@ -316,6 +342,26 @@ class AdminQuestionController extends Controller
         $user = $request->user();
 
         return $user instanceof User && in_array($user->role, [User::ROLE_SUPER_ADMIN, User::ROLE_ADMIN], true);
+    }
+
+    private function auditSnapshot(QuestionBankItem $question, ?Assessment $assessment): array
+    {
+        $usageScope = $question->usage_scope instanceof QuestionUsageScope ? $question->usage_scope->value : (string) $question->usage_scope;
+
+        return [
+            'assessment_id' => $assessment?->id,
+            'module_id' => $question->module_id,
+            'module_slug' => $question->trainingModule?->slug,
+            'question_text' => $question->question_text,
+            'type' => 'multiple_choice',
+            'usage_scope' => $usageScope,
+            'difficulty' => $question->difficulty,
+            'explanation' => $question->explanation,
+            'status' => $question->is_active ? 'active' : 'inactive',
+            'options_count' => $question->relationLoaded('options')
+                ? $question->options->count()
+                : $question->options()->count(),
+        ];
     }
 
     private function forbidden(string $message): JsonResponse

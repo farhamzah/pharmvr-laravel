@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\User;
 use App\Models\AuditLog;
+use App\Services\AdminAuditLogService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 
@@ -51,8 +52,8 @@ class UserObserver
             'action' => $action,
             'model_type' => get_class($model),
             'model_id' => $model->id,
-            'old_values' => $old,
-            'new_values' => $new,
+            'old_values' => AdminAuditLogService::sanitize($old),
+            'new_values' => AdminAuditLogService::sanitize($new),
             'ip_address' => Request::ip(),
             'user_agent' => Request::userAgent(),
         ]);

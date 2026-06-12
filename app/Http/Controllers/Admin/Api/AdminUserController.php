@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AssessmentAttempt;
 use App\Models\User;
 use App\Models\UserTrainingProgress;
+use App\Services\AdminAuditLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -124,7 +125,28 @@ class AdminUserController extends Controller
             }
         }
 
+        $before = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+        ];
+
         $user->forceFill(['role' => $newRole])->save();
+
+        app(AdminAuditLogService::class)->record(
+            $request,
+            $actor,
+            'user.role.updated',
+            'user',
+            $user->id,
+            $user->email,
+            $before,
+            [
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+            ]
+        );
 
         return response()->json([
             'success' => true,

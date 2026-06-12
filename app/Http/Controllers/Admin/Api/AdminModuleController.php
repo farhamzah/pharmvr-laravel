@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Scene;
 use App\Models\TrainingModule;
 use App\Models\User;
+use App\Services\AdminAuditLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -106,6 +107,7 @@ class AdminModuleController extends Controller
         }
 
         $firstScene = $module->scenes()->first();
+        $before = $this->auditSnapshot($module, $firstScene);
 
         $validator = Validator::make($request->all(), [
             'title' => ['sometimes', 'string', 'max:255'],
@@ -157,6 +159,18 @@ class AdminModuleController extends Controller
         }
 
         $module->refresh()->load(['scenes' => fn ($query) => $query->orderBy('order_index')]);
+        $updatedFirstScene = $module->scenes->sortBy('order_index')->first();
+
+        app(AdminAuditLogService::class)->record(
+            $request,
+            $request->user(),
+            'module.updated',
+            'training_module',
+            $module->id,
+            $module->title,
+            $before,
+            $this->auditSnapshot($module, $updatedFirstScene)
+        );
 
         return response()->json([
             'success' => true,
@@ -254,6 +268,20 @@ class AdminModuleController extends Controller
         $user = $request->user();
 
         return $user instanceof User && in_array($user->role, [User::ROLE_SUPER_ADMIN, User::ROLE_ADMIN], true);
+    }
+
+    private function auditSnapshot(TrainingModule $module, ?Scene $firstScene): array
+    {
+        return [
+            'title' => $module->title,
+            'slug' => $module->slug,
+            'description' => $module->description,
+            'status' => $module->is_active ? 'active' : 'inactive',
+            'difficulty' => $module->difficulty,
+            'estimated_duration' => $module->estimated_duration,
+            'order' => $firstScene?->order_index,
+            'scene_slug' => $firstScene?->slug,
+        ];
     }
 
     private function forbidden(string $message): JsonResponse
