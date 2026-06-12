@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\UserProfile;
@@ -155,6 +156,23 @@ class User extends Authenticatable
     public function vrSessions()
     {
         return $this->hasMany(VrSession::class);
+    }
+
+    public function cohorts(): BelongsToMany
+    {
+        return $this->belongsToMany(Cohort::class)
+            ->withPivot('role_in_cohort')
+            ->withTimestamps();
+    }
+
+    public function studentCohorts(): BelongsToMany
+    {
+        return $this->cohorts()->wherePivot('role_in_cohort', Cohort::MEMBER_ROLE_STUDENT);
+    }
+
+    public function instructorCohorts(): BelongsToMany
+    {
+        return $this->cohorts()->wherePivot('role_in_cohort', Cohort::MEMBER_ROLE_INSTRUCTOR);
     }
 
     /**

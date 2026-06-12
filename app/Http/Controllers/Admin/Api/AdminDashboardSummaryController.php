@@ -9,20 +9,24 @@ use App\Models\Certificate;
 use App\Models\User;
 use App\Models\UserTrainingProgress;
 use App\Models\VrSession;
+use App\Services\InstructorScopeService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdminDashboardSummaryController extends Controller
 {
-    public function __invoke(): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
+        $actor = $request->user();
+
         return response()->json([
             'success' => true,
             'message' => 'Admin dashboard summary retrieved.',
             'data' => [
-                'metrics' => $this->metrics(),
-                'latest_vr_sessions' => $this->latestVrSessions(),
-                'latest_assessment_attempts' => $this->latestAssessmentAttempts(),
+                'metrics' => $this->metrics($actor),
+                'latest_vr_sessions' => $this->latestVrSessions($actor),
+                'latest_assessment_attempts' => $this->latestAssessmentAttempts($actor),
                 'system_health' => $this->systemHealth(),
             ],
             'meta' => (object) [],
@@ -30,42 +34,60 @@ class AdminDashboardSummaryController extends Controller
         ]);
     }
 
-    private function metrics(): array
+    private function metrics(User $actor): array
     {
-        $totalProgress = UserTrainingProgress::count();
+        $progressQuery = UserTrainingProgress::query();
+        app(InstructorScopeService::class)->scopeStudentDataForActor($progressQuery, $actor);
+
+        $totalProgress = (clone $progressQuery)->count();
         $averageCompletion = $totalProgress > 0
-            ? (float) UserTrainingProgress::avg('completion_percentage')
+            ? (float) (clone $progressQuery)->avg('completion_percentage')
             : 0;
 
+        $activeUsersQuery = User::where('status', User::STATUS_ACTIVE);
+        app(InstructorScopeService::class)->scopeUsersForActor($activeUsersQuery, $actor);
+
+        $activeVrSessionsQuery = VrSession::whereIn('session_status', ['starting', 'playing', 'in_progress'])
+            ->where(function ($query) {
+                $query->whereNull('last_activity_at')
+                    ->orWhere('last_activity_at', '>=', now()->subMinutes(15));
+            });
+        app(InstructorScopeService::class)->scopeStudentDataForActor($activeVrSessionsQuery, $actor);
+
+        $certificatesQuery = Certificate::where('status', 'issued');
+        app(InstructorScopeService::class)->scopeStudentDataForActor($certificatesQuery, $actor);
+
         return [
-            'active_users' => User::where('status', User::STATUS_ACTIVE)->count(),
-            'active_vr_sessions' => VrSession::whereIn('session_status', ['starting', 'playing', 'in_progress'])
-                ->where(function ($query) {
-                    $query->whereNull('last_activity_at')
-                        ->orWhere('last_activity_at', '>=', now()->subMinutes(15));
-                })
-                ->count(),
+            'active_users' => $activeUsersQuery->count(),
+            'active_vr_sessions' => $activeVrSessionsQuery->count(),
             'completion_rate' => round($averageCompletion, 1),
-            'average_pretest_score' => $this->averageAssessmentScore(AssessmentType::PRETEST->value),
-            'average_posttest_score' => $this->averageAssessmentScore(AssessmentType::POSTTEST->value),
-            'certificate_eligible' => Certificate::where('status', 'issued')->count(),
+            'average_pretest_score' => $this->averageAssessmentScore(AssessmentType::PRETEST->value, $actor),
+            'average_posttest_score' => $this->averageAssessmentScore(AssessmentType::POSTTEST->value, $actor),
+            'certificate_eligible' => $certificatesQuery->count(),
         ];
     }
 
-    private function averageAssessmentScore(string $type): float
+    private function averageAssessmentScore(string $type, User $actor): float
     {
-        $score = AssessmentAttempt::query()
+        $query = AssessmentAttempt::query()
             ->whereNotNull('score')
-            ->whereHas('assessment', fn ($query) => $query->where('type', $type))
-            ->avg('score');
+            ->whereHas('assessment', fn ($query) => $query->where('type', $type));
+
+        app(InstructorScopeService::class)->scopeStudentDataForActor($query, $actor);
+
+        $score = $query->avg('score');
 
         return round((float) ($score ?? 0), 1);
     }
 
-    private function latestVrSessions(): array
+    private function latestVrSessions(User $actor): array
     {
-        return VrSession::with(['user:id,name,email', 'scene:id,slug,title', 'trainingModule:id,title,slug'])
-            ->latest()
+        $query = VrSession::with(['user:id,name,email', 'scene:id,slug,title', 'trainingModule:id,title,slug'])
+            ->latest();
+
+        app(InstructorScopeService::class)->scopeStudentDataForActor($query, $actor);
+
+        return $query
             ->limit(5)
             ->get()
             ->map(fn (VrSession $session) => [
@@ -96,10 +118,14 @@ class AdminDashboardSummaryController extends Controller
             ->all();
     }
 
-    private function latestAssessmentAttempts(): array
+    private function latestAssessmentAttempts(User $actor): array
     {
-        return AssessmentAttempt::with(['user:id,name,email', 'assessment:id,title,type,module_id'])
-            ->latest()
+        $query = AssessmentAttempt::with(['user:id,name,email', 'assessment:id,title,type,module_id'])
+            ->latest();
+
+        app(InstructorScopeService::class)->scopeStudentDataForActor($query, $actor);
+
+        return $query
             ->limit(5)
             ->get()
             ->map(fn (AssessmentAttempt $attempt) => [

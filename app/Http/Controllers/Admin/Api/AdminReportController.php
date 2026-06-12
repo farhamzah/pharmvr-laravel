@@ -6,6 +6,7 @@ use App\Enums\AssessmentType;
 use App\Http\Controllers\Controller;
 use App\Models\AssessmentAttempt;
 use App\Models\Scene;
+use App\Services\InstructorScopeService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -43,7 +44,7 @@ class AdminReportController extends Controller
         }
 
         $filters = $validator->validated();
-        $query = $this->attemptQuery($filters);
+        $query = $this->attemptQuery($filters, $request->user());
         $attempts = (clone $query)->get();
         $completedAttempts = $attempts->filter(fn (AssessmentAttempt $attempt) => $this->isCompletedAttempt($attempt));
         $passedAttempts = $completedAttempts->filter(fn (AssessmentAttempt $attempt) => (bool) $attempt->passed);
@@ -83,7 +84,7 @@ class AdminReportController extends Controller
 
         $filters = $validator->validated();
         $perPage = (int) ($filters['per_page'] ?? 15);
-        $attempts = $this->attemptQuery($filters)
+        $attempts = $this->attemptQuery($filters, $request->user())
             ->orderByDesc('completed_at')
             ->orderByDesc('started_at')
             ->orderByDesc('id')
@@ -116,11 +117,13 @@ class AdminReportController extends Controller
         $filters = $validator->validated();
         $filename = 'pharmvr-student-performance-' . now()->format('Ymd-His') . '.csv';
 
-        return response()->streamDownload(function () use ($filters) {
+        $actor = $request->user();
+
+        return response()->streamDownload(function () use ($filters, $actor) {
             $handle = fopen('php://output', 'w');
             fputcsv($handle, self::CSV_HEADERS);
 
-            $this->attemptQuery($filters)
+            $this->attemptQuery($filters, $actor)
                 ->orderByDesc('completed_at')
                 ->orderByDesc('started_at')
                 ->orderByDesc('id')
@@ -176,9 +179,9 @@ class AdminReportController extends Controller
         return Validator::make($request->query(), $rules);
     }
 
-    private function attemptQuery(array $filters = []): Builder
+    private function attemptQuery(array $filters = [], $actor = null): Builder
     {
-        return AssessmentAttempt::query()
+        $query = AssessmentAttempt::query()
             ->with(['user:id,name,email', 'assessment.trainingModule.scenes'])
             ->when($filters['search'] ?? null, function (Builder $query, string $search) {
                 $query->where(function (Builder $nested) use ($search) {
@@ -210,6 +213,12 @@ class AdminReportController extends Controller
             })
             ->when($filters['date_from'] ?? null, fn (Builder $query, string $date) => $query->whereDate('started_at', '>=', $date))
             ->when($filters['date_to'] ?? null, fn (Builder $query, string $date) => $query->whereDate('started_at', '<=', $date));
+
+        if ($actor) {
+            app(InstructorScopeService::class)->scopeStudentDataForActor($query, $actor);
+        }
+
+        return $query;
     }
 
     private function studentPerformanceRow(AssessmentAttempt $attempt): array

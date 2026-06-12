@@ -6,6 +6,7 @@ use App\Enums\AssessmentStatus;
 use App\Enums\AssessmentType;
 use App\Models\Assessment;
 use App\Models\AssessmentAttempt;
+use App\Models\Cohort;
 use App\Models\TrainingModule;
 use App\Models\User;
 use App\Models\UserTrainingProgress;
@@ -36,6 +37,7 @@ class AdminUsersManagementTest extends TestCase
     {
         $instructor = $this->makeUser(User::ROLE_INSTRUCTOR, 'Instructor User');
         $student = $this->makeUser(User::ROLE_STUDENT, 'Student User');
+        $this->assignStudentToInstructor($student, $instructor);
 
         $this->actingAs($instructor)
             ->getJson('/api/v1/admin/users?search=Student&role=student&status=active')
@@ -202,6 +204,15 @@ class AdminUsersManagementTest extends TestCase
             'name' => $name,
             'role' => $role,
             'status' => User::STATUS_ACTIVE,
+        ]);
+    }
+
+    private function assignStudentToInstructor(User $student, User $instructor): void
+    {
+        $cohort = Cohort::create(['name' => 'Instructor User Test Cohort']);
+        $cohort->members()->syncWithoutDetaching([
+            $instructor->id => ['role_in_cohort' => Cohort::MEMBER_ROLE_INSTRUCTOR],
+            $student->id => ['role_in_cohort' => Cohort::MEMBER_ROLE_STUDENT],
         ]);
     }
 }

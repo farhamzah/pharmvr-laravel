@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\Api\AdminDashboardSummaryController;
 use App\Http\Controllers\Admin\Api\AdminAssessmentController;
 use App\Http\Controllers\Admin\Api\AdminAttemptController;
 use App\Http\Controllers\Admin\Api\AdminAuditLogController;
+use App\Http\Controllers\Admin\Api\AdminCohortController;
 use App\Http\Controllers\Admin\Api\AdminCompletionCertificateController;
 use App\Http\Controllers\Admin\Api\AdminModuleController;
 use App\Http\Controllers\Admin\Api\AdminQuestionController;
@@ -188,6 +189,17 @@ Route::prefix('v1')->group(function () {
             Route::get('/', [AdminUserController::class, 'index']);
             Route::get('/{user}', [AdminUserController::class, 'show']);
             Route::patch('/{user}/role', [AdminUserController::class, 'updateRole']);
+        });
+
+        // Admin Cohorts and Instructor Scoping MVP
+        Route::prefix('admin/cohorts')->middleware('admin.dashboard')->group(function () {
+            Route::get('/', [AdminCohortController::class, 'index']);
+            Route::post('/', [AdminCohortController::class, 'store']);
+            Route::get('/{cohort}', [AdminCohortController::class, 'show']);
+            Route::patch('/{cohort}', [AdminCohortController::class, 'update']);
+            Route::get('/{cohort}/members', [AdminCohortController::class, 'members']);
+            Route::post('/{cohort}/members', [AdminCohortController::class, 'addMember']);
+            Route::delete('/{cohort}/members/{user}', [AdminCohortController::class, 'removeMember']);
         });
 
         // Admin Modules and Scenes Management MVP

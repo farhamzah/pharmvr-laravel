@@ -8,6 +8,7 @@ use App\Models\AssessmentAttempt;
 use App\Models\User;
 use App\Models\UserTrainingProgress;
 use App\Services\AdminAuditLogService;
+use App\Services\InstructorScopeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -46,7 +47,7 @@ class AdminUserController extends Controller
         $filters = $validator->validated();
         $perPage = (int) ($filters['per_page'] ?? 15);
 
-        $users = User::query()
+        $query = User::query()
             ->select(['id', 'name', 'email', 'role', 'status', 'created_at', 'updated_at'])
             ->when($filters['search'] ?? null, function ($query, string $search) {
                 $query->where(function ($nested) use ($search) {
@@ -55,7 +56,11 @@ class AdminUserController extends Controller
                 });
             })
             ->when($filters['role'] ?? null, fn ($query, string $role) => $query->where('role', $role))
-            ->when($filters['status'] ?? null, fn ($query, string $status) => $query->where('status', $status))
+            ->when($filters['status'] ?? null, fn ($query, string $status) => $query->where('status', $status));
+
+        app(InstructorScopeService::class)->scopeUsersForActor($query, $request->user());
+
+        $users = $query
             ->orderByDesc('created_at')
             ->orderBy('name')
             ->paginate($perPage);
@@ -76,8 +81,12 @@ class AdminUserController extends Controller
         ]);
     }
 
-    public function show(User $user): JsonResponse
+    public function show(Request $request, User $user): JsonResponse
     {
+        if (! app(InstructorScopeService::class)->canAccessStudent($request->user(), $user)) {
+            return $this->forbidden('You cannot access this user outside your assigned cohorts.');
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'User retrieved.',

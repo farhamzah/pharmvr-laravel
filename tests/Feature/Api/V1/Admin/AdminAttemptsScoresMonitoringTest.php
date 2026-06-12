@@ -7,6 +7,7 @@ use App\Enums\AssessmentType;
 use App\Enums\QuestionUsageScope;
 use App\Models\Assessment;
 use App\Models\AssessmentAttempt;
+use App\Models\Cohort;
 use App\Models\QuestionBankItem;
 use App\Models\QuestionBankOption;
 use App\Models\Scene;
@@ -38,6 +39,7 @@ class AdminAttemptsScoresMonitoringTest extends TestCase
     {
         $instructor = $this->makeUser(User::ROLE_INSTRUCTOR);
         [$attempt] = $this->makeAttemptSet();
+        $this->assignAttemptStudentToInstructor($attempt, $instructor);
 
         $this->actingAs($instructor)
             ->getJson("/api/v1/admin/attempts?status=completed&passed=1&user_id={$attempt->user_id}")
@@ -96,6 +98,7 @@ class AdminAttemptsScoresMonitoringTest extends TestCase
     {
         $instructor = $this->makeUser(User::ROLE_INSTRUCTOR);
         [$attempt] = $this->makeAttemptSet();
+        $this->assignAttemptStudentToInstructor($attempt, $instructor);
 
         $this->actingAs($instructor)
             ->getJson("/api/v1/admin/attempts/{$attempt->id}")
@@ -289,5 +292,14 @@ class AdminAttemptsScoresMonitoringTest extends TestCase
         ]);
 
         return [$attempt->load('assessment'), $assessment, $module, $question, $scene];
+    }
+
+    private function assignAttemptStudentToInstructor(AssessmentAttempt $attempt, User $instructor): void
+    {
+        $cohort = Cohort::create(['name' => 'Instructor Attempts Test Cohort']);
+        $cohort->members()->syncWithoutDetaching([
+            $instructor->id => ['role_in_cohort' => Cohort::MEMBER_ROLE_INSTRUCTOR],
+            $attempt->user_id => ['role_in_cohort' => Cohort::MEMBER_ROLE_STUDENT],
+        ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Enums\AssessmentType;
 use App\Enums\QuestionUsageScope;
 use App\Models\Assessment;
 use App\Models\AssessmentAttempt;
+use App\Models\Cohort;
 use App\Models\QuestionBankItem;
 use App\Models\QuestionBankOption;
 use App\Models\Scene;
@@ -41,7 +42,8 @@ class AdminReportsExportTest extends TestCase
     public function test_instructor_can_access_reports(): void
     {
         $instructor = $this->makeUser(User::ROLE_INSTRUCTOR);
-        $this->makeAttemptSet();
+        [$attempt] = $this->makeAttemptSet();
+        $this->assignAttemptStudentToInstructor($attempt, $instructor);
 
         $this->actingAs($instructor)
             ->getJson('/api/v1/admin/reports/learning-outcomes')
@@ -293,5 +295,14 @@ class AdminReportsExportTest extends TestCase
         ]);
 
         return [$attempt->load('assessment'), $assessment, $module, $question, $scene];
+    }
+
+    private function assignAttemptStudentToInstructor(AssessmentAttempt $attempt, User $instructor): void
+    {
+        $cohort = Cohort::create(['name' => 'Instructor Reports Test Cohort']);
+        $cohort->members()->syncWithoutDetaching([
+            $instructor->id => ['role_in_cohort' => Cohort::MEMBER_ROLE_INSTRUCTOR],
+            $attempt->user_id => ['role_in_cohort' => Cohort::MEMBER_ROLE_STUDENT],
+        ]);
     }
 }

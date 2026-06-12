@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\UserTrainingProgress;
 use App\Models\VrSession;
 use App\Services\LearningReadinessService;
+use App\Services\InstructorScopeService;
 use App\Services\ProductionPathService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -43,7 +44,7 @@ class AdminCompletionCertificateController extends Controller
 
         $filters = $validator->validated();
         $requiredModules = $this->requiredModules();
-        $rows = $this->studentQuery($filters)
+        $rows = $this->studentQuery($filters, $request->user())
             ->get()
             ->map(fn (User $user) => $this->completionSummaryRow($user, $requiredModules));
         $rows = $this->applyComputedFilters($rows, $filters);
@@ -69,6 +70,16 @@ class AdminCompletionCertificateController extends Controller
                 'meta' => null,
                 'errors' => null,
             ], 404);
+        }
+
+        if (! app(InstructorScopeService::class)->canAccessStudent($request->user(), $user)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You cannot access this completion outside your assigned cohorts.',
+                'data' => null,
+                'meta' => null,
+                'errors' => null,
+            ], 403);
         }
 
         $requiredModules = $this->requiredModules();
@@ -133,8 +144,11 @@ class AdminCompletionCertificateController extends Controller
             ->when($filters['date_from'] ?? null, fn (Builder $query, string $date) => $query->whereDate('issued_at', '>=', $date))
             ->when($filters['date_to'] ?? null, fn (Builder $query, string $date) => $query->whereDate('issued_at', '<=', $date))
             ->orderByDesc('issued_at')
-            ->orderByDesc('id')
-            ->paginate($perPage);
+            ->orderByDesc('id');
+
+        app(InstructorScopeService::class)->scopeStudentDataForActor($certificates, $request->user());
+
+        $certificates = $certificates->paginate($perPage);
 
         return response()->json([
             'success' => true,
@@ -157,7 +171,7 @@ class AdminCompletionCertificateController extends Controller
 
         $filters = $validator->validated();
         $requiredModules = $this->requiredModules();
-        $rows = $this->studentQuery($filters)
+        $rows = $this->studentQuery($filters, $request->user())
             ->get()
             ->map(fn (User $user) => $this->eligibilityRow($user, $requiredModules));
         $rows = $this->applyComputedFilters($rows, $filters);
@@ -190,9 +204,9 @@ class AdminCompletionCertificateController extends Controller
         ]);
     }
 
-    private function studentQuery(array $filters): Builder
+    private function studentQuery(array $filters, $actor = null): Builder
     {
-        return User::query()
+        $query = User::query()
             ->where('role', User::ROLE_STUDENT)
             ->select(['id', 'name', 'email', 'role', 'status', 'created_at', 'updated_at'])
             ->when($filters['search'] ?? null, fn (Builder $query, string $search) => $query
@@ -202,6 +216,12 @@ class AdminCompletionCertificateController extends Controller
             ->when($filters['user_id'] ?? null, fn (Builder $query, $userId) => $query->whereKey($userId))
             ->orderBy('name')
             ->orderBy('id');
+
+        if ($actor) {
+            app(InstructorScopeService::class)->scopeUsersForActor($query, $actor);
+        }
+
+        return $query;
     }
 
     private function requiredModules(): Collection

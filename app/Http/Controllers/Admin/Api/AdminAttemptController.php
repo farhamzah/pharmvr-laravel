@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AssessmentAttempt;
 use App\Models\QuestionBankOption;
 use App\Models\Scene;
+use App\Services\InstructorScopeService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class AdminAttemptController extends Controller
 
         $filters = $validator->validated();
         $perPage = (int) ($filters['per_page'] ?? 15);
-        $query = $this->attemptQuery($filters)
+        $query = $this->attemptQuery($filters, $request->user())
             ->orderByDesc('completed_at')
             ->orderByDesc('started_at')
             ->orderByDesc('id');
@@ -64,8 +65,12 @@ class AdminAttemptController extends Controller
         ]);
     }
 
-    public function show(AssessmentAttempt $attempt): JsonResponse
+    public function show(Request $request, AssessmentAttempt $attempt): JsonResponse
     {
+        if (! app(InstructorScopeService::class)->canAccessStudent($request->user(), $attempt->user_id)) {
+            return $this->forbidden('You cannot access this attempt outside your assigned cohorts.');
+        }
+
         $attempt->load([
             'user:id,name,email',
             'assessment.trainingModule.scenes',
@@ -99,7 +104,7 @@ class AdminAttemptController extends Controller
         }
 
         $filters = $validator->validated();
-        $baseQuery = $this->attemptQuery($filters);
+        $baseQuery = $this->attemptQuery($filters, $request->user());
         $totalAttempts = (clone $baseQuery)->count();
         $completedQuery = (clone $baseQuery)->where(function ($query) {
             $query->whereNotNull('completed_at')
@@ -121,8 +126,8 @@ class AdminAttemptController extends Controller
                 'passed_attempts' => $passedAttempts,
                 'failed_attempts' => $failedAttempts,
                 'average_score' => $this->averageScore($baseQuery),
-                'average_pretest_score' => $this->averageScore($this->typedAttemptQuery($filters, AssessmentType::PRETEST->value)),
-                'average_posttest_score' => $this->averageScore($this->typedAttemptQuery($filters, AssessmentType::POSTTEST->value)),
+                'average_pretest_score' => $this->averageScore($this->typedAttemptQuery($filters, AssessmentType::PRETEST->value, $request->user())),
+                'average_posttest_score' => $this->averageScore($this->typedAttemptQuery($filters, AssessmentType::POSTTEST->value, $request->user())),
                 'completion_rate' => $this->percentage($completedAttempts, $totalAttempts),
                 'pass_rate' => $this->percentage($passedAttempts, $completedAttempts),
             ],
@@ -131,9 +136,9 @@ class AdminAttemptController extends Controller
         ]);
     }
 
-    private function attemptQuery(array $filters = []): Builder
+    private function attemptQuery(array $filters = [], $actor = null): Builder
     {
-        return AssessmentAttempt::query()
+        $query = AssessmentAttempt::query()
             ->with(['user:id,name,email', 'assessment.trainingModule.scenes'])
             ->when($filters['search'] ?? null, function (Builder $query, string $search) {
                 $query->where(function (Builder $nested) use ($search) {
@@ -165,13 +170,19 @@ class AdminAttemptController extends Controller
             })
             ->when($filters['date_from'] ?? null, fn (Builder $query, string $date) => $query->whereDate('started_at', '>=', $date))
             ->when($filters['date_to'] ?? null, fn (Builder $query, string $date) => $query->whereDate('started_at', '<=', $date));
+
+        if ($actor) {
+            app(InstructorScopeService::class)->scopeStudentDataForActor($query, $actor);
+        }
+
+        return $query;
     }
 
-    private function typedAttemptQuery(array $filters, string $type): Builder
+    private function typedAttemptQuery(array $filters, string $type, $actor = null): Builder
     {
         $filters['type'] = $type;
 
-        return $this->attemptQuery($filters);
+        return $this->attemptQuery($filters, $actor);
     }
 
     private function attemptSummary(AssessmentAttempt $attempt): array
@@ -312,5 +323,16 @@ class AdminAttemptController extends Controller
             'meta' => null,
             'errors' => $errors,
         ], 422);
+    }
+
+    private function forbidden(string $message): JsonResponse
+    {
+        return response()->json([
+            'success' => false,
+            'message' => $message,
+            'data' => null,
+            'meta' => null,
+            'errors' => null,
+        ], 403);
     }
 }

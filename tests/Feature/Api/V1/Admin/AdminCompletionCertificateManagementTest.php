@@ -7,6 +7,7 @@ use App\Enums\AssessmentType;
 use App\Models\Assessment;
 use App\Models\AssessmentAttempt;
 use App\Models\Certificate;
+use App\Models\Cohort;
 use App\Models\Scene;
 use App\Models\TrainingModule;
 use App\Models\User;
@@ -38,6 +39,7 @@ class AdminCompletionCertificateManagementTest extends TestCase
     {
         $instructor = $this->makeUser(User::ROLE_INSTRUCTOR);
         $student = $this->makeUser(User::ROLE_STUDENT);
+        $this->assignStudentToInstructor($student, $instructor);
         $this->makeProductionPathModules();
         $this->completeModuleFor($student, 'hygiene');
 
@@ -326,6 +328,15 @@ class AdminCompletionCertificateManagementTest extends TestCase
             'status' => 'issued',
             'issued_at' => now(),
             'metadata_json' => ['source' => 'feature-test'],
+        ]);
+    }
+
+    private function assignStudentToInstructor(User $student, User $instructor): void
+    {
+        $cohort = Cohort::create(['name' => 'Instructor Completions Test Cohort']);
+        $cohort->members()->syncWithoutDetaching([
+            $instructor->id => ['role_in_cohort' => Cohort::MEMBER_ROLE_INSTRUCTOR],
+            $student->id => ['role_in_cohort' => Cohort::MEMBER_ROLE_STUDENT],
         ]);
     }
 }
