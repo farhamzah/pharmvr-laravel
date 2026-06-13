@@ -16,6 +16,14 @@ class EducationModuleSeeder extends Seeder
     {
         $modules = [
             [
+                'slug' => 'gmp_standard_room',
+                'title' => 'GMP Standard Room / Ruang Standar CPOB',
+                'code' => 'PH-CPOB-00',
+                'duration' => 20,
+                'scene_slug' => 'gmp_standard_room',
+                'description' => 'Foundation scene untuk mengenalkan permukaan ruang bersih, sudut lengkung, aliran HVAC, kaskade tekanan, signage, airlock, dan kesiapan peralatan sebelum masuk Production Path.',
+            ],
+            [
                 'slug' => 'hygiene',
                 'title' => 'Hygiene & Personnel Preparation',
                 'code' => 'PH-CPOB-01',

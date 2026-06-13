@@ -32,6 +32,7 @@ class Scene extends Model
     public const CANONICAL_SLUGS = [
         'lobby',
         'training_room',
+        'gmp_standard_room',
         'hygiene',
         'gowning',
         'airlock',

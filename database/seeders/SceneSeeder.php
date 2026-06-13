@@ -30,7 +30,18 @@ class SceneSeeder extends Seeder
             ]
         );
 
-        $scenes = $this->getSceneData($module->id);
+        $gmpStandardRoomModule = TrainingModule::updateOrCreate(
+            ['slug' => 'gmp_standard_room'],
+            [
+                'title' => 'GMP Standard Room / Ruang Standar CPOB',
+                'description' => 'Foundation scene untuk mengenalkan elemen desain cleanroom produksi farmasi sesuai CPOB/GMP.',
+                'difficulty' => 'beginner',
+                'estimated_duration' => 20,
+                'is_active' => true,
+            ]
+        );
+
+        $scenes = $this->getSceneData($module->id, $gmpStandardRoomModule->id);
 
         foreach ($scenes as $sceneData) {
             $steps = $sceneData['steps'];
@@ -55,9 +66,9 @@ class SceneSeeder extends Seeder
         $this->command->info('✅ Seeded ' . Scene::count() . ' scenes with ' . SceneStep::count() . ' steps.');
     }
 
-    private function getSceneData(int $moduleId): array
+    private function getSceneData(int $moduleId, int $gmpStandardRoomModuleId): array
     {
-        return $this->canonicalSceneData($moduleId);
+        return $this->canonicalSceneData($moduleId, $gmpStandardRoomModuleId);
 
         return [
             // ─── SCENE 1: Training Room ────────────────────────
@@ -578,7 +589,7 @@ class SceneSeeder extends Seeder
         ];
     }
 
-    private function canonicalSceneData(int $moduleId): array
+    private function canonicalSceneData(int $moduleId, int $gmpStandardRoomModuleId): array
     {
         return [
             $this->scene($moduleId, 'lobby', 'Lobby / PharmVR Hub', 'Pusat orientasi PharmVR untuk memilih modul, memahami alur CPOB/GMP, dan memulai pembelajaran VR.', 0, 'P0', 'beginner', 8, 'lobby', [
@@ -598,7 +609,16 @@ class SceneSeeder extends Seeder
                 $this->step('complete_safety_checklist', 'Isi Safety Checklist', 'Konfirmasi APD, jalur evakuasi, larangan, SOP, dan emergency contact.', 3, 'click', 30, 5),
                 $this->step('sign_attendance', 'Tanda Tangan Kehadiran', 'Lengkapi kehadiran training secara digital.', 4, 'click', 20),
             ]),
-            $this->scene($moduleId, 'hygiene', 'Hygiene', 'Area hygiene untuk pembelajaran sanitasi personal, hand hygiene, dan pencegahan kontaminasi sebelum gowning.', 2, 'P0', 'beginner', 10, 'hygiene', [
+            $this->scene($gmpStandardRoomModuleId, 'gmp_standard_room', 'GMP Standard Room / Ruang Standar CPOB', 'Foundation GMP room introducing cleanroom surfaces, coved corners, HVAC airflow, pressure cascade, signage, airlock, and equipment readiness. Ruang dasar CPOB untuk mengenalkan permukaan ruang bersih, sudut lengkung, aliran HVAC, kaskade tekanan, signage, airlock, dan kesiapan peralatan.', 2, 'P0', 'beginner', 20, 'gmp_standard_room', [
+                'Mengidentifikasi elemen desain ruang produksi yang mendukung penerapan CPOB di area produksi farmasi',
+                'Menjelaskan fungsi permukaan cleanroom, coved corner, HVAC, pressure cascade, signage, airlock, dan equipment readiness',
+                'Menggunakan checklist kesiapan ruangan sebelum aktivitas produksi',
+            ], [
+                $this->step('inspect-room', 'Inspect GMP Room Elements', 'Periksa lantai, dinding, coved corner, plafon, HVAC, return grille, tekanan, pintu, signage, dan equipment readiness.', 1, 'hotspot', 50),
+                $this->step('readiness-checklist', 'Room Readiness Checklist', 'Lengkapi checklist kesiapan ruangan sebelum operasi.', 2, 'checklist', 30, 5),
+                $this->step('mini-review', 'Mini Review', 'Jelaskan hubungan elemen desain ruangan dengan pencegahan kontaminasi dan kesiapan produksi.', 3, 'quiz', 20, 5),
+            ]),
+            $this->scene($moduleId, 'hygiene', 'Hygiene', 'Area hygiene untuk pembelajaran sanitasi personal, hand hygiene, dan pencegahan kontaminasi sebelum gowning.', 3, 'P0', 'beginner', 10, 'hygiene', [
                 'Memahami prosedur cuci tangan sesuai CPOB',
                 'Memahami risiko kontaminasi dari personel',
                 'Melakukan inspeksi kebersihan sebelum masuk produksi',
@@ -606,7 +626,7 @@ class SceneSeeder extends Seeder
                 $this->step('handwash_sequence', 'Urutan Cuci Tangan', 'Ikuti urutan hand hygiene yang benar.', 1, 'sequence', 50, 10),
                 $this->step('hygiene_check', 'Pemeriksaan Hygiene', 'Periksa kebersihan personel sebelum memakai APD.', 2, 'inspect', 50, 10),
             ]),
-            $this->scene($moduleId, 'gowning', 'Gowning', 'Ruang pemakaian APD cleanroom sesuai SOP untuk mencegah kontaminasi silang.', 3, 'P0', 'intermediate', 15, 'gowning', [
+            $this->scene($moduleId, 'gowning', 'Gowning', 'Ruang pemakaian APD cleanroom sesuai SOP untuk mencegah kontaminasi silang.', 4, 'P0', 'intermediate', 15, 'gowning', [
                 'Memahami urutan pemakaian APD',
                 'Mencegah kontaminasi silang melalui prosedur gowning',
                 'Mengetahui jenis APD area produksi',
@@ -617,7 +637,7 @@ class SceneSeeder extends Seeder
                 $this->step('wear_gloves', 'Pakai Sarung Tangan', 'Gunakan sarung tangan tanpa menyentuh permukaan luar.', 4, 'grab', 20, 10),
                 $this->step('final_gowning_check', 'Final Gowning Check', 'Periksa kembali kelengkapan APD sebelum masuk airlock.', 5, 'inspect', 25, 10),
             ]),
-            $this->scene($moduleId, 'airlock', 'Airlock', 'Ruang transisi dengan interlock dan pressure control untuk mencegah kontaminasi area produksi.', 4, 'P0', 'beginner', 8, 'airlock', [
+            $this->scene($moduleId, 'airlock', 'Airlock', 'Ruang transisi dengan interlock dan pressure control untuk mencegah kontaminasi area produksi.', 5, 'P0', 'beginner', 8, 'airlock', [
                 'Memahami fungsi airlock',
                 'Memahami interlock pintu',
                 'Memahami pressure stabilization',
@@ -627,7 +647,7 @@ class SceneSeeder extends Seeder
                 $this->step('wait_stabilization', 'Tunggu Stabilisasi', 'Tunggu proses stabilisasi selesai.', 3, 'observe', 25, 10),
                 $this->step('open_inner_door', 'Buka Pintu Dalam', 'Masuk ke area produksi setelah status aman.', 4, 'click', 25, 20),
             ]),
-            $this->scene($moduleId, 'production_corridor', 'Production Corridor', 'Koridor produksi untuk mengenali pressure cascade, room classification, alur personel, dan alur material.', 5, 'P0', 'beginner', 10, 'production_corridor', [
+            $this->scene($moduleId, 'production_corridor', 'Production Corridor', 'Koridor produksi untuk mengenali pressure cascade, room classification, alur personel, dan alur material.', 6, 'P0', 'beginner', 10, 'production_corridor', [
                 'Memahami layout koridor produksi',
                 'Mengenali jalur personel dan material',
                 'Memahami line clearance dan signage area',
@@ -637,7 +657,7 @@ class SceneSeeder extends Seeder
                 $this->step('check_line_clearance', 'Cek Line Clearance', 'Periksa status line clearance sebelum masuk ruang proses.', 3, 'inspect', 25, 10),
                 $this->step('find_emergency_exit', 'Identifikasi Emergency Exit', 'Temukan jalur evakuasi di area produksi.', 4, 'navigate', 25, 5),
             ]),
-            $this->scene($moduleId, 'weighing', 'Weighing', 'Ruang penimbangan bahan baku dengan verifikasi label, status material, toleransi berat, dan dokumentasi real-time.', 6, 'P0', 'intermediate', 15, 'weighing_room', [
+            $this->scene($moduleId, 'weighing', 'Weighing', 'Ruang penimbangan bahan baku dengan verifikasi label, status material, toleransi berat, dan dokumentasi real-time.', 7, 'P0', 'intermediate', 15, 'weighing_room', [
                 'Memahami prosedur penimbangan bahan',
                 'Melakukan TARE dan verifikasi material',
                 'Mendokumentasikan hasil penimbangan',
@@ -648,7 +668,7 @@ class SceneSeeder extends Seeder
                 $this->step('weigh_material', 'Timbang Material', 'Timbang bahan sesuai toleransi.', 4, 'sequence', 30, 10),
                 $this->step('submit_record', 'Submit Catatan', 'Simpan hasil penimbangan.', 5, 'click', 15),
             ]),
-            $this->scene($moduleId, 'granulation', 'Granulation', 'Proses granulasi basah, pengeringan FBD, dan kontrol parameter kritis untuk menghasilkan granul siap blending.', 7, 'P0', 'intermediate', 18, 'granulation_room', [
+            $this->scene($moduleId, 'granulation', 'Granulation', 'Proses granulasi basah, pengeringan FBD, dan kontrol parameter kritis untuk menghasilkan granul siap blending.', 8, 'P0', 'intermediate', 18, 'granulation_room', [
                 'Memahami proses granulasi',
                 'Memahami parameter kritis HSG dan FBD',
                 'Mendokumentasikan hasil proses granulasi',
@@ -658,7 +678,7 @@ class SceneSeeder extends Seeder
                 $this->step('fbd_drying', 'Fluid Bed Drying', 'Keringkan granul hingga parameter sesuai.', 3, 'sequence', 30, 10),
                 $this->step('record_granulation', 'Catat Proses', 'Lengkapi catatan proses granulasi.', 4, 'click', 15, 5),
             ]),
-            $this->scene($moduleId, 'final_mixing', 'Final Mixing', 'Pencampuran akhir granul dengan bahan pelumas atau glidant seperti magnesium stearate, talc, atau aerosil sebelum proses tabletting.', 8, 'P0', 'intermediate', 15, 'dry_mixing_room', [
+            $this->scene($moduleId, 'final_mixing', 'Final Mixing', 'Pencampuran akhir granul dengan bahan pelumas atau glidant seperti magnesium stearate, talc, atau aerosil sebelum proses tabletting.', 9, 'P0', 'intermediate', 15, 'dry_mixing_room', [
                 'Memahami final blending',
                 'Memahami risiko overmixing',
                 'Mendokumentasikan parameter mixing',
@@ -669,7 +689,7 @@ class SceneSeeder extends Seeder
                 $this->step('run_mixing', 'Jalankan Mixing', 'Jalankan mixing sesuai waktu dan kecepatan.', 4, 'sequence', 30, 10),
                 $this->step('record_mixing', 'Catat Mixing', 'Lengkapi catatan batch record.', 5, 'click', 10, 5),
             ]),
-            $this->scene($moduleId, 'tabletting', 'Tabletting', 'Proses kompresi tablet, setup mesin, IPC, dan pengendalian parameter kritis tablet press.', 9, 'P0', 'intermediate', 18, 'tabletting_room', [
+            $this->scene($moduleId, 'tabletting', 'Tabletting', 'Proses kompresi tablet, setup mesin, IPC, dan pengendalian parameter kritis tablet press.', 10, 'P0', 'intermediate', 18, 'tabletting_room', [
                 'Memahami setup mesin tablet',
                 'Memahami kontrol bobot dan kekerasan tablet',
                 'Melakukan IPC selama kompresi',
@@ -679,7 +699,7 @@ class SceneSeeder extends Seeder
                 $this->step('ipc_check', 'IPC Check', 'Periksa bobot, hardness, dan friability.', 3, 'inspect', 30, 10),
                 $this->step('record_tabletting', 'Catat Tabletting', 'Lengkapi catatan produksi tablet.', 4, 'click', 10, 5),
             ]),
-            $this->scene($moduleId, 'coating', 'Coating', 'Proses penyalutan tablet dengan kontrol spray rate, suhu inlet/outlet, pan speed, dan dokumentasi batch.', 10, 'P0', 'intermediate', 18, 'coating_room', [
+            $this->scene($moduleId, 'coating', 'Coating', 'Proses penyalutan tablet dengan kontrol spray rate, suhu inlet/outlet, pan speed, dan dokumentasi batch.', 11, 'P0', 'intermediate', 18, 'coating_room', [
                 'Memahami proses coating tablet',
                 'Memahami parameter kritis coating',
                 'Mengenali cacat coating',
@@ -689,7 +709,7 @@ class SceneSeeder extends Seeder
                 $this->step('run_coating', 'Jalankan Coating', 'Jalankan proses penyalutan sesuai parameter.', 3, 'sequence', 40, 10),
                 $this->step('coating_qc', 'QC Coating', 'Periksa appearance dan weight gain.', 4, 'inspect', 20, 5),
             ]),
-            $this->scene($moduleId, 'blistering', 'Blistering / Primary Packaging', 'Pengemasan primer blister dengan setup PVC/Alu foil, sealing, leak test, dan IPC packaging.', 11, 'P0', 'intermediate', 18, 'blistering_room', [
+            $this->scene($moduleId, 'blistering', 'Blistering / Primary Packaging', 'Pengemasan primer blister dengan setup PVC/Alu foil, sealing, leak test, dan IPC packaging.', 12, 'P0', 'intermediate', 18, 'blistering_room', [
                 'Memahami proses pengemasan primer',
                 'Memahami setup blister machine',
                 'Melakukan leak test dan IPC',
@@ -699,7 +719,7 @@ class SceneSeeder extends Seeder
                 $this->step('leak_test', 'Leak Test', 'Uji kebocoran blister.', 3, 'inspect', 25, 10),
                 $this->step('record_blistering', 'Catat Packaging Primer', 'Lengkapi catatan packaging primer.', 4, 'click', 15, 5),
             ]),
-            $this->scene($moduleId, 'secondary_packing', 'Secondary Packing', 'Pengemasan sekunder, cartoning, coding, vision inspection, checkweigher, dan final packing menuju warehouse.', 12, 'P0', 'intermediate', 15, 'secondary_packing', [
+            $this->scene($moduleId, 'secondary_packing', 'Secondary Packing', 'Pengemasan sekunder, cartoning, coding, vision inspection, checkweigher, dan final packing menuju warehouse.', 13, 'P0', 'intermediate', 15, 'secondary_packing', [
                 'Memahami cartoning dan coding',
                 'Memahami pemeriksaan visual dan checkweigher',
                 'Memahami proses final packing',
@@ -829,6 +849,7 @@ class SceneSeeder extends Seeder
         Scene::whereIn('slug', [
             'lobby',
             'training_room',
+            'gmp_standard_room',
             'hygiene',
             'qc_lab',
             'qa_office',
