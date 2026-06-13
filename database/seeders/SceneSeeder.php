@@ -614,9 +614,9 @@ class SceneSeeder extends Seeder
                 'Menjelaskan fungsi permukaan cleanroom, coved corner, HVAC, pressure cascade, signage, airlock, dan equipment readiness',
                 'Menggunakan checklist kesiapan ruangan sebelum aktivitas produksi',
             ], [
-                $this->step('inspect-room', 'Inspect GMP Room Elements', 'Periksa lantai, dinding, coved corner, plafon, HVAC, return grille, tekanan, pintu, signage, dan equipment readiness.', 1, 'hotspot', 50),
-                $this->step('readiness-checklist', 'Room Readiness Checklist', 'Lengkapi checklist kesiapan ruangan sebelum operasi.', 2, 'checklist', 30, 5),
-                $this->step('mini-review', 'Mini Review', 'Jelaskan hubungan elemen desain ruangan dengan pencegahan kontaminasi dan kesiapan produksi.', 3, 'quiz', 20, 5),
+                $this->step('inspect-room', 'Inspect GMP Room Elements', 'Periksa lantai, dinding, coved corner, plafon, HVAC, return grille, tekanan, pintu, signage, dan equipment readiness.', 1, 'inspect', 50),
+                $this->step('readiness-checklist', 'Room Readiness Checklist', 'Lengkapi checklist kesiapan ruangan sebelum operasi.', 2, 'click', 30, 5),
+                $this->step('mini-review', 'Mini Review', 'Jelaskan hubungan elemen desain ruangan dengan pencegahan kontaminasi dan kesiapan produksi.', 3, 'click', 20, 5),
             ]),
             $this->scene($moduleId, 'hygiene', 'Hygiene', 'Area hygiene untuk pembelajaran sanitasi personal, hand hygiene, dan pencegahan kontaminasi sebelum gowning.', 3, 'P0', 'beginner', 10, 'hygiene', [
                 'Memahami prosedur cuci tangan sesuai CPOB',
