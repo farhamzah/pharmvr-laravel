@@ -1,8 +1,21 @@
 <?php
 
+$defaultAllowedOrigins = implode(',', [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3001',
+    'http://127.0.0.1:3026',
+    'http://localhost:5273',
+    'http://127.0.0.1:5273',
+    'http://localhost:5274',
+    'http://127.0.0.1:5274',
+    'http://localhost:5105',
+    'http://127.0.0.1:5105',
+]);
+
 $allowedOrigins = array_values(array_filter(array_map(
     'trim',
-    explode(',', env('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:3000,http://127.0.0.1:3001,http://127.0.0.1:3026'))
+    explode(',', env('CORS_ALLOWED_ORIGINS', $defaultAllowedOrigins))
 )));
 
 return [

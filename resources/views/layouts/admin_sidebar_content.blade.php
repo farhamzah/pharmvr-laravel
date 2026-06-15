@@ -25,6 +25,13 @@
                 <span class="text-sm">Human Assets</span>
             </a>
             @endcan
+
+            @if(auth()->user()?->isAdmin())
+            <a href="{{ route('admin.vr-scene-contents.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl {{ request()->routeIs('admin.vr-scene-contents.*') ? 'bg-primary text-background font-black' : 'text-text-secondary hover:bg-surface-light hover:text-white' }} transition-all duration-300 group">
+                <svg class="w-5 h-5 {{ request()->routeIs('admin.vr-scene-contents.*') ? 'text-background' : 'text-primary/70 group-hover:text-primary' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 5a2 2 0 012-2h4a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm8 10a2 2 0 012-2h4a2 2 0 012 2v4a2 2 0 01-2 2h-4a2 2 0 01-2-2v-4zM4 15a2 2 0 012-2h4a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zm10-10a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5z"></path></svg>
+                <span class="text-sm">VR Scene Contents</span>
+            </a>
+            @endif
             
             @can('manage-content')
             <a href="{{ route('admin.education.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-2xl {{ request()->routeIs('admin.education.*') ? 'bg-primary text-background font-black' : 'text-text-secondary hover:bg-surface-light hover:text-white' }} transition-all duration-300 group">

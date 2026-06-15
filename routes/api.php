@@ -25,6 +25,8 @@ use App\Http\Controllers\Admin\Api\AdminQuestionController;
 use App\Http\Controllers\Admin\Api\AdminReportController;
 use App\Http\Controllers\Admin\Api\AdminSceneController;
 use App\Http\Controllers\Admin\Api\AdminUserController;
+use App\Http\Controllers\Admin\Api\AdminVrSceneContentController;
+use App\Http\Controllers\Api\V1\Vr\VrSceneContentController;
 use App\Http\Controllers\Api\V1\Vr\VrAiController;
 use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\Analytics\AnalyticsController;
@@ -262,6 +264,14 @@ Route::prefix('v1')->group(function () {
             Route::get('/{auditLog}', [AdminAuditLogController::class, 'show']);
         });
 
+        // Admin VR Scene Content CMS
+        Route::prefix('admin/vr-scene-contents')->middleware('admin.dashboard')->group(function () {
+            Route::get('/', [AdminVrSceneContentController::class, 'index']);
+            Route::post('/', [AdminVrSceneContentController::class, 'store']);
+            Route::get('/{content}', [AdminVrSceneContentController::class, 'show']);
+            Route::patch('/{content}', [AdminVrSceneContentController::class, 'update']);
+        });
+
         // Admin AI Management (Inside V1 for now, or separate prefix if preferred)
         Route::prefix('admin/ai')->middleware(['admin'])->group(function () {
             Route::apiResource('knowledge-sources', AiKnowledgeSourceController::class);
@@ -317,6 +327,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/', [\App\Http\Controllers\Api\V1\Vr\SceneController::class, 'index']);
             Route::get('/{slug}', [\App\Http\Controllers\Api\V1\Vr\SceneController::class, 'show']);
             Route::get('/{slug}/steps', [\App\Http\Controllers\Api\V1\Vr\SceneController::class, 'steps']);
+            Route::get('/{sceneSlug}/content', [VrSceneContentController::class, 'index']);
         });
 
         // Legacy/Alias for compatibility

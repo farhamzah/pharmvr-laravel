@@ -112,54 +112,12 @@
                     <div class="h-8 w-px bg-divider"></div>
 
                     @auth
-                    <div x-data="{ showLogoutModal: false }" class="inline">
-                        <button @click="showLogoutModal = true" type="button" class="text-xs font-black text-white uppercase tracking-[0.2em] bg-red-500/10 hover:bg-red-500 hover:text-white border border-red-500/20 px-5 py-2.5 rounded-xl transition-all duration-300">
+                    <form action="{{ route('admin.logout') }}" method="POST" class="inline" onsubmit="return confirm('Terminate the current admin session?');">
+                        @csrf
+                        <button type="submit" class="text-xs font-black text-white uppercase tracking-[0.2em] bg-red-500/10 hover:bg-red-500 hover:text-white border border-red-500/20 px-5 py-2.5 rounded-xl transition-all duration-300">
                             Terminate
                         </button>
-
-                        <!-- Logout Confirmation Modal -->
-                        <template x-teleport="body">
-                            <div x-show="showLogoutModal" x-cloak class="fixed inset-0 z-[2000] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                                <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                                    <div x-show="showLogoutModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 transition-opacity bg-background/90 backdrop-blur-sm" aria-hidden="true" @click="showLogoutModal = false"></div>
-
-                                    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-                                    <div x-show="showLogoutModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-surface border border-red-500/30 rounded-2xl shadow-2xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6 relative">
-                                        
-                                        <div class="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-[50px] pointer-events-none"></div>
-
-                                        <div class="sm:flex sm:items-start relative z-10">
-                                            <div class="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-red-500/10 rounded-full sm:mx-0 sm:h-10 sm:w-10 border border-red-500/30">
-                                                <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                            </div>
-                                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                                <h3 class="text-lg font-black leading-6 text-white tracking-widest uppercase font-display" id="modal-title">
-                                                    Terminate Session
-                                                </h3>
-                                                <div class="mt-2">
-                                                    <p class="text-sm text-text-secondary">
-                                                        Are you sure you want to terminate the current session and disconnect from the Command Center? Any unsaved changes may be lost.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-8 sm:mt-6 sm:flex sm:flex-row-reverse relative z-10 gap-3">
-                                            <form action="{{ route('admin.logout') }}" method="POST" class="w-full sm:w-auto">
-                                                @csrf
-                                                <button type="submit" class="inline-flex justify-center w-full px-5 py-2.5 text-xs font-black text-white uppercase tracking-[0.2em] bg-red-600 border border-transparent rounded-xl shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-surface transition-all duration-300">
-                                                    Confirm Disconnect
-                                                </button>
-                                            </form>
-                                            <button @click="showLogoutModal = false" type="button" class="mt-3 sm:mt-0 inline-flex justify-center w-full px-5 py-2.5 text-xs font-black text-white uppercase tracking-[0.2em] bg-surface-light border border-divider rounded-xl shadow-sm hover:bg-surface hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-surface transition-all duration-300">
-                                                Abort
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
+                    </form>
                     @endauth
                 </div>
             </header>

@@ -31,6 +31,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin', 'throttle:a
         Route::post('users/{user}/force-logout', [\App\Http\Controllers\Admin\UserController::class, 'forceLogout'])->name('users.force-logout');
     });
 
+    Route::resource('vr-scene-contents', \App\Http\Controllers\Admin\VrSceneContentWebController::class)->except(['show']);
+
     // Education & News (Content)
     Route::middleware('can:manage-content')->group(function () {
         Route::resource('education', \App\Http\Controllers\Admin\EducationController::class);
