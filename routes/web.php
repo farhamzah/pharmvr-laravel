@@ -32,6 +32,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin', 'throttle:a
     });
 
     Route::resource('vr-scene-contents', \App\Http\Controllers\Admin\VrSceneContentWebController::class)->except(['show']);
+    Route::post('vr-scene-layouts/{vrSceneLayout}/publish', [\App\Http\Controllers\Admin\VrSceneLayoutWebController::class, 'publish'])->name('vr-scene-layouts.publish');
+    Route::post('vr-scene-layouts/{vrSceneLayout}/archive', [\App\Http\Controllers\Admin\VrSceneLayoutWebController::class, 'archive'])->name('vr-scene-layouts.archive');
+    Route::post('vr-scene-layouts/{vrSceneLayout}/duplicate', [\App\Http\Controllers\Admin\VrSceneLayoutWebController::class, 'duplicate'])->name('vr-scene-layouts.duplicate');
+    Route::resource('vr-scene-layouts', \App\Http\Controllers\Admin\VrSceneLayoutWebController::class)->except(['destroy']);
 
     // Education & News (Content)
     Route::middleware('can:manage-content')->group(function () {

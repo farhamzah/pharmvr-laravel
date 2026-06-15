@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\VrSceneLayout;
+use App\Services\VrSceneLayoutPublicationService;
 use App\Services\VrSceneLayoutValidator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -59,7 +60,11 @@ class AdminVrSceneLayoutController extends Controller
         ]);
     }
 
-    public function store(Request $request, VrSceneLayoutValidator $layoutValidator): JsonResponse
+    public function store(
+        Request $request,
+        VrSceneLayoutValidator $layoutValidator,
+        VrSceneLayoutPublicationService $publicationService
+    ): JsonResponse
     {
         if (!$this->canManage($request)) {
             return $this->forbidden('Only super_admin and admin users can manage VR scene layouts.');
@@ -76,10 +81,10 @@ class AdminVrSceneLayoutController extends Controller
             return $this->validationError($validation['errors']);
         }
 
-        $layout = DB::transaction(function () use ($data, $request, $validation) {
+        $layout = DB::transaction(function () use ($data, $request, $validation, $publicationService) {
             $layout = VrSceneLayout::create($this->payload($data, $request->user(), $validation['warnings']));
 
-            return $this->enforcePublishedState($layout, $request->user());
+            return $publicationService->enforcePublishedState($layout, $request->user());
         });
 
         return response()->json([
@@ -102,7 +107,12 @@ class AdminVrSceneLayoutController extends Controller
         ]);
     }
 
-    public function update(Request $request, VrSceneLayout $vrSceneLayout, VrSceneLayoutValidator $layoutValidator): JsonResponse
+    public function update(
+        Request $request,
+        VrSceneLayout $vrSceneLayout,
+        VrSceneLayoutValidator $layoutValidator,
+        VrSceneLayoutPublicationService $publicationService
+    ): JsonResponse
     {
         if (!$this->canManage($request)) {
             return $this->forbidden('Only super_admin and admin users can manage VR scene layouts.');
@@ -123,11 +133,11 @@ class AdminVrSceneLayoutController extends Controller
             return $this->validationError($validation['errors']);
         }
 
-        $vrSceneLayout = DB::transaction(function () use ($data, $request, $validation, $vrSceneLayout) {
+        $vrSceneLayout = DB::transaction(function () use ($data, $request, $validation, $vrSceneLayout, $publicationService) {
             $vrSceneLayout->fill($this->payload($data, $request->user(), $validation['warnings'], true));
             $vrSceneLayout->save();
 
-            return $this->enforcePublishedState($vrSceneLayout, $request->user());
+            return $publicationService->enforcePublishedState($vrSceneLayout, $request->user());
         });
 
         return response()->json([
@@ -139,7 +149,12 @@ class AdminVrSceneLayoutController extends Controller
         ]);
     }
 
-    public function publish(Request $request, VrSceneLayout $vrSceneLayout, VrSceneLayoutValidator $layoutValidator): JsonResponse
+    public function publish(
+        Request $request,
+        VrSceneLayout $vrSceneLayout,
+        VrSceneLayoutValidator $layoutValidator,
+        VrSceneLayoutPublicationService $publicationService
+    ): JsonResponse
     {
         if (!$this->canManage($request)) {
             return $this->forbidden('Only super_admin and admin users can publish VR scene layouts.');
@@ -150,27 +165,7 @@ class AdminVrSceneLayoutController extends Controller
             return $this->validationError($validation['errors']);
         }
 
-        $layout = DB::transaction(function () use ($request, $vrSceneLayout, $validation) {
-            VrSceneLayout::query()
-                ->where('scene_slug', $vrSceneLayout->scene_slug)
-                ->where('id', '!=', $vrSceneLayout->id)
-                ->published()
-                ->update([
-                    'status' => VrSceneLayout::STATUS_ARCHIVED,
-                    'updated_by' => $request->user()?->id,
-                    'updated_at' => now(),
-                ]);
-
-            $vrSceneLayout->forceFill([
-                'status' => VrSceneLayout::STATUS_PUBLISHED,
-                'validation_warnings_json' => $validation['warnings'],
-                'published_by' => $request->user()?->id,
-                'published_at' => now(),
-                'updated_by' => $request->user()?->id,
-            ])->save();
-
-            return $vrSceneLayout->refresh();
-        });
+        $layout = $publicationService->publish($vrSceneLayout, $request->user(), $validation['warnings']);
 
         return response()->json([
             'success' => true,
@@ -181,16 +176,17 @@ class AdminVrSceneLayoutController extends Controller
         ]);
     }
 
-    public function archive(Request $request, VrSceneLayout $vrSceneLayout): JsonResponse
+    public function archive(
+        Request $request,
+        VrSceneLayout $vrSceneLayout,
+        VrSceneLayoutPublicationService $publicationService
+    ): JsonResponse
     {
         if (!$this->canManage($request)) {
             return $this->forbidden('Only super_admin and admin users can archive VR scene layouts.');
         }
 
-        $vrSceneLayout->forceFill([
-            'status' => VrSceneLayout::STATUS_ARCHIVED,
-            'updated_by' => $request->user()?->id,
-        ])->save();
+        $vrSceneLayout = $publicationService->archive($vrSceneLayout, $request->user());
 
         return response()->json([
             'success' => true,
@@ -253,31 +249,6 @@ class AdminVrSceneLayoutController extends Controller
         }
 
         return $resource;
-    }
-
-    private function enforcePublishedState(VrSceneLayout $layout, ?User $user): VrSceneLayout
-    {
-        if ($layout->status !== VrSceneLayout::STATUS_PUBLISHED) {
-            return $layout->refresh();
-        }
-
-        VrSceneLayout::query()
-            ->where('scene_slug', $layout->scene_slug)
-            ->where('id', '!=', $layout->id)
-            ->published()
-            ->update([
-                'status' => VrSceneLayout::STATUS_ARCHIVED,
-                'updated_by' => $user?->id,
-                'updated_at' => now(),
-            ]);
-
-        $layout->forceFill([
-            'published_by' => $layout->published_by ?? $user?->id,
-            'published_at' => $layout->published_at ?? now(),
-            'updated_by' => $user?->id,
-        ])->save();
-
-        return $layout->refresh();
     }
 
     private function canManage(Request $request): bool
