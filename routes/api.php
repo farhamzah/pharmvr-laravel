@@ -26,7 +26,9 @@ use App\Http\Controllers\Admin\Api\AdminReportController;
 use App\Http\Controllers\Admin\Api\AdminSceneController;
 use App\Http\Controllers\Admin\Api\AdminUserController;
 use App\Http\Controllers\Admin\Api\AdminVrSceneContentController;
+use App\Http\Controllers\Admin\Api\AdminVrSceneLayoutController;
 use App\Http\Controllers\Api\V1\Vr\VrSceneContentController;
+use App\Http\Controllers\Api\V1\Vr\VrSceneLayoutController;
 use App\Http\Controllers\Api\V1\Vr\VrAiController;
 use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\Analytics\AnalyticsController;
@@ -272,6 +274,16 @@ Route::prefix('v1')->group(function () {
             Route::patch('/{content}', [AdminVrSceneContentController::class, 'update']);
         });
 
+        // Admin VR Scene Layout Composer Foundation
+        Route::prefix('admin/vr-scene-layouts')->middleware('admin.dashboard')->group(function () {
+            Route::get('/', [AdminVrSceneLayoutController::class, 'index']);
+            Route::post('/', [AdminVrSceneLayoutController::class, 'store']);
+            Route::get('/{vrSceneLayout}', [AdminVrSceneLayoutController::class, 'show']);
+            Route::put('/{vrSceneLayout}', [AdminVrSceneLayoutController::class, 'update']);
+            Route::post('/{vrSceneLayout}/publish', [AdminVrSceneLayoutController::class, 'publish']);
+            Route::post('/{vrSceneLayout}/archive', [AdminVrSceneLayoutController::class, 'archive']);
+        });
+
         // Admin AI Management (Inside V1 for now, or separate prefix if preferred)
         Route::prefix('admin/ai')->middleware(['admin'])->group(function () {
             Route::apiResource('knowledge-sources', AiKnowledgeSourceController::class);
@@ -327,6 +339,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/', [\App\Http\Controllers\Api\V1\Vr\SceneController::class, 'index']);
             Route::get('/{slug}', [\App\Http\Controllers\Api\V1\Vr\SceneController::class, 'show']);
             Route::get('/{slug}/steps', [\App\Http\Controllers\Api\V1\Vr\SceneController::class, 'steps']);
+            Route::get('/{sceneSlug}/layout', [VrSceneLayoutController::class, 'show']);
             Route::get('/{sceneSlug}/content', [VrSceneContentController::class, 'index']);
         });
 

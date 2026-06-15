@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             EducationModuleSeeder::class,
             SceneSeeder::class,
             VrSceneContentSeeder::class,
+            VrSceneLayoutSeeder::class,
             AssessmentSeeder::class,
             HygieneAssessmentSeeder::class,
             GmpStandardRoomAssessmentSeeder::class,
