@@ -48,7 +48,12 @@ class WebxrSessionController extends Controller
 
         if (!$instructorMode && $module) {
             $readiness = $this->learningReadiness->forModule($user, $module);
-            if (!$readiness['can_launch_vr']) {
+            $canStartOrResume = ($readiness['can_launch_vr'] ?? false)
+                || ($readiness['eligible_to_launch'] ?? false)
+                || ($readiness['next_action'] ?? null) === 'continue_vr'
+                || ($readiness['vr_status'] ?? null) === 'in_progress';
+
+            if (!$canStartOrResume) {
                 return $this->errorResponse(
                     $readiness['locked_reason'] ?? 'Scene belum memenuhi syarat untuk diluncurkan.',
                     403,
