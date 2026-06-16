@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Models\User;
 use App\Models\VrSceneLayout;
+use App\Services\VrSceneLayoutValidator;
 use Database\Seeders\VrSceneLayoutSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -37,7 +38,12 @@ class VrSceneLayoutWebAdminTest extends TestCase
             ->assertSee('Component Types')
             ->assertSee('hotspot_marker')
             ->assertSee('JSON Snippets')
-            ->assertSee('Transform Guidance');
+            ->assertSee('Transform Guidance')
+            ->assertSee('Component Builder')
+            ->assertSee('2D Layout Preview')
+            ->assertSee('Position Presets')
+            ->assertSee('north_wall_center')
+            ->assertSee('Generated Component JSON');
     }
 
     public function test_admin_can_create_valid_draft_layout(): void
@@ -115,7 +121,14 @@ class VrSceneLayoutWebAdminTest extends TestCase
             ->assertSee('Validation Warnings')
             ->assertSee('learning_panel')
             ->assertSee('floor_arrow')
-            ->assertSee('position: [x, y, z]');
+            ->assertSee('position: [x, y, z]')
+            ->assertSee('Component Builder')
+            ->assertSee('2D Layout Preview')
+            ->assertSee('opening-briefing')
+            ->assertSee('floor-surface')
+            ->assertSee('Insert into layout_json components array')
+            ->assertSee('equipment_island_front')
+            ->assertSee('Use Duplicate as Draft before editing a published layout.');
 
         $this->actingAs($admin)
             ->put("/admin/vr-scene-layouts/{$layout->id}", $this->formPayload([
@@ -130,6 +143,78 @@ class VrSceneLayoutWebAdminTest extends TestCase
             'version' => 2,
             'updated_by' => $admin->id,
         ]);
+    }
+
+    public function test_show_page_renders_2d_layout_preview(): void
+    {
+        $admin = $this->makeAdmin();
+        $layout = VrSceneLayout::create($this->modelPayload());
+
+        $this->actingAs($admin)
+            ->get("/admin/vr-scene-layouts/{$layout->id}")
+            ->assertOk()
+            ->assertSee('2D Layout Preview')
+            ->assertSee('opening-briefing')
+            ->assertSee('floor-surface')
+            ->assertSee('Bounds X')
+            ->assertSee('Legend');
+    }
+
+    public function test_2d_layout_preview_handles_invalid_json_without_crashing(): void
+    {
+        $this->view('admin.vr-scene-layouts._layout_preview', [
+            'previewLayoutJson' => '{not valid json',
+        ])
+            ->assertSee('2D Layout Preview')
+            ->assertSee('Preview unavailable: invalid layout JSON.');
+    }
+
+    public function test_2d_layout_preview_warns_for_outside_bounds_component(): void
+    {
+        $layout = $this->validLayout([
+            'roomBounds' => [
+                'x' => [-4, 4],
+                'z' => [-4, 4],
+            ],
+        ]);
+        $layout['components'][] = [
+            'id' => 'outside-panel',
+            'type' => 'learning_panel',
+            'title' => 'Outside Panel',
+            'transform' => [
+                'position' => [9, 1.8, 9],
+                'rotation' => [0, 0, 0],
+                'scale' => [1, 1, 1],
+            ],
+        ];
+
+        $this->view('admin.vr-scene-layouts._layout_preview', [
+            'previewLayout' => $layout,
+        ])
+            ->assertSee('outside-panel')
+            ->assertSee('Component [outside-panel] is outside room bounds.')
+            ->assertSee('Outside bounds');
+    }
+
+    public function test_position_presets_and_component_defaults_are_config_driven(): void
+    {
+        $preset = config('vr_scene.position_presets.north_wall_center');
+        $default = config('vr_scene.component_defaults.hotspot_marker');
+
+        $this->assertSame([0, 1.7, -3.8], $preset['position']);
+        $this->assertSame([0, 0, 0], $preset['rotation']);
+        $this->assertSame('hotspot_marker', $default['type']);
+        $this->assertSame('hotspot_inspected', $default['interaction']['evidenceEventType']);
+    }
+
+    public function test_component_default_snippet_is_compatible_with_layout_validator(): void
+    {
+        $layout = $this->validLayout();
+        $layout['components'][] = config('vr_scene.component_defaults.hotspot_marker');
+
+        $result = app(VrSceneLayoutValidator::class)->validate('gmp_standard_room', $layout);
+
+        $this->assertTrue($result['valid'], json_encode($result['errors'], JSON_THROW_ON_ERROR));
     }
 
     public function test_validate_layout_action_accepts_valid_layout(): void

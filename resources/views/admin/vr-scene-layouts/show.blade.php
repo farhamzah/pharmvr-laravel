@@ -67,6 +67,8 @@
         @endif
     </div>
 
+    @include('admin.vr-scene-layouts._layout_preview', ['previewLayout' => $layout->layout_json ?? []])
+
     <div class="rounded-3xl border border-divider bg-surface p-6 shadow-premium">
         <h2 class="text-lg font-black text-white">Layout JSON</h2>
         <pre class="mt-4 overflow-x-auto rounded-2xl border border-divider bg-background p-5 text-xs leading-6 text-text-secondary">{{ json_encode($layout->layout_json ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) }}</pre>
