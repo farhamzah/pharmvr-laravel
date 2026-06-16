@@ -12,13 +12,13 @@
         </div>
 
         <div class="flex flex-wrap gap-3">
-            <form action="{{ route('admin.vr-scene-layouts.publish', $layout) }}" method="POST" onsubmit="return confirm('Publish this layout and archive the previous published layout for this scene?');">
+            <form action="{{ route('admin.vr-scene-layouts.publish', $layout) }}" method="POST" onsubmit="return confirm('Publishing this layout will archive the current published layout for this scene. Continue?');">
                 @csrf
                 <button type="submit" class="rounded-2xl bg-emerald-500 px-5 py-3 text-xs font-black uppercase tracking-[0.2em] text-white hover:bg-emerald-400">
                     Publish
                 </button>
             </form>
-            <form action="{{ route('admin.vr-scene-layouts.archive', $layout) }}" method="POST" onsubmit="return confirm('Archive this VR scene layout?');">
+            <form action="{{ route('admin.vr-scene-layouts.archive', $layout) }}" method="POST" onsubmit="return confirm('Archive this VR scene layout? It will no longer be returned by the public published layout endpoint.');">
                 @csrf
                 <button type="submit" class="rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-3 text-xs font-black uppercase tracking-[0.2em] text-red-300 hover:bg-red-500 hover:text-white">
                     Archive

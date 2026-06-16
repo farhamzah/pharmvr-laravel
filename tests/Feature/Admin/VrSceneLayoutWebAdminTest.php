@@ -33,7 +33,11 @@ class VrSceneLayoutWebAdminTest extends TestCase
             ->get('/admin/vr-scene-layouts/create')
             ->assertOk()
             ->assertSee('Create VR Scene Layout')
-            ->assertSee('layout_json');
+            ->assertSee('layout_json')
+            ->assertSee('Component Types')
+            ->assertSee('hotspot_marker')
+            ->assertSee('JSON Snippets')
+            ->assertSee('Transform Guidance');
     }
 
     public function test_admin_can_create_valid_draft_layout(): void
@@ -106,7 +110,12 @@ class VrSceneLayoutWebAdminTest extends TestCase
         $this->actingAs($admin)
             ->get("/admin/vr-scene-layouts/{$layout->id}/edit")
             ->assertOk()
-            ->assertSee('Edit VR Scene Layout');
+            ->assertSee('Edit VR Scene Layout')
+            ->assertSee('View Public API')
+            ->assertSee('Validation Warnings')
+            ->assertSee('learning_panel')
+            ->assertSee('floor_arrow')
+            ->assertSee('position: [x, y, z]');
 
         $this->actingAs($admin)
             ->put("/admin/vr-scene-layouts/{$layout->id}", $this->formPayload([
@@ -121,6 +130,87 @@ class VrSceneLayoutWebAdminTest extends TestCase
             'version' => 2,
             'updated_by' => $admin->id,
         ]);
+    }
+
+    public function test_validate_layout_action_accepts_valid_layout(): void
+    {
+        $admin = $this->makeAdmin();
+        $layout = VrSceneLayout::create($this->modelPayload());
+
+        $this->actingAs($admin)
+            ->from("/admin/vr-scene-layouts/{$layout->id}/edit")
+            ->put("/admin/vr-scene-layouts/{$layout->id}", $this->formPayload([
+                'editor_action' => 'validate',
+            ]))
+            ->assertRedirect("/admin/vr-scene-layouts/{$layout->id}/edit")
+            ->assertSessionHas('layout_validation.valid', true)
+            ->assertSessionHas('success', 'Layout JSON is valid.');
+    }
+
+    public function test_validate_layout_action_rejects_invalid_json(): void
+    {
+        $admin = $this->makeAdmin();
+        $layout = VrSceneLayout::create($this->modelPayload());
+
+        $this->actingAs($admin)
+            ->from("/admin/vr-scene-layouts/{$layout->id}/edit")
+            ->put("/admin/vr-scene-layouts/{$layout->id}", $this->formPayload([
+                'editor_action' => 'validate',
+                'layout_json' => '{not valid json',
+            ]))
+            ->assertRedirect("/admin/vr-scene-layouts/{$layout->id}/edit")
+            ->assertSessionHasErrors('layout_json');
+    }
+
+    public function test_validate_layout_action_rejects_duplicate_component_ids(): void
+    {
+        $admin = $this->makeAdmin();
+        $layout = VrSceneLayout::create($this->modelPayload());
+        $json = $this->validLayout();
+        $json['components'][1]['id'] = $json['components'][0]['id'];
+
+        $this->actingAs($admin)
+            ->from("/admin/vr-scene-layouts/{$layout->id}/edit")
+            ->put("/admin/vr-scene-layouts/{$layout->id}", $this->formPayload([
+                'editor_action' => 'validate',
+                'layout_json' => json_encode($json, JSON_THROW_ON_ERROR),
+            ]))
+            ->assertRedirect("/admin/vr-scene-layouts/{$layout->id}/edit")
+            ->assertSessionHas('layout_validation.valid', false);
+    }
+
+    public function test_validate_layout_action_rejects_unknown_component_type(): void
+    {
+        $admin = $this->makeAdmin();
+        $layout = VrSceneLayout::create($this->modelPayload());
+        $json = $this->validLayout();
+        $json['components'][0]['type'] = 'unknown_component';
+
+        $this->actingAs($admin)
+            ->from("/admin/vr-scene-layouts/{$layout->id}/edit")
+            ->put("/admin/vr-scene-layouts/{$layout->id}", $this->formPayload([
+                'editor_action' => 'validate',
+                'layout_json' => json_encode($json, JSON_THROW_ON_ERROR),
+            ]))
+            ->assertRedirect("/admin/vr-scene-layouts/{$layout->id}/edit")
+            ->assertSessionHas('layout_validation.valid', false);
+    }
+
+    public function test_format_action_pretty_prints_valid_json(): void
+    {
+        $admin = $this->makeAdmin();
+        $layout = VrSceneLayout::create($this->modelPayload());
+
+        $this->actingAs($admin)
+            ->from("/admin/vr-scene-layouts/{$layout->id}/edit")
+            ->put("/admin/vr-scene-layouts/{$layout->id}", $this->formPayload([
+                'editor_action' => 'format',
+                'layout_json' => json_encode($this->validLayout(), JSON_THROW_ON_ERROR),
+                'metadata_json' => json_encode(['module_code' => 'PH-CPOB-00'], JSON_THROW_ON_ERROR),
+            ]))
+            ->assertRedirect("/admin/vr-scene-layouts/{$layout->id}/edit")
+            ->assertSessionHasInput('layout_json', fn (string $value) => str_contains($value, "\n    \"sceneSlug\""))
+            ->assertSessionHasInput('metadata_json', fn (string $value) => str_contains($value, "\n    \"module_code\""));
     }
 
     public function test_admin_can_publish_layout_and_public_api_returns_it(): void

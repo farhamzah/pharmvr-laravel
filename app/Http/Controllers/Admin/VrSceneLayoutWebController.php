@@ -78,6 +78,10 @@ class VrSceneLayoutWebController extends Controller
         VrSceneLayoutValidator $layoutValidator,
         VrSceneLayoutPublicationService $publicationService
     ) {
+        if ($response = $this->handleEditorAction($request, $layoutValidator)) {
+            return $response;
+        }
+
         $payload = $this->validatedPayload($request, $layoutValidator, $request->user()?->id);
 
         $layout = DB::transaction(function () use ($payload, $request, $publicationService) {
@@ -107,6 +111,10 @@ class VrSceneLayoutWebController extends Controller
         VrSceneLayoutValidator $layoutValidator,
         VrSceneLayoutPublicationService $publicationService
     ) {
+        if ($response = $this->handleEditorAction($request, $layoutValidator)) {
+            return $response;
+        }
+
         $payload = $this->validatedPayload($request, $layoutValidator, $request->user()?->id, true, $vrSceneLayout);
 
         $layout = DB::transaction(function () use ($vrSceneLayout, $payload, $request, $publicationService) {
@@ -229,6 +237,50 @@ class VrSceneLayoutWebController extends Controller
         return $data;
     }
 
+    private function handleEditorAction(Request $request, VrSceneLayoutValidator $layoutValidator)
+    {
+        $action = $request->input('editor_action');
+
+        if (!in_array($action, ['format', 'validate'], true)) {
+            return null;
+        }
+
+        try {
+            $layoutJson = $this->decodeJsonField($request->input('layout_json'), 'layout_json', []);
+            $metadataJson = $this->decodeJsonField($request->input('metadata_json'), 'metadata_json', []);
+        } catch (ValidationException $exception) {
+            return redirect()
+                ->back()
+                ->withErrors($exception->errors())
+                ->withInput();
+        }
+
+        if ($action === 'format') {
+            return redirect()
+                ->back()
+                ->withInput(array_merge($request->except(['layout_json', 'metadata_json']), [
+                    'layout_json' => $this->prettyJson($layoutJson),
+                    'metadata_json' => $this->prettyJson($metadataJson),
+                ]))
+                ->with('success', 'Layout JSON and metadata JSON formatted.');
+        }
+
+        $sceneSlug = (string) $request->input('scene_slug', '');
+        $validation = $layoutValidator->validate($sceneSlug, $layoutJson);
+
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with('layout_validation', [
+                'valid' => $validation['valid'],
+                'errors' => $validation['errors'],
+                'warnings' => $validation['warnings'],
+            ])
+            ->with($validation['valid'] ? 'success' : 'error', $validation['valid']
+                ? 'Layout JSON is valid.'
+                : 'Layout JSON is invalid. Review the validation results below.');
+    }
+
     private function decodeJsonField(?string $value, string $field, array $default): array
     {
         if ($value === null || trim($value) === '') {
@@ -244,6 +296,11 @@ class VrSceneLayoutWebController extends Controller
         }
 
         return $decoded;
+    }
+
+    private function prettyJson(array $value): string
+    {
+        return json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
     private function defaultLayoutJson(): array
