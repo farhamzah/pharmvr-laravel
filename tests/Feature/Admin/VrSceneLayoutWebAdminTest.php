@@ -41,6 +41,8 @@ class VrSceneLayoutWebAdminTest extends TestCase
             ->assertSee('Transform Guidance')
             ->assertSee('Component Builder')
             ->assertSee('2D Layout Preview')
+            ->assertSee('2D Position Editor')
+            ->assertSee('Apply Position to JSON')
             ->assertSee('Position Presets')
             ->assertSee('north_wall_center')
             ->assertSee('Generated Component JSON');
@@ -124,6 +126,9 @@ class VrSceneLayoutWebAdminTest extends TestCase
             ->assertSee('position: [x, y, z]')
             ->assertSee('Component Builder')
             ->assertSee('2D Layout Preview')
+            ->assertSee('2D Position Editor')
+            ->assertSee('Apply Position to JSON')
+            ->assertSee('Reset from JSON')
             ->assertSee('opening-briefing')
             ->assertSee('floor-surface')
             ->assertSee('Insert into layout_json components array')
@@ -157,7 +162,8 @@ class VrSceneLayoutWebAdminTest extends TestCase
             ->assertSee('opening-briefing')
             ->assertSee('floor-surface')
             ->assertSee('Bounds X')
-            ->assertSee('Legend');
+            ->assertSee('Legend')
+            ->assertDontSee('Apply Position to JSON');
     }
 
     public function test_2d_layout_preview_handles_invalid_json_without_crashing(): void

@@ -134,7 +134,7 @@
     </div>
 </div>
 
-@include('admin.vr-scene-layouts._layout_preview', ['previewLayoutJson' => $layoutJson])
+@include('admin.vr-scene-layouts._layout_preview', ['previewLayoutJson' => $layoutJson, 'positionEditor' => true])
 
 <div class="rounded-2xl border border-primary/20 bg-primary/5 p-5">
     <div class="mb-5 flex flex-wrap items-start justify-between gap-4">

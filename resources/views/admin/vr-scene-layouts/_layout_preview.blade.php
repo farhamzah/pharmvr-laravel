@@ -1,6 +1,7 @@
 @php
     $previewSource = $previewLayout ?? null;
     $previewError = null;
+    $positionEditorEnabled = (bool) ($positionEditor ?? false);
 
     if (isset($previewLayoutJson)) {
         $decodedPreview = json_decode($previewLayoutJson, true);
@@ -144,8 +145,8 @@
 
                     @foreach ($components as $component)
                         @if ($component['hasPosition'])
-                            <g opacity="{{ $component['active'] ? '1' : '0.35' }}">
-                                <circle cx="{{ $component['svgX'] }}" cy="{{ $component['svgY'] }}" r="{{ $component['outsideBounds'] ? 9 : 7 }}" fill="{{ $component['color'] }}" stroke="{{ $component['outsideBounds'] ? '#f97316' : '#e2e8f0' }}" stroke-width="{{ $component['outsideBounds'] ? 4 : 2 }}">
+                            <g opacity="{{ $component['active'] ? '1' : '0.35' }}" @if ($positionEditorEnabled) data-layout-marker data-component-id="{{ $component['id'] }}" style="cursor: pointer;" @endif>
+                                <circle cx="{{ $component['svgX'] }}" cy="{{ $component['svgY'] }}" r="{{ $component['outsideBounds'] ? 9 : 7 }}" fill="{{ $component['color'] }}" stroke="{{ $component['outsideBounds'] ? '#f97316' : '#e2e8f0' }}" stroke-width="{{ $component['outsideBounds'] ? 4 : 2 }}" data-default-stroke="{{ $component['outsideBounds'] ? '#f97316' : '#e2e8f0' }}" data-default-stroke-width="{{ $component['outsideBounds'] ? 4 : 2 }}">
                                     <title>{{ $component['id'] }} / {{ $component['type'] }} / y={{ is_array($component['position']) ? $component['position'][1] : '-' }}</title>
                                 </circle>
                                 @if ($component['yaw'] !== null)
@@ -163,6 +164,45 @@
             </div>
 
             <div class="space-y-4">
+                @if ($positionEditorEnabled)
+                    <div id="layout-position-editor" class="rounded-2xl border border-primary/30 bg-primary/5 p-4" data-x-min="{{ $xMin }}" data-x-max="{{ $xMax }}" data-z-min="{{ $zMin }}" data-z-max="{{ $zMax }}">
+                        <div class="mb-4">
+                            <p class="text-[10px] font-black uppercase tracking-[0.25em] text-primary">2D Position Editor</p>
+                            <p class="mt-2 text-xs leading-5 text-text-secondary">Select a marker, edit X/Z floor position and optional Y height, then apply to <code>layout_json</code>. Save and Validate Layout are still required.</p>
+                        </div>
+
+                        <div class="space-y-3 rounded-xl border border-divider bg-background/70 p-3 text-xs">
+                            <p class="font-black text-white" id="layout-editor-selected-id">No component selected</p>
+                            <p class="text-text-secondary">Type: <span id="layout-editor-selected-type">-</span></p>
+                            <p class="text-text-secondary">Title: <span id="layout-editor-selected-title">-</span></p>
+                            <p class="text-text-secondary">Rotation: <span id="layout-editor-selected-rotation" class="font-mono">-</span></p>
+                            <p class="text-text-secondary">Active: <span id="layout-editor-selected-active">-</span></p>
+                        </div>
+
+                        <div class="mt-4 grid grid-cols-3 gap-3">
+                            <div>
+                                <label class="mb-2 block text-[9px] font-black uppercase tracking-[0.25em] text-text-tertiary">X</label>
+                                <input id="layout-editor-x" type="number" step="0.01" class="w-full rounded-xl border border-divider bg-background px-3 py-2 text-xs font-bold text-white outline-none focus:border-primary">
+                            </div>
+                            <div>
+                                <label class="mb-2 block text-[9px] font-black uppercase tracking-[0.25em] text-text-tertiary">Y Height</label>
+                                <input id="layout-editor-y" type="number" step="0.01" class="w-full rounded-xl border border-divider bg-background px-3 py-2 text-xs font-bold text-white outline-none focus:border-primary">
+                            </div>
+                            <div>
+                                <label class="mb-2 block text-[9px] font-black uppercase tracking-[0.25em] text-text-tertiary">Z</label>
+                                <input id="layout-editor-z" type="number" step="0.01" class="w-full rounded-xl border border-divider bg-background px-3 py-2 text-xs font-bold text-white outline-none focus:border-primary">
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <button type="button" id="layout-editor-apply" class="rounded-xl bg-primary px-4 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-background hover:bg-cyan-200">Apply Position to JSON</button>
+                            <button type="button" id="layout-editor-reset" class="rounded-xl border border-divider px-4 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-text-secondary hover:text-white">Reset from JSON</button>
+                        </div>
+
+                        <p id="layout-editor-message" class="mt-3 text-xs font-bold text-text-tertiary">Click a marker or Select button to begin.</p>
+                    </div>
+                @endif
+
                 @if (!empty($warnings))
                     <div class="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4">
                         <p class="text-[10px] font-black uppercase tracking-[0.25em] text-amber-200">Preview Warnings</p>
@@ -215,6 +255,9 @@
                                     </td>
                                     <td class="px-3 py-3 align-top">
                                         <span class="rounded-full border px-2 py-1 text-[10px] font-black uppercase tracking-[0.16em] {{ $component['active'] ? 'border-emerald-400/30 text-emerald-300' : 'border-slate-400/30 text-slate-300' }}">{{ $component['active'] ? 'active' : 'inactive' }}</span>
+                                        @if ($positionEditorEnabled)
+                                            <button type="button" data-layout-select data-component-id="{{ $component['id'] }}" class="mt-3 block rounded-lg border border-primary/30 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-primary hover:bg-primary hover:text-background">Select</button>
+                                        @endif
                                         @if ($component['outsideBounds'])
                                             <p class="mt-2 text-[10px] font-bold text-amber-200">Outside bounds</p>
                                         @endif
@@ -232,3 +275,177 @@
         </div>
     @endif
 </div>
+
+@if ($positionEditorEnabled && !$previewError)
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editor = document.getElementById('layout-position-editor');
+            const layoutInput = document.querySelector('textarea[name="layout_json"]');
+            const selectedIdEl = document.getElementById('layout-editor-selected-id');
+            const selectedTypeEl = document.getElementById('layout-editor-selected-type');
+            const selectedTitleEl = document.getElementById('layout-editor-selected-title');
+            const selectedRotationEl = document.getElementById('layout-editor-selected-rotation');
+            const selectedActiveEl = document.getElementById('layout-editor-selected-active');
+            const xInput = document.getElementById('layout-editor-x');
+            const yInput = document.getElementById('layout-editor-y');
+            const zInput = document.getElementById('layout-editor-z');
+            const messageEl = document.getElementById('layout-editor-message');
+            const markers = Array.from(document.querySelectorAll('[data-layout-marker]'));
+            const selectors = Array.from(document.querySelectorAll('[data-layout-select]'));
+            let selectedComponentId = null;
+
+            if (!editor || !layoutInput) {
+                return;
+            }
+
+            const bounds = {
+                xMin: Number(editor.dataset.xMin),
+                xMax: Number(editor.dataset.xMax),
+                zMin: Number(editor.dataset.zMin),
+                zMax: Number(editor.dataset.zMax),
+            };
+
+            const setMessage = function (message, isError = false) {
+                messageEl.textContent = message;
+                messageEl.className = isError
+                    ? 'mt-3 text-xs font-bold text-red-300'
+                    : 'mt-3 text-xs font-bold text-emerald-300';
+            };
+
+            const parseLayout = function () {
+                try {
+                    const layout = JSON.parse(layoutInput.value || '{}');
+                    if (!layout || typeof layout !== 'object') {
+                        throw new Error('layout_json must be a JSON object.');
+                    }
+                    if (!Array.isArray(layout.components)) {
+                        layout.components = [];
+                    }
+                    return layout;
+                } catch (error) {
+                    setMessage('Cannot edit position: invalid JSON. Fix layout_json first.', true);
+                    return null;
+                }
+            };
+
+            const findComponent = function (layout, id) {
+                return layout.components.find(function (component) {
+                    return component && component.id === id;
+                }) || null;
+            };
+
+            const normalizePosition = function (component) {
+                const position = component?.transform?.position;
+                if (!Array.isArray(position) || position.length !== 3) {
+                    return null;
+                }
+                const vector = position.map(function (value) {
+                    return Number(value);
+                });
+                return vector.some(Number.isNaN) ? null : vector;
+            };
+
+            const highlightSelectedMarker = function () {
+                markers.forEach(function (marker) {
+                    const circle = marker.querySelector('circle');
+                    if (!circle) {
+                        return;
+                    }
+                    if (marker.dataset.componentId === selectedComponentId) {
+                        circle.setAttribute('stroke', '#facc15');
+                        circle.setAttribute('stroke-width', '5');
+                    } else if (circle.getAttribute('stroke') === '#facc15') {
+                        circle.setAttribute('stroke', circle.dataset.defaultStroke || '#e2e8f0');
+                        circle.setAttribute('stroke-width', circle.dataset.defaultStrokeWidth || '2');
+                    }
+                });
+            };
+
+            const selectComponent = function (id) {
+                const layout = parseLayout();
+                if (!layout) {
+                    return;
+                }
+                const component = findComponent(layout, id);
+                const position = normalizePosition(component);
+                if (!component || !position) {
+                    setMessage('Selected component has no editable transform.position.', true);
+                    return;
+                }
+
+                selectedComponentId = id;
+                selectedIdEl.textContent = component.id || '-';
+                selectedTypeEl.textContent = component.type || '-';
+                selectedTitleEl.textContent = component.title || '-';
+                selectedRotationEl.textContent = JSON.stringify(component.transform?.rotation || []);
+                selectedActiveEl.textContent = (component.active ?? component.isActive ?? true) === false ? 'inactive' : 'active';
+                xInput.value = position[0];
+                yInput.value = position[1];
+                zInput.value = position[2];
+                highlightSelectedMarker();
+                setMessage('Component selected. Edit X/Y/Z and apply to layout_json.');
+            };
+
+            const readNumber = function (input, label) {
+                const value = Number(input.value);
+                if (Number.isNaN(value)) {
+                    throw new Error(label + ' must be a number.');
+                }
+                return value;
+            };
+
+            document.getElementById('layout-editor-apply')?.addEventListener('click', function () {
+                if (!selectedComponentId) {
+                    setMessage('Select a component before applying a position.', true);
+                    return;
+                }
+
+                const layout = parseLayout();
+                if (!layout) {
+                    return;
+                }
+
+                const component = findComponent(layout, selectedComponentId);
+                if (!component) {
+                    setMessage('Selected component no longer exists in layout_json.', true);
+                    return;
+                }
+
+                try {
+                    const x = readNumber(xInput, 'X');
+                    const y = readNumber(yInput, 'Y');
+                    const z = readNumber(zInput, 'Z');
+                    component.transform = component.transform || {};
+                    component.transform.position = [x, y, z];
+                    layoutInput.value = JSON.stringify(layout, null, 2);
+
+                    const outsideBounds = x < bounds.xMin || x > bounds.xMax || z < bounds.zMin || z > bounds.zMax;
+                    setMessage(outsideBounds
+                        ? 'Position applied to layout_json, but component is outside room bounds. Validate before publishing.'
+                        : 'Position applied to layout_json. Save and Validate Layout are still required.', outsideBounds);
+                } catch (error) {
+                    setMessage(error.message, true);
+                }
+            });
+
+            document.getElementById('layout-editor-reset')?.addEventListener('click', function () {
+                if (!selectedComponentId) {
+                    setMessage('Select a component before resetting from JSON.', true);
+                    return;
+                }
+                selectComponent(selectedComponentId);
+            });
+
+            markers.forEach(function (marker) {
+                marker.addEventListener('click', function () {
+                    selectComponent(marker.dataset.componentId);
+                });
+            });
+            selectors.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    selectComponent(button.dataset.componentId);
+                });
+            });
+        });
+    </script>
+@endif
