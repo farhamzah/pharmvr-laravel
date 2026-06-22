@@ -105,11 +105,12 @@ class EducationModuleSeeder extends Seeder
             ],
             [
                 'slug' => 'warehouse',
-                'title' => 'Warehouse / Gudang Produk Jadi',
+                'title' => 'Finished Goods Staging / Transfer Produk Jadi',
                 'code' => 'PH-CPOB-11',
                 'duration' => 20,
                 'scene_slug' => 'warehouse',
-                'description' => 'Latih transfer produk jadi dari Secondary Packing ke gudang finished goods, segregasi quarantine/released/hold/reject, FEFO/FIFO, stock card, suhu/RH, dan dispatch readiness.',
+                'description' => 'Latih staging produk jadi setelah Secondary Packing: karton selesai diterima, status QA hold/released diverifikasi, stock card dan FEFO/FIFO diperbarui, lalu dispatch readiness dikonfirmasi. Scene ini bukan gudang bahan baku atau bahan kemas.',
+                'summary' => 'Staging produk jadi setelah Secondary Packing dengan kontrol status QA, FEFO/FIFO, stock card, dan dispatch readiness.',
             ],
             [
                 'slug' => 'report_certificate',
@@ -169,7 +170,7 @@ class EducationModuleSeeder extends Seeder
                     'next_step_label' => $item['scene_slug'] === null ? 'Lihat Report & Sertifikat' : 'Mulai Belajar',
                     'next_step_action' => $item['scene_slug'] === null ? 'open_report' : 'open_production_path',
                     'description' => $item['description'],
-                    'short_summary' => $item['description'],
+                    'short_summary' => $item['summary'] ?? $item['description'],
                     'thumbnail_url' => null,
                     'duration_minutes' => $item['duration'],
                     'pages_count' => null,

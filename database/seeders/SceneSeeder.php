@@ -467,12 +467,12 @@ class SceneSeeder extends Seeder
                 ],
             ],
 
-            // ─── SCENE 6: Gudang (Warehouse) ──────────────────
+            // ─── SCENE 6: Finished Goods Staging ───────────────
             [
                 'training_module_id' => $moduleId,
                 'slug' => 'warehouse',
-                'title' => 'Warehouse / Gudang Produk Jadi',
-                'description' => 'Transfer produk jadi dari Secondary Packing ke gudang finished goods dengan kontrol status, FEFO/FIFO, stock card, suhu/RH, dan dispatch readiness.',
+                'title' => 'Finished Goods Staging / Transfer Produk Jadi',
+                'description' => 'Area transit/staging produk jadi setelah Secondary Packing sebelum masuk gudang besar atau dispatch, dengan kontrol status QA, FEFO/FIFO, stock card, suhu/RH, dan dispatch readiness.',
                 'learning_objectives' => [
                     'Memahami alur penerimaan produk jadi dari Secondary Packing',
                     'Mengetahui segregasi status quarantine, released, hold, dan rejected',
@@ -810,13 +810,13 @@ class SceneSeeder extends Seeder
                 $this->step('deviation_capa', 'Evaluasi Deviasi dan CAPA', 'Analisis deviasi dan tindakan perbaikan.', 2, 'inspect', 35, 5),
                 $this->step('release_decision', 'Release Decision', 'Buat keputusan release berdasarkan bukti mutu.', 3, 'click', 30, 10),
             ]),
-            $this->scene($moduleId, 'warehouse', 'Warehouse / Gudang Produk Jadi', 'Transfer produk jadi dari Secondary Packing ke gudang finished goods dengan kontrol status, FEFO/FIFO, stock card, suhu/RH, dan dispatch readiness.', 14, 'P0', 'intermediate', 20, 'warehouse', [
+            $this->scene($moduleId, 'warehouse', 'Finished Goods Staging / Transfer Produk Jadi', 'Area transit/staging produk jadi setelah Secondary Packing sebelum masuk gudang besar atau dispatch, dengan kontrol status QA, FEFO/FIFO, stock card, suhu/RH, dan dispatch readiness. Scene ini bukan gudang bahan baku atau bahan kemas.', 14, 'P0', 'intermediate', 20, 'warehouse', [
                 'Memahami alur penerimaan produk jadi dari Secondary Packing',
                 'Memahami segregasi status quarantine, released, hold, dan rejected',
                 'Memahami kontrol suhu/RH, FEFO/FIFO, stock card, dan dispatch readiness',
             ], [
-                $this->step('warehouse-briefing', 'Vira Briefing', 'Ikuti briefing transfer produk jadi ke gudang.', 1, 'observe', 10, 0),
-                $this->step('warehouse-checklist-line-clearance', 'Line Clearance', 'Pastikan line clearance dan cleaning status gudang selesai.', 2, 'click', 8, 5),
+                $this->step('warehouse-briefing', 'Vira Briefing', 'Ikuti briefing staging produk jadi setelah Secondary Packing.', 1, 'observe', 10, 0),
+                $this->step('warehouse-checklist-line-clearance', 'Line Clearance', 'Pastikan line clearance dan cleaning status area staging selesai.', 2, 'click', 8, 5),
                 $this->step('warehouse-checklist-batch-identity', 'Batch Identity', 'Verifikasi batch identity produk jadi.', 3, 'click', 8, 5),
                 $this->step('warehouse-checklist-status-label', 'Status Label', 'Periksa status quarantine/released/hold/reject pada label.', 4, 'inspect', 8, 5),
                 $this->step('warehouse-checklist-storage-condition', 'Storage Condition', 'Pastikan suhu dan RH berada dalam rentang.', 5, 'inspect', 8, 5),
