@@ -13,5 +13,6 @@ return [
         ['slug' => 'coating', 'title' => 'Coating'],
         ['slug' => 'blistering', 'title' => 'Blistering'],
         ['slug' => 'secondary_packing', 'title' => 'Secondary Packing'],
+        ['slug' => 'warehouse', 'title' => 'Warehouse / Finished Goods Transfer'],
     ],
 ];

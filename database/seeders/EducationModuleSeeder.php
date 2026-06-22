@@ -104,13 +104,21 @@ class EducationModuleSeeder extends Seeder
                 'description' => 'Latih cartoning, coding, line clearance, kontrol reject, rekonsiliasi output, dan packaging record.',
             ],
             [
+                'slug' => 'warehouse',
+                'title' => 'Warehouse / Gudang Produk Jadi',
+                'code' => 'PH-CPOB-11',
+                'duration' => 20,
+                'scene_slug' => 'warehouse',
+                'description' => 'Latih transfer produk jadi dari Secondary Packing ke gudang finished goods, segregasi quarantine/released/hold/reject, FEFO/FIFO, stock card, suhu/RH, dan dispatch readiness.',
+            ],
+            [
                 'slug' => 'report_certificate',
                 'title' => 'Report & Certificate',
-                'code' => 'PH-CPOB-11',
+                'code' => 'PH-CPOB-12',
                 'duration' => 15,
                 'scene_slug' => null,
                 'route' => '/vr/production-path-report',
-                'description' => 'Review laporan Production Path 11/11, status kelulusan, dan sertifikat digital setelah seluruh post-test selesai.',
+                'description' => 'Review laporan Production Path 12/12, status kelulusan, dan sertifikat digital setelah seluruh post-test selesai.',
             ],
         ];
 

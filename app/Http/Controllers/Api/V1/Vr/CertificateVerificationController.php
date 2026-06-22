@@ -42,8 +42,8 @@ class CertificateVerificationController extends Controller
             'issued_at'              => $certificate->issued_at?->toISOString(),
             'learner_name'           => $certificate->user?->name ?? 'Verified Learner',
             'production_path_title'  => $metadata['production_path_title'] ?? 'Non-Sterile Solid Dosage Production Path',
-            'completed_scenes'       => $metadata['completed_scenes'] ?? 11,
-            'total_scenes'           => $metadata['total_scenes'] ?? 11,
+            'completed_scenes'       => $metadata['completed_scenes'] ?? 12,
+            'total_scenes'           => $metadata['total_scenes'] ?? 12,
         ], 'Certificate is valid.');
     }
 }

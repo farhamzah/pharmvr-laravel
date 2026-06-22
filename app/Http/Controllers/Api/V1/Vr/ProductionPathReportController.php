@@ -37,6 +37,7 @@ class ProductionPathReportController extends Controller
         'coating',
         'blistering',
         'secondary_packing',
+        'warehouse',
     ];
 
     public function show(Request $request): JsonResponse
@@ -198,8 +199,8 @@ class ProductionPathReportController extends Controller
             ];
         }
 
-        $secondaryCompleted = in_array('secondary_packing', $completedSceneSlugs, true);
-        $productionPathCompleted = count($completedSceneSlugs) === count(self::PRODUCTION_PATH_SCENES) && $secondaryCompleted;
+        $warehouseCompleted = in_array('warehouse', $completedSceneSlugs, true);
+        $productionPathCompleted = count($completedSceneSlugs) === count(self::PRODUCTION_PATH_SCENES) && $warehouseCompleted;
         $certificate = Certificate::where('user_id', $user->id)
             ->where('certificate_type', self::CERTIFICATE_TYPE)
             ->first();

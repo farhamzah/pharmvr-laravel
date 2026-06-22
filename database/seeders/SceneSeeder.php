@@ -52,6 +52,12 @@ class SceneSeeder extends Seeder
                 $sceneData
             );
 
+            if ($sceneData['slug'] === 'warehouse') {
+                SceneStep::where('scene_id', $scene->id)
+                    ->whereNotIn('slug', array_column($steps, 'slug'))
+                    ->delete();
+            }
+
             foreach ($steps as $stepData) {
                 SceneStep::updateOrCreate(
                     ['scene_id' => $scene->id, 'slug' => $stepData['slug']],
@@ -465,20 +471,76 @@ class SceneSeeder extends Seeder
             [
                 'training_module_id' => $moduleId,
                 'slug' => 'warehouse',
-                'title' => 'Gudang (Warehouse)',
-                'description' => 'Manajemen stok, penerimaan bahan baku, dan karantina material sesuai standar CPOB.',
+                'title' => 'Warehouse / Gudang Produk Jadi',
+                'description' => 'Transfer produk jadi dari Secondary Packing ke gudang finished goods dengan kontrol status, FEFO/FIFO, stock card, suhu/RH, dan dispatch readiness.',
                 'learning_objectives' => [
-                    'Memahami alur penerimaan barang',
-                    'Mengetahui status label material (Karantina, Diluluskan, Ditolak)',
-                    'Memahami kondisi penyimpanan (suhu & kelembaban)',
+                    'Memahami alur penerimaan produk jadi dari Secondary Packing',
+                    'Mengetahui segregasi status quarantine, released, hold, dan rejected',
+                    'Memahami kontrol suhu/RH, FEFO/FIFO, stock card, dan dispatch readiness',
                 ],
-                'order_index' => 6,
-                'priority' => 'P1',
+                'order_index' => 14,
+                'priority' => 'P0',
                 'difficulty' => 'intermediate',
                 'estimated_minutes' => 20,
                 'environment_asset' => 'warehouse',
                 'is_active' => true,
-                'steps' => [],
+                'steps' => [
+                    [
+                        'slug' => 'receive_finished_goods',
+                        'title' => 'Receive Finished Goods',
+                        'description' => 'Verifikasi dokumen transfer, batch identity, dan kondisi pallet produk jadi.',
+                        'order_index' => 1,
+                        'is_required' => true,
+                        'scoring_weight' => 1.00,
+                        'max_score' => 20,
+                        'mistake_penalty' => 5,
+                        'interaction_type' => 'inspect',
+                    ],
+                    [
+                        'slug' => 'status_segregation',
+                        'title' => 'Status Segregation',
+                        'description' => 'Pastikan produk berada pada zona quarantine, released, hold, atau rejected sesuai status QA.',
+                        'order_index' => 2,
+                        'is_required' => true,
+                        'scoring_weight' => 1.00,
+                        'max_score' => 20,
+                        'mistake_penalty' => 5,
+                        'interaction_type' => 'inspect',
+                    ],
+                    [
+                        'slug' => 'storage_condition',
+                        'title' => 'Storage Condition',
+                        'description' => 'Periksa suhu, kelembaban, cleaning status, dan kesiapan area simpan.',
+                        'order_index' => 3,
+                        'is_required' => true,
+                        'scoring_weight' => 1.00,
+                        'max_score' => 20,
+                        'mistake_penalty' => 5,
+                        'interaction_type' => 'inspect',
+                    ],
+                    [
+                        'slug' => 'stock_card_fefo',
+                        'title' => 'Stock Card and FEFO',
+                        'description' => 'Update stock card dan urutan FEFO/FIFO untuk batch finished goods.',
+                        'order_index' => 4,
+                        'is_required' => true,
+                        'scoring_weight' => 1.00,
+                        'max_score' => 20,
+                        'mistake_penalty' => 5,
+                        'interaction_type' => 'click',
+                    ],
+                    [
+                        'slug' => 'dispatch_readiness',
+                        'title' => 'Dispatch Readiness',
+                        'description' => 'Pastikan hanya produk released yang masuk dispatch staging.',
+                        'order_index' => 5,
+                        'is_required' => true,
+                        'scoring_weight' => 1.00,
+                        'max_score' => 20,
+                        'mistake_penalty' => 5,
+                        'interaction_type' => 'click',
+                    ],
+                ],
             ],
 
             // ─── SCENE 6: PPIC ────────────────────────────────
@@ -748,15 +810,23 @@ class SceneSeeder extends Seeder
                 $this->step('deviation_capa', 'Evaluasi Deviasi dan CAPA', 'Analisis deviasi dan tindakan perbaikan.', 2, 'inspect', 35, 5),
                 $this->step('release_decision', 'Release Decision', 'Buat keputusan release berdasarkan bukti mutu.', 3, 'click', 30, 10),
             ]),
-            $this->scene($moduleId, 'warehouse', 'Warehouse', 'Manajemen penerimaan, karantina, penyimpanan, status label, suhu, kelembaban, dan distribusi material sesuai CPOB.', 22, 'P1', 'intermediate', 20, 'warehouse', [
-                'Memahami alur penerimaan dan penyimpanan material',
-                'Memahami status label material',
-                'Memahami kontrol suhu dan kelembaban gudang',
+            $this->scene($moduleId, 'warehouse', 'Warehouse / Gudang Produk Jadi', 'Transfer produk jadi dari Secondary Packing ke gudang finished goods dengan kontrol status, FEFO/FIFO, stock card, suhu/RH, dan dispatch readiness.', 14, 'P0', 'intermediate', 20, 'warehouse', [
+                'Memahami alur penerimaan produk jadi dari Secondary Packing',
+                'Memahami segregasi status quarantine, released, hold, dan rejected',
+                'Memahami kontrol suhu/RH, FEFO/FIFO, stock card, dan dispatch readiness',
             ], [
-                $this->step('receive_material', 'Receive Material', 'Verifikasi material masuk.', 1, 'inspect', 25, 5),
-                $this->step('label_status', 'Label Status', 'Identifikasi status karantina, diluluskan, atau ditolak.', 2, 'inspect', 25, 5),
-                $this->step('storage_condition', 'Storage Condition', 'Periksa suhu dan kelembaban area simpan.', 3, 'inspect', 25, 5),
-                $this->step('material_release', 'Material Release', 'Simulasikan alur material ke produksi.', 4, 'navigate', 25, 5),
+                $this->step('warehouse-briefing', 'Vira Briefing', 'Ikuti briefing transfer produk jadi ke gudang.', 1, 'observe', 10, 0),
+                $this->step('warehouse-checklist-line-clearance', 'Line Clearance', 'Pastikan line clearance dan cleaning status gudang selesai.', 2, 'click', 8, 5),
+                $this->step('warehouse-checklist-batch-identity', 'Batch Identity', 'Verifikasi batch identity produk jadi.', 3, 'click', 8, 5),
+                $this->step('warehouse-checklist-status-label', 'Status Label', 'Periksa status quarantine/released/hold/reject pada label.', 4, 'inspect', 8, 5),
+                $this->step('warehouse-checklist-storage-condition', 'Storage Condition', 'Pastikan suhu dan RH berada dalam rentang.', 5, 'inspect', 8, 5),
+                $this->step('warehouse-checklist-fefo', 'FEFO/FIFO', 'Update FEFO/FIFO dan stock card.', 6, 'click', 8, 5),
+                $this->step('warehouse-checklist-dispatch', 'Dispatch Control', 'Pastikan dispatch staging hanya memakai stock QA released.', 7, 'click', 8, 5),
+                $this->step('warehouse-receiving', 'Receive Finished Goods', 'Verifikasi dokumen transfer, batch identity, dan kondisi pallet produk jadi.', 8, 'inspect', 12, 5),
+                $this->step('warehouse-quarantine', 'Quarantine Status', 'Pastikan produk masuk zona quarantine sebelum release.', 9, 'inspect', 12, 5),
+                $this->step('warehouse-release', 'QA Release', 'Pindahkan produk ke released zone setelah status QA lengkap.', 10, 'inspect', 12, 5),
+                $this->step('warehouse-dispatch', 'Dispatch Readiness', 'Pastikan hanya produk released yang masuk dispatch staging.', 11, 'click', 12, 5),
+                $this->step('warehouse-mini-review', 'Mini Review', 'Jawab mini-review kontrol status dan dispatch produk jadi.', 12, 'click', 14, 5),
             ]),
             $this->scene($moduleId, 'ppic', 'PPIC', 'Pembelajaran perencanaan produksi, pengendalian persediaan, jadwal produksi, dan koordinasi supply chain.', 23, 'P2', 'intermediate', 15, 'ppic', [
                 'Memahami production planning',
@@ -844,6 +914,7 @@ class SceneSeeder extends Seeder
             'coating',
             'blistering',
             'secondary_packing',
+            'warehouse',
         ];
 
         Scene::whereIn('slug', [
@@ -853,7 +924,6 @@ class SceneSeeder extends Seeder
             'hygiene',
             'qc_lab',
             'qa_office',
-            'warehouse',
             'ppic',
             'purchasing',
             'engineering',

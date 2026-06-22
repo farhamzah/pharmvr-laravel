@@ -21,11 +21,11 @@ class ProductionPathCertificateTest extends TestCase
     private const PRODUCTION_PATH_SCENES = [
         'hygiene', 'gowning', 'airlock', 'production_corridor',
         'weighing', 'granulation', 'final_mixing', 'tabletting',
-        'coating', 'blistering', 'secondary_packing',
+        'coating', 'blistering', 'secondary_packing', 'warehouse',
     ];
 
     // ─────────────────────────────────────────────────────────────────────
-    // Helper: create a user with all 11 scenes completed
+    // Helper: create a user with all production path scenes completed
     // ─────────────────────────────────────────────────────────────────────
     private function createCompletedUser(): User
     {
@@ -101,12 +101,12 @@ class ProductionPathCertificateTest extends TestCase
     {
         $user = $this->createCompletedUser();
 
-        $secondaryAssessment = Assessment::whereHas('trainingModule', function ($query) {
-            $query->where('slug', 'secondary_packing');
+        $finalAssessment = Assessment::whereHas('trainingModule', function ($query) {
+            $query->where('slug', 'warehouse');
         })->where('type', AssessmentType::POSTTEST->value)->firstOrFail();
 
         AssessmentAttempt::where('user_id', $user->id)
-            ->where('assessment_id', $secondaryAssessment->id)
+            ->where('assessment_id', $finalAssessment->id)
             ->delete();
 
         return $user;
@@ -116,17 +116,17 @@ class ProductionPathCertificateTest extends TestCase
     {
         $user = $this->createCompletedUser();
 
-        $secondaryAssessment = Assessment::whereHas('trainingModule', function ($query) {
-            $query->where('slug', 'secondary_packing');
+        $finalAssessment = Assessment::whereHas('trainingModule', function ($query) {
+            $query->where('slug', 'warehouse');
         })->where('type', AssessmentType::POSTTEST->value)->firstOrFail();
 
         AssessmentAttempt::where('user_id', $user->id)
-            ->where('assessment_id', $secondaryAssessment->id)
+            ->where('assessment_id', $finalAssessment->id)
             ->delete();
 
         AssessmentAttempt::create([
             'user_id' => $user->id,
-            'assessment_id' => $secondaryAssessment->id,
+            'assessment_id' => $finalAssessment->id,
             'score' => 0,
             'passed' => false,
             'status' => 'completed',
@@ -151,8 +151,8 @@ class ProductionPathCertificateTest extends TestCase
             'issued_at' => now(),
             'metadata_json' => [
                 'production_path_title' => 'Non-Sterile Solid Dosage Production Path',
-                'completed_scenes' => 11,
-                'total_scenes' => 11,
+                'completed_scenes' => 12,
+                'total_scenes' => 12,
             ],
         ]);
     }
@@ -229,14 +229,14 @@ class ProductionPathCertificateTest extends TestCase
             ]);
     }
 
-    public function test_final_vr_completion_without_secondary_posttest_does_not_unlock_certificate(): void
+    public function test_final_vr_completion_without_final_posttest_does_not_unlock_certificate(): void
     {
         $user = $this->createVrCompletedUserWithoutFinalPosttest();
 
         $this->actingAs($user)
             ->getJson('/api/v1/vr/reports/production-path')
             ->assertStatus(200)
-            ->assertJsonPath('data.completed_scenes', 10)
+            ->assertJsonPath('data.completed_scenes', 11)
             ->assertJsonPath('data.production_path_completed', false)
             ->assertJsonPath('data.certificate.eligible', false);
 
@@ -246,18 +246,18 @@ class ProductionPathCertificateTest extends TestCase
             ->assertJsonPath('message', 'Production path is not completed.');
     }
 
-    public function test_failed_secondary_posttest_does_not_unlock_certificate(): void
+    public function test_failed_final_posttest_does_not_unlock_certificate(): void
     {
         $user = $this->createVrCompletedUserWithFailedFinalPosttest();
 
         $this->actingAs($user)
             ->getJson('/api/v1/vr/reports/production-path')
             ->assertStatus(200)
-            ->assertJsonPath('data.completed_scenes', 10)
+            ->assertJsonPath('data.completed_scenes', 11)
             ->assertJsonPath('data.production_path_completed', false)
             ->assertJsonPath('data.certificate.eligible', false)
-            ->assertJsonPath('data.scene_results.10.vr_completed', true)
-            ->assertJsonPath('data.scene_results.10.post_test_passed', false);
+            ->assertJsonPath('data.scene_results.11.vr_completed', true)
+            ->assertJsonPath('data.scene_results.11.post_test_passed', false);
 
         $this->actingAs($user)
             ->postJson('/api/v1/vr/certificates/production-path/generate')
@@ -304,8 +304,8 @@ class ProductionPathCertificateTest extends TestCase
             ->assertJsonPath('data.certificate_id', $certificate->certificate_id)
             ->assertJsonPath('data.status', 'issued')
             ->assertJsonPath('data.learner_name', 'Verified Learner')
-            ->assertJsonPath('data.completed_scenes', 11)
-            ->assertJsonPath('data.total_scenes', 11)
+            ->assertJsonPath('data.completed_scenes', 12)
+            ->assertJsonPath('data.total_scenes', 12)
             ->assertJsonStructure([
                 'data' => [
                     'valid', 'certificate_id', 'certificate_type',
