@@ -48,6 +48,15 @@ class EducationModuleSeeder extends Seeder
                 'description' => 'Kenali alur personel, material, status ruangan, dan prinsip pemisahan jalur dalam koridor produksi CPOB non-steril.',
             ],
             [
+                'slug' => 'raw_material_warehouse',
+                'title' => 'Raw Material Warehouse / Gudang Bahan Baku',
+                'code' => 'PH-CPOB-03A',
+                'duration' => 25,
+                'scene_slug' => 'raw_material_warehouse',
+                'description' => 'Pelajari penerimaan, karantina, sampling QC, status released/rejected, FEFO, stock card, suhu/RH, dan transfer bahan baku menuju Weighing. Scene ini berbeda dari Finished Goods Staging.',
+                'summary' => 'Gudang bahan baku sebelum Weighing dengan kontrol receiving, quarantine, QC sampling, FEFO, stock card, dan transfer material.',
+            ],
+            [
                 'slug' => 'weighing',
                 'title' => 'Weighing & Dispensing',
                 'code' => 'PH-CPOB-04',

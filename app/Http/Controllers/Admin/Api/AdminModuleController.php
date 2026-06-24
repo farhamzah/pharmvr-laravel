@@ -22,6 +22,7 @@ class AdminModuleController extends Controller
         'gowning',
         'airlock',
         'production_corridor',
+        'raw_material_warehouse',
         'weighing',
         'granulation',
         'final_mixing',

@@ -19,7 +19,7 @@ class ProductionPathAssessmentSeeder extends Seeder
             $slug = $scene['slug'];
             $title = $scene['title'];
 
-            $module = TrainingModule::updateOrCreate(
+            $module = TrainingModule::firstOrCreate(
                 ['slug' => $slug],
                 [
                     'title' => $title,

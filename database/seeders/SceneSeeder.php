@@ -52,7 +52,7 @@ class SceneSeeder extends Seeder
                 $sceneData
             );
 
-            if ($sceneData['slug'] === 'warehouse') {
+            if (in_array($sceneData['slug'], ['raw_material_warehouse', 'warehouse'], true)) {
                 SceneStep::where('scene_id', $scene->id)
                     ->whereNotIn('slug', array_column($steps, 'slug'))
                     ->delete();
@@ -719,7 +719,23 @@ class SceneSeeder extends Seeder
                 $this->step('check_line_clearance', 'Cek Line Clearance', 'Periksa status line clearance sebelum masuk ruang proses.', 3, 'inspect', 25, 10),
                 $this->step('find_emergency_exit', 'Identifikasi Emergency Exit', 'Temukan jalur evakuasi di area produksi.', 4, 'navigate', 25, 5),
             ]),
-            $this->scene($moduleId, 'weighing', 'Weighing', 'Ruang penimbangan bahan baku dengan verifikasi label, status material, toleransi berat, dan dokumentasi real-time.', 7, 'P0', 'intermediate', 15, 'weighing_room', [
+            $this->scene($moduleId, 'raw_material_warehouse', 'Raw Material Warehouse / Gudang Bahan Baku', 'Gudang bahan baku dengan rak tinggi, receiving, quarantine, QC sampling, status released/rejected, FEFO, stock card, suhu/RH, dan transfer material menuju Weighing.', 7, 'P0', 'intermediate', 25, 'raw_material_warehouse', [
+                'Memahami alur penerimaan dan penyimpanan bahan baku sebelum Weighing',
+                'Membedakan status quarantine, QC sampling, released, hold, dan rejected',
+                'Memahami FEFO, stock card, suhu/RH, dan transfer material berbasis status QA',
+            ], [
+                $this->step('raw-material-briefing', 'Vira Briefing', 'Ikuti briefing alur gudang bahan baku sebelum proses penimbangan.', 1, 'observe', 8, 0),
+                $this->step('raw-material-receiving', 'Receiving Check', 'Verifikasi dokumen penerimaan, label supplier, nomor batch, dan kondisi kemasan bahan baku.', 2, 'inspect', 10, 5),
+                $this->step('raw-material-quarantine', 'Quarantine Status', 'Pastikan bahan baru ditempatkan di area quarantine sebelum keputusan QC.', 3, 'inspect', 10, 5),
+                $this->step('raw-material-qc-sampling', 'QC Sampling', 'Periksa area sampling, label sampel, dan status menunggu hasil QC.', 4, 'inspect', 10, 5),
+                $this->step('raw-material-release', 'Released Material', 'Konfirmasi bahan released sebelum dipilih untuk proses Weighing.', 5, 'inspect', 10, 5),
+                $this->step('raw-material-reject-hold', 'Reject and Hold', 'Identifikasi bahan hold/rejected dan pastikan segregasi statusnya jelas.', 6, 'inspect', 10, 5),
+                $this->step('raw-material-fefo', 'FEFO/FIFO Control', 'Cek FEFO/FIFO berdasarkan expiry date dan tanggal penerimaan.', 7, 'click', 10, 5),
+                $this->step('raw-material-stock-card', 'Stock Card', 'Perbarui stock card dan traceability material.', 8, 'click', 10, 5),
+                $this->step('raw-material-temp-rh', 'Temperature and RH', 'Pastikan suhu/RH gudang berada dalam rentang penyimpanan bahan baku.', 9, 'inspect', 10, 5),
+                $this->step('raw-material-transfer-weighing', 'Transfer to Weighing', 'Konfirmasi hanya bahan released yang ditransfer ke Weighing.', 10, 'click', 12, 5),
+            ]),
+            $this->scene($moduleId, 'weighing', 'Weighing', 'Ruang penimbangan bahan baku dengan verifikasi label, status material, toleransi berat, dan dokumentasi real-time.', 8, 'P0', 'intermediate', 15, 'weighing_room', [
                 'Memahami prosedur penimbangan bahan',
                 'Melakukan TARE dan verifikasi material',
                 'Mendokumentasikan hasil penimbangan',
@@ -730,7 +746,7 @@ class SceneSeeder extends Seeder
                 $this->step('weigh_material', 'Timbang Material', 'Timbang bahan sesuai toleransi.', 4, 'sequence', 30, 10),
                 $this->step('submit_record', 'Submit Catatan', 'Simpan hasil penimbangan.', 5, 'click', 15),
             ]),
-            $this->scene($moduleId, 'granulation', 'Granulation', 'Proses granulasi basah, pengeringan FBD, dan kontrol parameter kritis untuk menghasilkan granul siap blending.', 8, 'P0', 'intermediate', 18, 'granulation_room', [
+            $this->scene($moduleId, 'granulation', 'Granulation', 'Proses granulasi basah, pengeringan FBD, dan kontrol parameter kritis untuk menghasilkan granul siap blending.', 9, 'P0', 'intermediate', 18, 'granulation_room', [
                 'Memahami proses granulasi',
                 'Memahami parameter kritis HSG dan FBD',
                 'Mendokumentasikan hasil proses granulasi',
@@ -740,7 +756,7 @@ class SceneSeeder extends Seeder
                 $this->step('fbd_drying', 'Fluid Bed Drying', 'Keringkan granul hingga parameter sesuai.', 3, 'sequence', 30, 10),
                 $this->step('record_granulation', 'Catat Proses', 'Lengkapi catatan proses granulasi.', 4, 'click', 15, 5),
             ]),
-            $this->scene($moduleId, 'final_mixing', 'Final Mixing', 'Pencampuran akhir granul dengan bahan pelumas atau glidant seperti magnesium stearate, talc, atau aerosil sebelum proses tabletting.', 9, 'P0', 'intermediate', 15, 'dry_mixing_room', [
+            $this->scene($moduleId, 'final_mixing', 'Final Mixing', 'Pencampuran akhir granul dengan bahan pelumas atau glidant seperti magnesium stearate, talc, atau aerosil sebelum proses tabletting.', 10, 'P0', 'intermediate', 15, 'dry_mixing_room', [
                 'Memahami final blending',
                 'Memahami risiko overmixing',
                 'Mendokumentasikan parameter mixing',
@@ -751,7 +767,7 @@ class SceneSeeder extends Seeder
                 $this->step('run_mixing', 'Jalankan Mixing', 'Jalankan mixing sesuai waktu dan kecepatan.', 4, 'sequence', 30, 10),
                 $this->step('record_mixing', 'Catat Mixing', 'Lengkapi catatan batch record.', 5, 'click', 10, 5),
             ]),
-            $this->scene($moduleId, 'tabletting', 'Tabletting', 'Proses kompresi tablet, setup mesin, IPC, dan pengendalian parameter kritis tablet press.', 10, 'P0', 'intermediate', 18, 'tabletting_room', [
+            $this->scene($moduleId, 'tabletting', 'Tabletting', 'Proses kompresi tablet, setup mesin, IPC, dan pengendalian parameter kritis tablet press.', 11, 'P0', 'intermediate', 18, 'tabletting_room', [
                 'Memahami setup mesin tablet',
                 'Memahami kontrol bobot dan kekerasan tablet',
                 'Melakukan IPC selama kompresi',
@@ -761,7 +777,7 @@ class SceneSeeder extends Seeder
                 $this->step('ipc_check', 'IPC Check', 'Periksa bobot, hardness, dan friability.', 3, 'inspect', 30, 10),
                 $this->step('record_tabletting', 'Catat Tabletting', 'Lengkapi catatan produksi tablet.', 4, 'click', 10, 5),
             ]),
-            $this->scene($moduleId, 'coating', 'Coating', 'Proses penyalutan tablet dengan kontrol spray rate, suhu inlet/outlet, pan speed, dan dokumentasi batch.', 11, 'P0', 'intermediate', 18, 'coating_room', [
+            $this->scene($moduleId, 'coating', 'Coating', 'Proses penyalutan tablet dengan kontrol spray rate, suhu inlet/outlet, pan speed, dan dokumentasi batch.', 12, 'P0', 'intermediate', 18, 'coating_room', [
                 'Memahami proses coating tablet',
                 'Memahami parameter kritis coating',
                 'Mengenali cacat coating',
@@ -771,7 +787,7 @@ class SceneSeeder extends Seeder
                 $this->step('run_coating', 'Jalankan Coating', 'Jalankan proses penyalutan sesuai parameter.', 3, 'sequence', 40, 10),
                 $this->step('coating_qc', 'QC Coating', 'Periksa appearance dan weight gain.', 4, 'inspect', 20, 5),
             ]),
-            $this->scene($moduleId, 'blistering', 'Blistering / Primary Packaging', 'Pengemasan primer blister dengan setup PVC/Alu foil, sealing, leak test, dan IPC packaging.', 12, 'P0', 'intermediate', 18, 'blistering_room', [
+            $this->scene($moduleId, 'blistering', 'Blistering / Primary Packaging', 'Pengemasan primer blister dengan setup PVC/Alu foil, sealing, leak test, dan IPC packaging.', 13, 'P0', 'intermediate', 18, 'blistering_room', [
                 'Memahami proses pengemasan primer',
                 'Memahami setup blister machine',
                 'Melakukan leak test dan IPC',
@@ -781,7 +797,7 @@ class SceneSeeder extends Seeder
                 $this->step('leak_test', 'Leak Test', 'Uji kebocoran blister.', 3, 'inspect', 25, 10),
                 $this->step('record_blistering', 'Catat Packaging Primer', 'Lengkapi catatan packaging primer.', 4, 'click', 15, 5),
             ]),
-            $this->scene($moduleId, 'secondary_packing', 'Secondary Packing', 'Pengemasan sekunder, cartoning, coding, vision inspection, checkweigher, dan final packing menuju warehouse.', 13, 'P0', 'intermediate', 15, 'secondary_packing', [
+            $this->scene($moduleId, 'secondary_packing', 'Secondary Packing', 'Pengemasan sekunder, cartoning, coding, vision inspection, checkweigher, dan final packing menuju warehouse.', 14, 'P0', 'intermediate', 15, 'secondary_packing', [
                 'Memahami cartoning dan coding',
                 'Memahami pemeriksaan visual dan checkweigher',
                 'Memahami proses final packing',
@@ -810,7 +826,7 @@ class SceneSeeder extends Seeder
                 $this->step('deviation_capa', 'Evaluasi Deviasi dan CAPA', 'Analisis deviasi dan tindakan perbaikan.', 2, 'inspect', 35, 5),
                 $this->step('release_decision', 'Release Decision', 'Buat keputusan release berdasarkan bukti mutu.', 3, 'click', 30, 10),
             ]),
-            $this->scene($moduleId, 'warehouse', 'Finished Goods Staging / Transfer Produk Jadi', 'Area transit/staging produk jadi setelah Secondary Packing sebelum masuk gudang besar atau dispatch, dengan kontrol status QA, FEFO/FIFO, stock card, suhu/RH, dan dispatch readiness. Scene ini bukan gudang bahan baku atau bahan kemas.', 14, 'P0', 'intermediate', 20, 'warehouse', [
+            $this->scene($moduleId, 'warehouse', 'Finished Goods Staging / Transfer Produk Jadi', 'Area transit/staging produk jadi setelah Secondary Packing sebelum masuk gudang besar atau dispatch, dengan kontrol status QA, FEFO/FIFO, stock card, suhu/RH, dan dispatch readiness. Scene ini bukan gudang bahan baku atau bahan kemas.', 15, 'P0', 'intermediate', 20, 'warehouse', [
                 'Memahami alur penerimaan produk jadi dari Secondary Packing',
                 'Memahami segregasi status quarantine, released, hold, dan rejected',
                 'Memahami kontrol suhu/RH, FEFO/FIFO, stock card, dan dispatch readiness',
@@ -907,6 +923,7 @@ class SceneSeeder extends Seeder
             'gowning',
             'airlock',
             'production_corridor',
+            'raw_material_warehouse',
             'weighing',
             'granulation',
             'final_mixing',
